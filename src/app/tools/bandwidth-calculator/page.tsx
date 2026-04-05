@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BandwidthCalculator from "@/components/BandwidthCalculator";
+import RelatedTools from "@/components/RelatedTools";
 
 export const metadata: Metadata = {
   title:
@@ -174,6 +175,8 @@ export default function BandwidthCalcPage() {
               ))}
             </div>
           </section>
+
+          <RelatedTools current="/tools/bandwidth-calculator/" />
         </div>
       </div>
     </>

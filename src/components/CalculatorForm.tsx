@@ -14,6 +14,38 @@ import ShareButton from "@/components/ShareButton";
 import ResultCard from "@/components/ResultCard";
 import CodecComparisonTable from "@/components/CodecComparisonTable";
 import { PLATFORMS, getPlatformById } from "@/data/platforms";
+import Link from "next/link";
+
+interface HistoryEntry {
+  resolution: string;
+  fps: number;
+  codec: string;
+  fileSize: string;
+  bitrate: string;
+  timestamp: number;
+}
+
+const HISTORY_KEY = "calc-history";
+const MAX_HISTORY = 5;
+
+function loadHistory(): HistoryEntry[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(entry: HistoryEntry) {
+  const history = loadHistory();
+  // Dedupe by settings
+  const filtered = history.filter(
+    (h) => !(h.resolution === entry.resolution && h.fps === entry.fps && h.codec === entry.codec)
+  );
+  filtered.unshift(entry);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, MAX_HISTORY)));
+}
 
 interface CalculatorFormProps {
   defaultResolution?: string;
@@ -80,6 +112,7 @@ export default function CalculatorForm({
   const [hours, setHours] = useState(1);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   // Hydrate from URL params (shared links) with validation
   useEffect(() => {
@@ -121,6 +154,26 @@ export default function CalculatorForm({
       }),
     [resolution, fps, codec, audioBitrate, durationSeconds]
   );
+
+  // Load history on mount
+  useEffect(() => {
+    setHistory(loadHistory());
+  }, []);
+
+  // Save to history when result changes (debounced by resolution/fps/codec)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const entry: HistoryEntry = {
+      resolution,
+      fps,
+      codec,
+      fileSize: result.fileSizeFormatted,
+      bitrate: result.totalBitrateMbps + " Mbps",
+      timestamp: Date.now(),
+    };
+    saveHistory(entry);
+    setHistory(loadHistory());
+  }, [resolution, fps, codec, result.fileSizeFormatted, result.totalBitrateMbps]);
 
   const selectedRes = RESOLUTIONS.find((r) => r.slug === resolution);
 
@@ -517,6 +570,7 @@ export default function CalculatorForm({
             label="Upload Speed"
             value={`${result.recommendedBandwidthMbps} Mbps`}
             sub="1.5x headroom"
+            href="/tools/bandwidth-calculator/"
             icon={
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
             }
@@ -525,6 +579,7 @@ export default function CalculatorForm({
             label="Bandwidth/min"
             value={`${(result.totalBitrateKbps * 60 / 8 / 1024).toFixed(1)} MB`}
             sub="data per minute"
+            href="/tools/upload-time-calculator/"
             icon={
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
             }
@@ -543,6 +598,71 @@ export default function CalculatorForm({
             durationSeconds={durationSeconds || 1}
             activeCodec={codec}
           />
+        </div>
+
+        {/* Next Steps */}
+        <div className="rounded-xl border border-dashed border-[var(--primary-30)] bg-[var(--accent)] p-5">
+          <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+            <span className="text-[var(--primary)]">→</span> What&apos;s Next?
+          </h3>
+          <div className="grid gap-2">
+            <Link
+              href={`/tools/upload-time-calculator/`}
+              className="group flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-[var(--background)] transition-colors"
+            >
+              <span className="text-base" aria-hidden="true">⏱️</span>
+              <div>
+                <span className="text-sm font-medium group-hover:text-[var(--primary)] transition-colors">
+                  How long to upload {result.fileSizeFormatted}?
+                </span>
+                <span className="block text-xs text-[var(--muted-foreground)]">
+                  Estimate upload time for your file
+                </span>
+              </div>
+            </Link>
+            <Link
+              href={`/tools/bandwidth-calculator/`}
+              className="group flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-[var(--background)] transition-colors"
+            >
+              <span className="text-base" aria-hidden="true">📡</span>
+              <div>
+                <span className="text-sm font-medium group-hover:text-[var(--primary)] transition-colors">
+                  Can your internet handle {result.totalBitrateMbps} Mbps?
+                </span>
+                <span className="block text-xs text-[var(--muted-foreground)]">
+                  Check bandwidth requirements
+                </span>
+              </div>
+            </Link>
+            <Link
+              href={`/tools/recording-time-calculator/`}
+              className="group flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-[var(--background)] transition-colors"
+            >
+              <span className="text-base" aria-hidden="true">💾</span>
+              <div>
+                <span className="text-sm font-medium group-hover:text-[var(--primary)] transition-colors">
+                  How much recording fits on your drive?
+                </span>
+                <span className="block text-xs text-[var(--muted-foreground)]">
+                  Plan storage for {resolution} {fps}fps
+                </span>
+              </div>
+            </Link>
+            <Link
+              href={`/compare/`}
+              className="group flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-[var(--background)] transition-colors"
+            >
+              <span className="text-base" aria-hidden="true">⚖️</span>
+              <div>
+                <span className="text-sm font-medium group-hover:text-[var(--primary)] transition-colors">
+                  Compare all codecs in detail
+                </span>
+                <span className="block text-xs text-[var(--muted-foreground)]">
+                  See full codec comparison chart
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

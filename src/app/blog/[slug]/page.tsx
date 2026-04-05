@@ -244,6 +244,22 @@ export default async function BlogPostPage({
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
 
+        {/* CTA: Try the calculator */}
+        <div className="rounded-xl border-2 border-[var(--primary-20)] bg-[var(--accent)] p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex-1">
+            <h2 className="text-lg font-bold mb-1">Try It Yourself</h2>
+            <p className="text-sm text-[var(--muted-foreground)]">
+              Use our free calculator to find the exact file size, bitrate, and storage needs for your streaming setup.
+            </p>
+          </div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
+          >
+            Open Calculator →
+          </Link>
+        </div>
+
         {/* Related posts */}
         <section>
           <h2 className="text-2xl font-bold mb-6">Related Guides</h2>

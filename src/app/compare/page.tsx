@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RESOLUTIONS, FPS_OPTIONS, CODECS } from "@/data/presets";
 import { calculate, toDurationSeconds } from "@/lib/calculate";
 import CodecCompareClient from "@/components/CodecCompareClient";
+import RelatedTools from "@/components/RelatedTools";
 
 
 export const metadata: Metadata = {
@@ -269,6 +270,7 @@ export default function ComparePage() {
         </div>
       </section>
 
+      <RelatedTools current="/compare/" />
       </div>
 
       <script

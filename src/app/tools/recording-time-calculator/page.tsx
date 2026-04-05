@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import RecordingTimeCalculator from "@/components/RecordingTimeCalculator";
+import RelatedTools from "@/components/RelatedTools";
 
 export const metadata: Metadata = {
   title: "Recording Time Calculator — How Long Can You Record?",
@@ -157,6 +158,8 @@ export default function RecordingTimePage() {
               ))}
             </div>
           </section>
+
+          <RelatedTools current="/tools/recording-time-calculator/" />
         </div>
       </div>
     </>
