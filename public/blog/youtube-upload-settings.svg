@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, sans-serif">
+  <rect width="800" height="420" rx="16" fill="#0f172a"/>
+  <text x="400" y="36" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700">Best YouTube Upload Settings (2026)</text>
+  <!-- Container -->
+  <rect x="40" y="60" width="220" height="340" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-opacity="0.4"/>
+  <text x="150" y="90" text-anchor="middle" fill="#3b82f6" font-size="14" font-weight="700">Container</text>
+  <rect x="65" y="110" width="170" height="44" rx="8" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-opacity="0.5"/>
+  <text x="150" y="136" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">MP4</text>
+  <text x="150" y="180" text-anchor="middle" fill="#94a3b8" font-size="11">Fastest processing</text>
+  <text x="150" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">Universal support</text>
+  <text x="150" y="230" text-anchor="middle" fill="#64748b" font-size="11">Alternatives:</text>
+  <text x="150" y="250" text-anchor="middle" fill="#64748b" font-size="11">MOV (Final Cut Pro)</text>
+  <text x="150" y="270" text-anchor="middle" fill="#64748b" font-size="11">MKV (accepted)</text>
+  <!-- Codec -->
+  <rect x="290" y="60" width="220" height="340" rx="12" fill="#1e293b" stroke="#10b981" stroke-opacity="0.4"/>
+  <text x="400" y="90" text-anchor="middle" fill="#10b981" font-size="14" font-weight="700">Video Codec</text>
+  <rect x="315" y="110" width="170" height="44" rx="8" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-opacity="0.5"/>
+  <text x="400" y="136" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">H.265 / HEVC</text>
+  <text x="400" y="180" text-anchor="middle" fill="#94a3b8" font-size="11">40% smaller files</text>
+  <text x="400" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">Best quality/size ratio</text>
+  <text x="400" y="230" text-anchor="middle" fill="#64748b" font-size="11">Safe choice: H.264</text>
+  <text x="400" y="250" text-anchor="middle" fill="#64748b" font-size="11">Future: AV1</text>
+  <!-- Settings -->
+  <rect x="540" y="60" width="220" height="340" rx="12" fill="#1e293b" stroke="#f59e0b" stroke-opacity="0.4"/>
+  <text x="650" y="90" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="700">Quality Settings</text>
+  <rect x="560" y="110" width="180" height="30" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="650" y="130" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">CRF 18 or VBR 2-pass</text>
+  <rect x="560" y="150" width="180" height="30" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="650" y="170" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Audio: AAC 256 Kbps</text>
+  <rect x="560" y="190" width="180" height="30" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="650" y="210" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Sample: 48 kHz</text>
+  <text x="650" y="250" text-anchor="middle" fill="#94a3b8" font-size="11">1080p: 8,000-12,000 Kbps</text>
+  <text x="650" y="270" text-anchor="middle" fill="#94a3b8" font-size="11">1440p: 16,000-24,000 Kbps</text>
+  <text x="650" y="290" text-anchor="middle" fill="#94a3b8" font-size="11">4K: 35,000-68,000 Kbps</text>
+  <!-- Bottom tip -->
+  <rect x="40" y="370" width="720" height="30" rx="6" fill="#10b981" fill-opacity="0.1"/>
+  <text x="400" y="390" text-anchor="middle" fill="#10b981" font-size="12" font-weight="600">Pro tip: Upload as Unlisted, wait for processing, then set to Public</text>
+</svg>

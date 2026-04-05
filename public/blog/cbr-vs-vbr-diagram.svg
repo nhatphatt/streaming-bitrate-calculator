@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="cbr-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.1"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient>
+    <linearGradient id="vbr-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity="0.1"/><stop offset="100%" stop-color="#10b981" stop-opacity="0.02"/></linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="800" height="400" rx="16" fill="#0f172a"/>
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700">CBR vs VBR Bitrate Over Time</text>
+  <!-- CBR Section -->
+  <rect x="40" y="55" width="350" height="160" rx="12" fill="url(#cbr-bg)" stroke="#3b82f6" stroke-opacity="0.3"/>
+  <text x="215" y="78" text-anchor="middle" fill="#3b82f6" font-size="14" font-weight="600">CBR (Constant Bitrate)</text>
+  <!-- CBR Graph -->
+  <line x1="70" y1="190" x2="360" y2="190" stroke="#334155" stroke-width="1"/>
+  <line x1="70" y1="100" x2="70" y2="190" stroke="#334155" stroke-width="1"/>
+  <text x="60" y="150" text-anchor="end" fill="#94a3b8" font-size="10">6 Mbps</text>
+  <line x1="70" y1="145" x2="360" y2="145" stroke="#3b82f6" stroke-width="3"/>
+  <text x="215" y="205" text-anchor="middle" fill="#64748b" font-size="10">Time</text>
+  <!-- Scene labels CBR -->
+  <rect x="90" y="160" width="70" height="20" rx="4" fill="#1e293b"/>
+  <text x="125" y="174" text-anchor="middle" fill="#94a3b8" font-size="9">Static</text>
+  <rect x="200" y="160" width="70" height="20" rx="4" fill="#1e293b"/>
+  <text x="235" y="174" text-anchor="middle" fill="#94a3b8" font-size="9">Action</text>
+  <rect x="310" y="160" width="40" height="20" rx="4" fill="#1e293b"/>
+  <text x="330" y="174" text-anchor="middle" fill="#94a3b8" font-size="9">Static</text>
+  <!-- VBR Section -->
+  <rect x="410" y="55" width="350" height="160" rx="12" fill="url(#vbr-bg)" stroke="#10b981" stroke-opacity="0.3"/>
+  <text x="585" y="78" text-anchor="middle" fill="#10b981" font-size="14" font-weight="600">VBR (Variable Bitrate)</text>
+  <!-- VBR Graph -->
+  <line x1="440" y1="190" x2="730" y2="190" stroke="#334155" stroke-width="1"/>
+  <line x1="440" y1="100" x2="440" y2="190" stroke="#334155" stroke-width="1"/>
+  <text x="430" y="150" text-anchor="end" fill="#94a3b8" font-size="10">6 Mbps</text>
+  <text x="430" y="120" text-anchor="end" fill="#94a3b8" font-size="10">10 Mbps</text>
+  <polyline points="440,165 480,168 510,170 540,165 560,130 580,110 600,120 620,115 650,125 680,160 710,168 730,165" fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+  <text x="585" y="205" text-anchor="middle" fill="#64748b" font-size="10">Time</text>
+  <!-- Scene labels VBR -->
+  <rect x="460" y="160" width="70" height="20" rx="4" fill="#1e293b"/>
+  <text x="495" y="174" text-anchor="middle" fill="#94a3b8" font-size="9">Static</text>
+  <rect x="570" y="160" width="70" height="20" rx="4" fill="#1e293b"/>
+  <text x="605" y="174" text-anchor="middle" fill="#94a3b8" font-size="9">Action</text>
+  <rect x="680" y="160" width="40" height="20" rx="4" fill="#1e293b"/>
+  <text x="700" y="174" text-anchor="middle" fill="#94a3b8" font-size="9">Static</text>
+  <!-- Bottom comparison -->
+  <rect x="40" y="235" width="350" height="145" rx="12" fill="#1e293b"/>
+  <text x="215" y="260" text-anchor="middle" fill="#3b82f6" font-size="13" font-weight="600">Best for: Live Streaming</text>
+  <text x="215" y="282" text-anchor="middle" fill="#94a3b8" font-size="11">Predictable bandwidth</text>
+  <text x="215" y="300" text-anchor="middle" fill="#94a3b8" font-size="11">No buffering spikes</text>
+  <text x="215" y="318" text-anchor="middle" fill="#94a3b8" font-size="11">Twitch, YouTube Live, Kick</text>
+  <text x="215" y="342" text-anchor="middle" fill="#ef4444" font-size="11">Wastes bits on simple scenes</text>
+  <text x="215" y="362" text-anchor="middle" fill="#ef4444" font-size="11">Larger file sizes</text>
+  <rect x="410" y="235" width="350" height="145" rx="12" fill="#1e293b"/>
+  <text x="585" y="260" text-anchor="middle" fill="#10b981" font-size="13" font-weight="600">Best for: Recording &amp; Uploads</text>
+  <text x="585" y="282" text-anchor="middle" fill="#94a3b8" font-size="11">Better quality per file size</text>
+  <text x="585" y="300" text-anchor="middle" fill="#94a3b8" font-size="11">Smart bit allocation</text>
+  <text x="585" y="318" text-anchor="middle" fill="#94a3b8" font-size="11">YouTube uploads, local recording</text>
+  <text x="585" y="342" text-anchor="middle" fill="#ef4444" font-size="11">Bitrate spikes can cause buffering</text>
+  <text x="585" y="362" text-anchor="middle" fill="#ef4444" font-size="11">Not ideal for live streaming</text>
+</svg>

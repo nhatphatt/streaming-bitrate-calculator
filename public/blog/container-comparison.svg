@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" font-family="system-ui, -apple-system, sans-serif">
+  <rect width="800" height="440" rx="16" fill="#0f172a"/>
+  <text x="400" y="36" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700">MP4 vs MKV vs MOV: When to Use Each</text>
+  <!-- MP4 -->
+  <rect x="30" y="60" width="240" height="360" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-opacity="0.5"/>
+  <rect x="30" y="60" width="240" height="50" rx="12" fill="#3b82f6" fill-opacity="0.2"/>
+  <text x="150" y="92" text-anchor="middle" fill="#3b82f6" font-size="20" font-weight="800">.MP4</text>
+  <text x="150" y="135" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">The Universal Standard</text>
+  <text x="150" y="165" text-anchor="middle" fill="#22c55e" font-size="11">Plays everywhere</text>
+  <text x="150" y="185" text-anchor="middle" fill="#22c55e" font-size="11">Fastest upload processing</text>
+  <text x="150" y="205" text-anchor="middle" fill="#22c55e" font-size="11">Web/mobile native</text>
+  <text x="150" y="225" text-anchor="middle" fill="#22c55e" font-size="11">HTML5 video support</text>
+  <text x="150" y="255" text-anchor="middle" fill="#ef4444" font-size="11">Limited subtitle support</text>
+  <text x="150" y="275" text-anchor="middle" fill="#ef4444" font-size="11">Corrupts on crash (OBS)</text>
+  <rect x="55" y="300" width="190" height="24" rx="6" fill="#3b82f6" fill-opacity="0.15"/>
+  <text x="150" y="316" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="600">YouTube / Twitch / TikTok</text>
+  <rect x="55" y="330" width="190" height="24" rx="6" fill="#3b82f6" fill-opacity="0.15"/>
+  <text x="150" y="346" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="600">Sharing / Web embed</text>
+  <rect x="55" y="360" width="190" height="24" rx="6" fill="#3b82f6" fill-opacity="0.15"/>
+  <text x="150" y="376" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="600">Mobile playback</text>
+  <!-- MKV -->
+  <rect x="280" y="60" width="240" height="360" rx="12" fill="#1e293b" stroke="#10b981" stroke-opacity="0.5"/>
+  <rect x="280" y="60" width="240" height="50" rx="12" fill="#10b981" fill-opacity="0.2"/>
+  <text x="400" y="92" text-anchor="middle" fill="#10b981" font-size="20" font-weight="800">.MKV</text>
+  <text x="400" y="135" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">The Power User's Choice</text>
+  <text x="400" y="165" text-anchor="middle" fill="#22c55e" font-size="11">Any codec supported</text>
+  <text x="400" y="185" text-anchor="middle" fill="#22c55e" font-size="11">Crash-safe recording</text>
+  <text x="400" y="205" text-anchor="middle" fill="#22c55e" font-size="11">Multiple audio tracks</text>
+  <text x="400" y="225" text-anchor="middle" fill="#22c55e" font-size="11">Advanced subtitles</text>
+  <text x="400" y="255" text-anchor="middle" fill="#ef4444" font-size="11">Poor browser support</text>
+  <text x="400" y="275" text-anchor="middle" fill="#ef4444" font-size="11">Not supported on iOS</text>
+  <rect x="305" y="300" width="190" height="24" rx="6" fill="#10b981" fill-opacity="0.15"/>
+  <text x="400" y="316" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600">OBS recording</text>
+  <rect x="305" y="330" width="190" height="24" rx="6" fill="#10b981" fill-opacity="0.15"/>
+  <text x="400" y="346" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600">Archiving / local playback</text>
+  <rect x="305" y="360" width="190" height="24" rx="6" fill="#10b981" fill-opacity="0.15"/>
+  <text x="400" y="376" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600">Multi-language media</text>
+  <!-- MOV -->
+  <rect x="530" y="60" width="240" height="360" rx="12" fill="#1e293b" stroke="#f59e0b" stroke-opacity="0.5"/>
+  <rect x="530" y="60" width="240" height="50" rx="12" fill="#f59e0b" fill-opacity="0.2"/>
+  <text x="650" y="92" text-anchor="middle" fill="#f59e0b" font-size="20" font-weight="800">.MOV</text>
+  <text x="650" y="135" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">The Professional Format</text>
+  <text x="650" y="165" text-anchor="middle" fill="#22c55e" font-size="11">ProRes native support</text>
+  <text x="650" y="185" text-anchor="middle" fill="#22c55e" font-size="11">Apple ecosystem</text>
+  <text x="650" y="205" text-anchor="middle" fill="#22c55e" font-size="11">Fast macOS playback</text>
+  <text x="650" y="225" text-anchor="middle" fill="#22c55e" font-size="11">Industry standard editing</text>
+  <text x="650" y="255" text-anchor="middle" fill="#ef4444" font-size="11">Limited Android/Linux</text>
+  <text x="650" y="275" text-anchor="middle" fill="#ef4444" font-size="11">Larger with ProRes</text>
+  <rect x="555" y="300" width="190" height="24" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="650" y="316" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">Final Cut Pro workflow</text>
+  <rect x="555" y="330" width="190" height="24" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="650" y="346" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">ProRes recording</text>
+  <rect x="555" y="360" width="190" height="24" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="650" y="376" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">Broadcast delivery</text>
+</svg>

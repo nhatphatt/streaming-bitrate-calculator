@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" font-family="system-ui, -apple-system, sans-serif">
+  <rect width="800" height="350" rx="16" fill="#0f172a"/>
+  <text x="400" y="36" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700">4K Video Storage Requirements Per Hour</text>
+  <text x="400" y="56" text-anchor="middle" fill="#64748b" font-size="12">By codec and frame rate</text>
+  <!-- 30fps group -->
+  <text x="230" y="90" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="600">30 fps</text>
+  <rect x="80" y="105" width="300" height="36" rx="6" fill="#ef4444" fill-opacity="0.25"/>
+  <text x="90" y="128" fill="#f1f5f9" font-size="12" font-weight="600">H.264</text>
+  <text x="370" y="128" text-anchor="end" fill="#ef4444" font-size="13" font-weight="700">23.4 GB</text>
+  <rect x="80" y="149" width="180" height="36" rx="6" fill="#f59e0b" fill-opacity="0.25"/>
+  <text x="90" y="172" fill="#f1f5f9" font-size="12" font-weight="600">HEVC</text>
+  <text x="250" y="172" text-anchor="end" fill="#f59e0b" font-size="13" font-weight="700">14.1 GB</text>
+  <rect x="80" y="193" width="150" height="36" rx="6" fill="#10b981" fill-opacity="0.25"/>
+  <text x="90" y="216" fill="#f1f5f9" font-size="12" font-weight="600">AV1</text>
+  <text x="220" y="216" text-anchor="end" fill="#10b981" font-size="13" font-weight="700">11.7 GB</text>
+  <!-- 60fps group -->
+  <text x="600" y="90" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="600">60 fps</text>
+  <rect x="450" y="105" width="320" height="36" rx="6" fill="#ef4444" fill-opacity="0.25"/>
+  <text x="460" y="128" fill="#f1f5f9" font-size="12" font-weight="600">H.264</text>
+  <text x="760" y="128" text-anchor="end" fill="#ef4444" font-size="13" font-weight="700">46.8 GB</text>
+  <rect x="450" y="149" width="192" height="36" rx="6" fill="#f59e0b" fill-opacity="0.25"/>
+  <text x="460" y="172" fill="#f1f5f9" font-size="12" font-weight="600">HEVC</text>
+  <text x="632" y="172" text-anchor="end" fill="#f59e0b" font-size="13" font-weight="700">28.1 GB</text>
+  <rect x="450" y="193" width="160" height="36" rx="6" fill="#10b981" fill-opacity="0.25"/>
+  <text x="460" y="216" fill="#f1f5f9" font-size="12" font-weight="600">AV1</text>
+  <text x="600" y="216" text-anchor="end" fill="#10b981" font-size="13" font-weight="700">23.4 GB</text>
+  <!-- Storage recommendation -->
+  <rect x="80" y="260" width="640" height="70" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-opacity="0.3"/>
+  <text x="400" y="288" text-anchor="middle" fill="#3b82f6" font-size="14" font-weight="700">Storage Recommendation for 4K Creators</text>
+  <text x="400" y="312" text-anchor="middle" fill="#94a3b8" font-size="12">2 TB SSD = ~85 hrs (HEVC 30fps) | 4 TB HDD = ~280 hrs (HEVC 30fps)</text>
+</svg>

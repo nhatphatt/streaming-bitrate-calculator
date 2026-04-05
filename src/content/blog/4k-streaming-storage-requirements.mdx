@@ -1,0 +1,83 @@
+---
+slug: 4k-streaming-storage-requirements
+title: "4K Streaming Storage Requirements: How Much Space Do You Really Need?"
+description: "Calculate exactly how much storage you need for 4K video recording and streaming. Covers H.264, HEVC, AV1, and ProRes with real file size examples."
+publishedAt: "2026-03-18"
+updatedAt: "2026-03-27"
+readTime: "7 min read"
+---
+
+![4K video storage requirements per hour by codec and frame rate](/blog/4k-storage-requirements.svg)
+
+4K video production generates enormous files. Whether you're a YouTuber, filmmaker, or live streamer, understanding your storage requirements before a shoot prevents the nightmare of running out of space mid-session.
+
+This guide breaks down exactly how much storage 4K video requires across every common codec, frame rate, and recording duration — with real numbers you can plan around.
+
+## 4K File Sizes at a Glance
+
+Here's how much storage 1 hour of 4K (3840×2160) video consumes at different settings:
+
+| Codec | 30fps (1 hour) | 60fps (1 hour) |
+|---|---|---|
+| H.264 (AVC) | ~15.3 GB | ~30.5 GB |
+| HEVC (H.265) | ~9.2 GB | ~18.3 GB |
+| AV1 | ~7.7 GB | ~15.3 GB |
+| ProRes 422 | ~53.5 GB | ~107.0 GB |
+| ProRes 4444 | ~76.4 GB | ~152.8 GB |
+
+These numbers assume standard audio at 128 Kbps. Your actual file sizes will vary depending on scene complexity, color depth, and encoder settings. Use our [4K 30fps calculator](/size/4k-30fps/) or [4K 60fps calculator](/size/4k-60fps/) for precise estimates with your exact settings.
+
+## Storage Planning by Content Type
+
+### YouTube Content Creators
+
+If you record in 4K and edit before uploading, you need to account for:
+
+- **Source footage:** The raw recordings (largest files)
+- **Project files:** Your editor's working files (usually 10–20% of source)
+- **Render/export:** The final output file for upload
+- **Backup:** At least one copy of source footage
+
+A typical 15-minute YouTube video shot in 4K 30fps with H.264 generates about 3.8 GB of source footage. With editing overhead and a safety margin, budget approximately **10–15 GB per finished video**.
+
+For a weekly upload schedule producing 4K content, you'll consume roughly **40–60 GB per month** in source files alone. After one year, that's 480–720 GB. A 2TB drive gives you comfortable headroom.
+
+### Live Streamers Recording VODs
+
+If you stream for 4–6 hours daily and save local recordings, storage adds up fast:
+
+- **4K 30fps H.264 × 5 hours/day:** ~76 GB/day → ~2.3 TB/month
+- **4K 30fps HEVC × 5 hours/day:** ~46 GB/day → ~1.4 TB/month
+- **1080p 60fps H.264 × 5 hours/day:** ~17 GB/day → ~520 GB/month
+
+Most streamers use HEVC or lower their local recording resolution to manage storage costs. Alternatively, recording at 1080p 60fps and streaming at the same resolution eliminates the need for massive 4K storage.
+
+### Professional Video Production
+
+Professional workflows using ProRes require significantly more storage. A single day of shooting (8 hours) in 4K ProRes 422 generates approximately **428 GB**. For ProRes 4444, that jumps to **611 GB per day**.
+
+Production houses typically use RAID arrays or NAS systems with 20–100 TB of usable storage, depending on project volume.
+
+## Best Storage Solutions for 4K Video
+
+### Internal SSDs (Editing)
+For active editing, NVMe SSDs provide the speed needed for smooth 4K timeline playback. Minimum recommended: 2TB NVMe SSD as your editing drive, separate from your OS drive.
+
+### External SSDs (Field Recording)
+For on-location shoots, portable SSDs like the Samsung T7 Shield or SanDisk Extreme Pro offer fast write speeds in a rugged form factor. The 4TB models provide enough space for a full day of 4K recording.
+
+### NAS Systems (Archive)
+For long-term storage and backup, a NAS (Network Attached Storage) with 4+ drive bays running RAID 5 or RAID 6 provides both capacity and redundancy. A 4-bay NAS with 8TB drives gives you roughly 24TB of usable space in RAID 5.
+
+## How Codec Choice Affects Storage
+
+Your codec choice is the single biggest factor in file size. Compared to the H.264 baseline:
+
+- **HEVC:** ~40% smaller files — the best balance of quality, compatibility, and size
+- **AV1:** ~50% smaller files — best compression but slower encoding
+- **ProRes 422:** ~3.5× larger — for professional editing only
+- **ProRes 4444:** ~5× larger — for VFX and compositing workflows
+
+For most creators, recording in HEVC (H.265) offers the best tradeoff. Modern GPUs from NVIDIA, AMD, and Apple Silicon all support hardware HEVC encoding with minimal quality loss.
+
+Compare all codecs side-by-side with our [Codec Comparison Tool](/compare/), or calculate exact storage for your setup using the [Streaming Bitrate Calculator](/).

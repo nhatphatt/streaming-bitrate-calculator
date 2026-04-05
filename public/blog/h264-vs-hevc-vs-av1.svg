@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="system-ui, -apple-system, sans-serif">
+  <rect width="800" height="400" rx="16" fill="#0f172a"/>
+  <text x="400" y="36" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700">H.264 vs HEVC (H.265) vs AV1</text>
+  <!-- H.264 -->
+  <rect x="30" y="60" width="240" height="320" rx="12" fill="#1e293b" stroke="#ef4444" stroke-opacity="0.5"/>
+  <rect x="30" y="60" width="240" height="50" rx="12" fill="#ef4444" fill-opacity="0.2"/>
+  <text x="150" y="92" text-anchor="middle" fill="#ef4444" font-size="20" font-weight="800">H.264</text>
+  <text x="150" y="130" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Released: 2003</text>
+  <text x="150" y="155" text-anchor="middle" fill="#94a3b8" font-size="11">Compression: Baseline</text>
+  <text x="150" y="175" text-anchor="middle" fill="#94a3b8" font-size="11">Speed: Fast</text>
+  <text x="150" y="195" text-anchor="middle" fill="#94a3b8" font-size="11">Hardware: Everything</text>
+  <rect x="50" y="215" width="200" height="28" rx="6" fill="#22c55e" fill-opacity="0.1"/>
+  <text x="150" y="234" text-anchor="middle" fill="#22c55e" font-size="11">Universal compatibility</text>
+  <rect x="50" y="250" width="200" height="28" rx="6" fill="#22c55e" fill-opacity="0.1"/>
+  <text x="150" y="269" text-anchor="middle" fill="#22c55e" font-size="11">Fastest encoding</text>
+  <rect x="50" y="285" width="200" height="28" rx="6" fill="#ef4444" fill-opacity="0.1"/>
+  <text x="150" y="304" text-anchor="middle" fill="#ef4444" font-size="11">Largest file sizes</text>
+  <rect x="50" y="340" width="200" height="28" rx="6" fill="#3b82f6" fill-opacity="0.15"/>
+  <text x="150" y="359" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="600">Best for: Streaming</text>
+  <!-- HEVC -->
+  <rect x="280" y="60" width="240" height="320" rx="12" fill="#1e293b" stroke="#f59e0b" stroke-opacity="0.5"/>
+  <rect x="280" y="60" width="240" height="50" rx="12" fill="#f59e0b" fill-opacity="0.2"/>
+  <text x="400" y="92" text-anchor="middle" fill="#f59e0b" font-size="20" font-weight="800">HEVC</text>
+  <text x="400" y="130" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Released: 2013</text>
+  <text x="400" y="155" text-anchor="middle" fill="#94a3b8" font-size="11">Compression: ~40% better</text>
+  <text x="400" y="175" text-anchor="middle" fill="#94a3b8" font-size="11">Speed: Medium</text>
+  <text x="400" y="195" text-anchor="middle" fill="#94a3b8" font-size="11">Hardware: Most modern GPUs</text>
+  <rect x="300" y="215" width="200" height="28" rx="6" fill="#22c55e" fill-opacity="0.1"/>
+  <text x="400" y="234" text-anchor="middle" fill="#22c55e" font-size="11">Great quality/size balance</text>
+  <rect x="300" y="250" width="200" height="28" rx="6" fill="#22c55e" fill-opacity="0.1"/>
+  <text x="400" y="269" text-anchor="middle" fill="#22c55e" font-size="11">Wide platform support</text>
+  <rect x="300" y="285" width="200" height="28" rx="6" fill="#ef4444" fill-opacity="0.1"/>
+  <text x="400" y="304" text-anchor="middle" fill="#ef4444" font-size="11">Licensing complexity</text>
+  <rect x="300" y="340" width="200" height="28" rx="6" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="400" y="359" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">Best for: Recording + Uploads</text>
+  <!-- AV1 -->
+  <rect x="530" y="60" width="240" height="320" rx="12" fill="#1e293b" stroke="#10b981" stroke-opacity="0.5"/>
+  <rect x="530" y="60" width="240" height="50" rx="12" fill="#10b981" fill-opacity="0.2"/>
+  <text x="650" y="92" text-anchor="middle" fill="#10b981" font-size="20" font-weight="800">AV1</text>
+  <text x="650" y="130" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Released: 2018</text>
+  <text x="650" y="155" text-anchor="middle" fill="#94a3b8" font-size="11">Compression: ~50% better</text>
+  <text x="650" y="175" text-anchor="middle" fill="#94a3b8" font-size="11">Speed: Slow (CPU)</text>
+  <text x="650" y="195" text-anchor="middle" fill="#94a3b8" font-size="11">Hardware: RTX 40+, Intel Arc</text>
+  <rect x="550" y="215" width="200" height="28" rx="6" fill="#22c55e" fill-opacity="0.1"/>
+  <text x="650" y="234" text-anchor="middle" fill="#22c55e" font-size="11">Smallest file sizes</text>
+  <rect x="550" y="250" width="200" height="28" rx="6" fill="#22c55e" fill-opacity="0.1"/>
+  <text x="650" y="269" text-anchor="middle" fill="#22c55e" font-size="11">Royalty-free</text>
+  <rect x="550" y="285" width="200" height="28" rx="6" fill="#ef4444" fill-opacity="0.1"/>
+  <text x="650" y="304" text-anchor="middle" fill="#ef4444" font-size="11">Needs modern hardware</text>
+  <rect x="550" y="340" width="200" height="28" rx="6" fill="#10b981" fill-opacity="0.15"/>
+  <text x="650" y="359" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600">Best for: Future-proofing</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" font-family="system-ui, -apple-system, sans-serif">
+  <rect width="800" height="380" rx="16" fill="#0f172a"/>
+  <text x="400" y="36" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700">File Size Comparison: 1hr 1080p 60fps Video</text>
+  <text x="400" y="56" text-anchor="middle" fill="#64748b" font-size="12">Lower is better (same visual quality)</text>
+  <!-- Bars -->
+  <!-- H.264 -->
+  <rect x="120" y="90" width="560" height="50" rx="8" fill="#ef4444" fill-opacity="0.15" stroke="#ef4444" stroke-opacity="0.3"/>
+  <rect x="120" y="90" width="560" height="50" rx="8" fill="#ef4444" fill-opacity="0.25"/>
+  <text x="100" y="120" text-anchor="end" fill="#f1f5f9" font-size="14" font-weight="600">H.264</text>
+  <text x="690" y="120" fill="#ef4444" font-size="16" font-weight="700">5.4 GB</text>
+  <text x="690" y="134" fill="#ef4444" font-size="10">baseline</text>
+  <!-- HEVC -->
+  <rect x="120" y="160" width="336" height="50" rx="8" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-opacity="0.3"/>
+  <rect x="120" y="160" width="336" height="50" rx="8" fill="#f59e0b" fill-opacity="0.25"/>
+  <text x="100" y="190" text-anchor="end" fill="#f1f5f9" font-size="14" font-weight="600">HEVC</text>
+  <text x="466" y="190" fill="#f59e0b" font-size="16" font-weight="700">3.2 GB</text>
+  <text x="466" y="204" fill="#f59e0b" font-size="10">-40%</text>
+  <!-- VP9 -->
+  <rect x="120" y="230" width="310" height="50" rx="8" fill="#8b5cf6" fill-opacity="0.15" stroke="#8b5cf6" stroke-opacity="0.3"/>
+  <rect x="120" y="230" width="310" height="50" rx="8" fill="#8b5cf6" fill-opacity="0.25"/>
+  <text x="100" y="260" text-anchor="end" fill="#f1f5f9" font-size="14" font-weight="600">VP9</text>
+  <text x="440" y="260" fill="#8b5cf6" font-size="16" font-weight="700">3.0 GB</text>
+  <text x="440" y="274" fill="#8b5cf6" font-size="10">-44%</text>
+  <!-- AV1 -->
+  <rect x="120" y="300" width="280" height="50" rx="8" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-opacity="0.3"/>
+  <rect x="120" y="300" width="280" height="50" rx="8" fill="#10b981" fill-opacity="0.25"/>
+  <text x="100" y="330" text-anchor="end" fill="#f1f5f9" font-size="14" font-weight="600">AV1</text>
+  <text x="410" y="330" fill="#10b981" font-size="16" font-weight="700">2.7 GB</text>
+  <text x="410" y="344" fill="#10b981" font-size="10">-50%</text>
+</svg>
