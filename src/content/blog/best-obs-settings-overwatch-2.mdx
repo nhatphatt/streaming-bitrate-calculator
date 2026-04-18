@@ -1,0 +1,74 @@
+---
+slug: best-obs-settings-overwatch-2
+title: "Best OBS Settings for Streaming Overwatch 2 in 2026"
+description: "Optimal OBS settings for streaming Overwatch 2. Recommended bitrate, encoder, and in-game settings for Twitch and YouTube streaming."
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+readTime: "6 min read"
+---
+
+Overwatch 2 is a visually busy team shooter with lots of ability effects, ultimates, and fast movement. Getting your OBS settings right ensures teamfights look clean on stream.
+
+## Recommended Settings
+
+### Twitch
+
+- **1080p 60fps:** 6,000 Kbps, NVENC (New), Preset P4–P5
+- **720p 60fps:** 4,500 Kbps
+
+### YouTube Live
+
+- **1080p 60fps:** 9,000–11,000 Kbps
+- **1440p 60fps:** 14,000–16,000 Kbps
+
+## Compression Characteristics
+
+Overwatch 2 has high compression complexity during teamfights. Multiple ultimates firing simultaneously (Graviton + Dragon Strike, for example) create particle-heavy scenes that are hard to compress. During downtime between fights, compression is very efficient.
+
+At 6,000 Kbps on Twitch, expect minor artifacts during chaotic teamfights. This is unavoidable at Twitch's bitrate cap. On YouTube with 9,000+ Kbps, teamfights look significantly cleaner.
+
+## Encoder Settings
+
+### NVENC
+
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) / 9,000–11,000 Kbps (YouTube)
+- **Preset:** P4 (Medium) — OW2 is GPU-intensive
+- **Profile:** High
+- **B-frames:** 2
+
+## In-Game Settings
+
+- **Render Scale:** 100% (never go below)
+- **Texture Quality:** High
+- **Texture Filtering Quality:** High
+- **Local Fog Detail:** Low
+- **Dynamic Reflections:** Off
+- **Shadow Detail:** Medium
+- **Model Detail:** High
+- **Effects Detail:** Medium (reduces particle complexity for encoder)
+- **Lighting Quality:** Medium
+- **Antialias Quality:** Medium (SMAA)
+- **Refraction Quality:** Low
+- **Screenshot Quality:** 1x
+- **Ambient Occlusion:** Off
+- **Local Reflections:** Off
+- **Damage FX:** Default
+
+## Performance Tips
+
+1. Use **NVENC** — OW2 uses significant GPU resources
+2. Cap FPS at your monitor refresh rate
+3. Reduce **Effects Detail** to Medium — this is the biggest impact on both FPS and stream compression
+4. Close background applications, especially browsers with Twitch chat open
+
+## Quick Reference
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P4 |
+| Twitch | 720p | 60 | 4,500 Kbps | NVENC P5 |
+| YouTube | 1080p | 60 | 9,000–11,000 Kbps | NVENC P4 |
+| Kick | 1080p | 60 | 7,000 Kbps | NVENC P4 |
+
+Use our [Bitrate Calculator](/) for storage planning or check [YouTube settings](/platforms/youtube/) for more tips.

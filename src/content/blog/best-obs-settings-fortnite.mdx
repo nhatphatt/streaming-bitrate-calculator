@@ -1,0 +1,89 @@
+---
+slug: best-obs-settings-fortnite
+title: "Best OBS Settings for Streaming Fortnite in 2026"
+description: "Optimal OBS bitrate, resolution, and encoder settings for streaming Fortnite on Twitch and YouTube. Covers 1080p 60fps, 720p, and performance tips."
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+readTime: "7 min read"
+---
+
+Fortnite is one of the most streamed games in the world, and its fast-paced building and combat mechanics demand the right OBS settings to look good on stream. Here's how to optimize your setup for the best viewer experience.
+
+## Recommended OBS Settings for Fortnite
+
+### Twitch (6,000 Kbps cap)
+
+- **1080p 60fps:** Bitrate 6,000 Kbps, Encoder NVENC (New), Preset P5 (Slow), Profile High
+- **720p 60fps:** Bitrate 4,500 Kbps — better option if your PC struggles at 1080p
+- **Keyframe Interval:** 2 seconds (required by Twitch)
+- **Rate Control:** CBR
+
+### YouTube Live
+
+- **1080p 60fps:** Bitrate 9,000–12,000 Kbps for best quality
+- **1440p 60fps:** Bitrate 15,000 Kbps if your upload speed supports it
+- **Encoder:** NVENC or x264 Medium
+
+## Why Fortnite Needs Higher Bitrate
+
+Fortnite has constant fast motion — building, editing, jumping, and particle effects. This creates high scene complexity that compresses poorly at low bitrates. Compared to slower games like Minecraft, Fortnite needs **30–50% more bitrate** at the same resolution to look sharp.
+
+At 1080p 60fps with only 4,000 Kbps, you'll see noticeable blockiness during build fights. Pushing to 6,000 Kbps on Twitch (the maximum for non-partners) makes a significant difference.
+
+## Encoder Settings
+
+### NVENC (NVIDIA GPU)
+
+If you have an RTX 2060 or newer, NVENC is the best choice for Fortnite streaming:
+
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) or 9,000+ Kbps (YouTube)
+- **Preset:** P5 (Slow) for best quality, P4 (Medium) if you need more GPU headroom
+- **Profile:** High
+- **Look-ahead:** Off (reduces latency)
+- **B-frames:** 2
+
+### x264 (CPU)
+
+Only use x264 if you have a powerful CPU (Ryzen 7/9 or Intel i7/i9) and your GPU is already maxed by the game:
+
+- **Preset:** Medium (or Slow if your CPU can handle it)
+- **Bitrate:** Same as NVENC recommendations
+- **Profile:** High
+
+## In-Game Settings That Affect Stream Quality
+
+Certain Fortnite settings create more visual noise, making your stream harder to compress:
+
+- **Effects:** Set to Medium — High/Epic effects create particle spam that eats bitrate
+- **View Distance:** Epic is fine — doesn't affect compression much
+- **Shadows:** Medium or Low — heavy shadows add compression complexity
+- **Anti-Aliasing:** TAA — reduces jagged edges that waste bitrate on edge detail
+- **Motion Blur:** Off — adds unnecessary visual noise
+
+## Performance vs Quality
+
+For competitive Fortnite, most streamers prioritize frame rate over visual quality. A common setup:
+
+- **Game Resolution:** 1920×1080 (or 1600×900 stretched)
+- **Stream Resolution:** 1920×1080 (or downscale to 1280×720 in OBS)
+- **Game FPS:** 144+ (uncapped or capped at monitor refresh rate)
+- **Stream FPS:** 60fps
+
+Use OBS's **Downscale Filter: Lanczos** if you're downscaling from a higher game resolution.
+
+## Recommended Upload Speed
+
+For Fortnite streaming at 1080p 60fps on Twitch (6,000 Kbps), you need at least **10 Mbps upload speed**. For YouTube at 9,000+ Kbps, aim for **15+ Mbps**. Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to check your connection.
+
+## Quick Reference Table
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P5 |
+| Twitch | 720p | 60 | 4,500 Kbps | NVENC P5 |
+| YouTube | 1080p | 60 | 9,000–12,000 Kbps | NVENC P5 |
+| YouTube | 1440p | 60 | 15,000 Kbps | NVENC P4 |
+| Kick | 1080p | 60 | 7,000 Kbps | NVENC P5 |
+
+Use our [Bitrate Calculator](/) to calculate exact file sizes and storage needs for your Fortnite recordings.

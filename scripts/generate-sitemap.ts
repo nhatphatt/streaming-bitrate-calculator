@@ -6,6 +6,8 @@
 import { getAllSlugs } from "../src/lib/seo-matrix";
 import { getAllBlogSlugs } from "../src/lib/blog-content";
 import { PRIORITY_SIZE_SLUGS, SIZE_HUBS } from "../src/lib/strategic-pages";
+import { getAllPlatformSlugs } from "../src/lib/platform-content";
+import { getAllGlossarySlugs } from "../src/data/glossary-terms";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
@@ -19,6 +21,13 @@ const staticUrls = [
   { loc: "/tools/bandwidth-calculator/", priority: "0.9" },
   { loc: "/tools/upload-time-calculator/", priority: "0.9" },
   { loc: "/tools/recording-time-calculator/", priority: "0.9" },
+  { loc: "/tools/aspect-ratio-calculator/", priority: "0.9" },
+  { loc: "/tools/compression-calculator/", priority: "0.9" },
+  { loc: "/tools/fps-calculator/", priority: "0.9" },
+  { loc: "/tools/disk-space-planner/", priority: "0.9" },
+  { loc: "/platforms/", priority: "0.9" },
+  { loc: "/glossary/", priority: "0.8" },
+  { loc: "/setup-wizard/", priority: "0.9" },
   { loc: "/blog/", priority: "0.8" },
   { loc: "/tools/", priority: "0.9" },
   { loc: "/about/", priority: "0.5" },
@@ -35,7 +44,17 @@ const blogUrls = getAllBlogSlugs().map((slug) => ({
   priority: "0.7",
 }));
 
-const allUrls = [...staticUrls, ...prioritySizeUrls, ...blogUrls];
+const platformUrls = getAllPlatformSlugs().map((slug) => ({
+  loc: `/platforms/${slug}/`,
+  priority: "0.8",
+}));
+
+const glossaryUrls = getAllGlossarySlugs().map((slug) => ({
+  loc: `/glossary/${slug}/`,
+  priority: "0.6",
+}));
+
+const allUrls = [...staticUrls, ...platformUrls, ...glossaryUrls, ...prioritySizeUrls, ...blogUrls];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -38,6 +38,30 @@ const ALL_TOOLS: Tool[] = [
     description: "Compare file sizes across H.264, HEVC, AV1, and ProRes",
     icon: "⚖️",
   },
+  {
+    href: "/tools/aspect-ratio-calculator/",
+    title: "Aspect Ratio Calculator",
+    description: "Calculate aspect ratio for YouTube, TikTok, Instagram, and more",
+    icon: "📐",
+  },
+  {
+    href: "/tools/compression-calculator/",
+    title: "Compression Calculator",
+    description: "Estimate file size after converting between video codecs",
+    icon: "🗜️",
+  },
+  {
+    href: "/tools/fps-calculator/",
+    title: "FPS Calculator",
+    description: "Calculate frames, duration, and slow-motion playback",
+    icon: "🎞️",
+  },
+  {
+    href: "/tools/disk-space-planner/",
+    title: "Disk Space Planner",
+    description: "Plan storage needs based on your streaming schedule",
+    icon: "💿",
+  },
 ];
 
 interface RelatedToolsProps {

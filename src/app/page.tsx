@@ -213,15 +213,28 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold mb-6">Platform-specific guides</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                ["/blog/youtube-streaming-bitrate-guide/", "YouTube streaming bitrate guide"],
-                ["/blog/twitch-streaming-bitrate-guide/", "Twitch streaming bitrate guide"],
-                ["/blog/obs-bitrate-for-1080p-60fps/", "OBS bitrate for 1080p 60fps"],
+                ["/platforms/twitch/", "Twitch streaming settings"],
+                ["/platforms/youtube/", "YouTube streaming settings"],
+                ["/platforms/kick/", "Kick streaming settings"],
+                ["/blog/youtube-streaming-bitrate-guide/", "YouTube bitrate guide"],
+                ["/blog/twitch-streaming-bitrate-guide/", "Twitch bitrate guide"],
+                ["/blog/best-obs-bitrate-settings/", "OBS bitrate settings"],
               ].map(([href, label]) => (
                 <Link key={href} href={href} className="rounded-xl border border-[var(--border)] px-4 py-3 text-sm font-medium hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors">
                   {label}
                 </Link>
               ))}
             </div>
+          </section>
+
+          <section className="rounded-xl border-2 border-[var(--primary-20)] bg-[var(--accent)] p-6 text-center">
+            <h2 className="text-xl font-bold mb-2">Not sure what settings to use?</h2>
+            <p className="text-[var(--muted-foreground)] mb-4 text-sm">
+              Answer 4 quick questions and get personalized streaming settings for your setup.
+            </p>
+            <Link href="/setup-wizard/" className="inline-flex items-center gap-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">
+              Open Setup Wizard →
+            </Link>
           </section>
         </div>
       </div>

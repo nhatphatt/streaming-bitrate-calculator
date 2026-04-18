@@ -1,0 +1,74 @@
+---
+slug: best-obs-settings-elden-ring
+title: "Best OBS Settings for Streaming Elden Ring in 2026"
+description: "Optimal OBS settings for streaming Elden Ring. Bitrate, encoder, and in-game settings for smooth streaming on Twitch and YouTube."
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+readTime: "5 min read"
+---
+
+Elden Ring is a visually stunning open-world RPG that streams beautifully when configured correctly. Its slower pace compared to competitive shooters means you can get excellent quality at moderate bitrates.
+
+## Recommended Settings
+
+### Twitch
+
+- **1080p 60fps:** 5,000–6,000 Kbps, NVENC (New), Preset P5
+- **1080p 30fps:** 4,000–4,500 Kbps — acceptable since Elden Ring caps at 60fps anyway
+
+### YouTube Live
+
+- **1080p 60fps:** 8,000–10,000 Kbps
+- **1440p 60fps:** 12,000–15,000 Kbps
+
+## Why Elden Ring Streams Well
+
+Elden Ring has moderate compression complexity. While the environments are detailed, the camera movement is relatively controlled (third-person, no rapid spinning). Boss fights increase complexity with particle effects, but the overall scene is manageable.
+
+At 5,000–6,000 Kbps on Twitch, 1080p looks excellent. The game's art direction with muted colors and atmospheric lighting compresses efficiently.
+
+## Encoder Settings
+
+### NVENC
+
+- **Rate Control:** CBR
+- **Bitrate:** 5,000–6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
+- **Preset:** P5 (Slow)
+- **Profile:** High
+- **B-frames:** 2
+
+## In-Game Settings
+
+Elden Ring has limited graphics options, but optimize what you can:
+
+- **Texture Quality:** High or Maximum
+- **Antialiasing Quality:** High
+- **SSAO:** Medium
+- **Depth of Field:** Off (cleaner stream image)
+- **Motion Blur:** Off (critical for stream quality)
+- **Shadow Quality:** Medium
+- **Lighting Quality:** High
+- **Effects Quality:** Medium
+- **Volumetric Quality:** Medium
+- **Reflection Quality:** Medium
+- **Grass Quality:** Medium
+
+**Note:** Elden Ring is capped at 60fps. Don't set your OBS to 120fps — it won't help.
+
+## Performance Tips
+
+1. Elden Ring has frame pacing issues — use **RTSS (RivaTuner)** to cap at 60fps for smoother frame delivery
+2. Use NVENC encoding — the game is GPU-heavy
+3. Disable Steam overlay to prevent stutters
+4. If you experience stuttering in the open world, lower Grass Quality and Volumetric Quality
+
+## Quick Reference
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 5,000–6,000 Kbps | NVENC P5 |
+| YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC P5 |
+| YouTube | 1440p | 60 | 12,000–15,000 Kbps | NVENC P5 |
+| Kick | 1080p | 60 | 6,000–7,000 Kbps | NVENC P5 |
+
+Use our [Bitrate Calculator](/) for recording file size estimates or the [Disk Space Planner](/tools/disk-space-planner/) to plan your storage.

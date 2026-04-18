@@ -2,229 +2,523 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://streamersize.com/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://streamersize.com/compare/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://streamersize.com/tools/bandwidth-calculator/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://streamersize.com/tools/upload-time-calculator/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://streamersize.com/tools/recording-time-calculator/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/tools/aspect-ratio-calculator/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/tools/compression-calculator/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/tools/fps-calculator/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/tools/disk-space-planner/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/platforms/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/setup-wizard/</loc>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/tools/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://streamersize.com/about/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://streamersize.com/privacy-policy/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://streamersize.com/platforms/twitch/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/platforms/youtube/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/platforms/kick/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/platforms/facebook/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/platforms/discord/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/bitrate/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/codec/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/fps/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/resolution/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/cbr/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/vbr/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/keyframe/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/transcoding/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/encoding/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/latency/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/buffering/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/obs/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/rtmp/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/srt/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/hls/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/ingest-server/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/b-frames/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/chroma-subsampling/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/color-depth/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/glossary/container-format/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://streamersize.com/size/720p-60fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/1080p-30fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/1080p-60fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/1440p-60fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/4k-30fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/4k-60fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/720p-streaming-bitrate/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/1080p-streaming-bitrate/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/1440p-streaming-bitrate/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://streamersize.com/size/4k-streaming-bitrate/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://streamersize.com/blog/best-capture-card-for-streaming/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-internet-speed-for-streaming/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-microphone-for-streaming/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-apex-legends/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-cs2/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-elden-ring/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-fortnite/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-gta-v/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-league-of-legends/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-minecraft/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-overwatch-2/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-valorant/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-obs-settings-warzone/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/best-streaming-software-2026/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/how-to-multistream/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/nvenc-vs-x264-streaming/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://streamersize.com/blog/obs-vs-streamlabs-2026/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://streamersize.com/blog/best-codec-for-live-streaming/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/best-streaming-bitrate-by-resolution/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/cbr-vs-vbr-for-streaming/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/obs-bitrate-for-1080p-60fps/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/twitch-streaming-bitrate-guide/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/twitch-vs-youtube-bitrate-comparison/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/upload-speed-for-streaming-guide/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/youtube-streaming-bitrate-guide/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/best-video-format-for-youtube/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/cbr-vs-vbr-bitrate-explained/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/how-to-reduce-video-file-size/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/mp4-vs-mkv-vs-mov/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/obs-recording-settings-guide/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/best-obs-bitrate-settings/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/4k-streaming-storage-requirements/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/h264-vs-h265-vs-av1/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/how-much-storage-for-youtube-channel/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://streamersize.com/blog/streaming-bandwidth-requirements/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

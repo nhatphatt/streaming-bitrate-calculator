@@ -48,6 +48,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    languages: {
+      "en-US": "https://streamersize.com",
+      "x-default": "https://streamersize.com",
+    },
+  },
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
@@ -62,6 +68,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
+        {/* Preconnect to external resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
         {/* Inline script to prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{
@@ -133,6 +144,12 @@ export default function RootLayout({
             <div className="flex items-center gap-4">
               <ToolsDropdown />
               <Link
+                href="/platforms/"
+                className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors hidden md:inline"
+              >
+                Platforms
+              </Link>
+              <Link
                 href="/compare/"
                 className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors hidden md:inline"
               >
@@ -194,6 +211,7 @@ export default function RootLayout({
                   <li><Link href="/tools/bandwidth-calculator/" className="hover:text-[var(--primary)] transition-colors">Bandwidth Calculator</Link></li>
                   <li><Link href="/tools/upload-time-calculator/" className="hover:text-[var(--primary)] transition-colors">Upload Time Calculator</Link></li>
                   <li><Link href="/tools/recording-time-calculator/" className="hover:text-[var(--primary)] transition-colors">Recording Time Calculator</Link></li>
+                  <li><Link href="/tools/aspect-ratio-calculator/" className="hover:text-[var(--primary)] transition-colors">Aspect Ratio Calculator</Link></li>
                 </ul>
               </div>
 
@@ -205,6 +223,8 @@ export default function RootLayout({
                   <li><Link href="/blog/youtube-streaming-bitrate-guide/" className="hover:text-[var(--primary)] transition-colors">YouTube Bitrate Guide</Link></li>
                   <li><Link href="/blog/twitch-streaming-bitrate-guide/" className="hover:text-[var(--primary)] transition-colors">Twitch Bitrate Guide</Link></li>
                   <li><Link href="/blog/best-obs-bitrate-settings/" className="hover:text-[var(--primary)] transition-colors">OBS Bitrate Guide</Link></li>
+                  <li><Link href="/platforms/" className="hover:text-[var(--primary)] transition-colors">Platform Settings</Link></li>
+                  <li><Link href="/glossary/" className="hover:text-[var(--primary)] transition-colors">Glossary</Link></li>
                   <li><Link href="/about/" className="hover:text-[var(--primary)] transition-colors">About</Link></li>
                   <li><Link href="/privacy-policy/" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</Link></li>
                 </ul>

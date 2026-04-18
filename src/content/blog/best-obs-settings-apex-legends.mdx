@@ -1,0 +1,79 @@
+---
+slug: best-obs-settings-apex-legends
+title: "Best OBS Settings for Streaming Apex Legends in 2026"
+description: "Optimal OBS settings for streaming Apex Legends. Recommended bitrate, encoder, and in-game settings for Twitch and YouTube."
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+readTime: "6 min read"
+---
+
+Apex Legends is a fast-paced battle royale with lots of movement, abilities, and particle effects. Getting your OBS settings right ensures your stream looks clean during intense fights.
+
+## Recommended Settings
+
+### Twitch
+
+- **1080p 60fps:** 6,000 Kbps, NVENC (New), Preset P4–P5
+- **720p 60fps:** 4,500 Kbps — solid option for lower-end PCs
+
+### YouTube Live
+
+- **1080p 60fps:** 9,000–11,000 Kbps
+- **1440p 60fps:** 14,000–16,000 Kbps
+
+## Compression Characteristics
+
+Apex Legends has moderate-to-high compression complexity due to:
+
+- Fast player movement (sliding, jumping, ziplines)
+- Ability effects (Bangalore smoke, Caustic gas, Seer tactical)
+- Detailed environments with varied terrain
+
+At 6,000 Kbps on Twitch, 1080p 60fps looks good for most situations. During heavy ability usage in final rings, you may see minor artifacts — this is normal at Twitch's bitrate cap.
+
+## Encoder Settings
+
+### NVENC
+
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) / 9,000–11,000 Kbps (YouTube)
+- **Preset:** P4 or P5
+- **Profile:** High
+- **B-frames:** 2
+
+### x264
+
+- **Preset:** Faster (Apex is CPU-intensive for game logic)
+- **Profile:** High
+
+## In-Game Settings
+
+- **Anti-Aliasing:** TSAA
+- **Texture Streaming Budget:** Match your VRAM (4 GB, 6 GB, 8 GB)
+- **Texture Filtering:** Anisotropic 4x
+- **Ambient Occlusion:** Low
+- **Sun Shadow Coverage:** Low
+- **Sun Shadow Detail:** Low
+- **Spot Shadow Detail:** Off
+- **Model Detail:** Medium
+- **Effects Detail:** Medium (Low if you need more FPS)
+- **Impact Marks:** Low
+- **Ragdolls:** Low
+
+## Performance Tips
+
+1. **Cap FPS at 144** — uncapped FPS causes frame time spikes that affect stream smoothness
+2. Use **Game Capture** in OBS, not Display Capture
+3. Disable Steam overlay and Discord overlay
+4. Set Apex to **Fullscreen** (not Borderless) for best performance
+
+## Quick Reference
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P4 |
+| Twitch | 720p | 60 | 4,500 Kbps | NVENC P5 |
+| YouTube | 1080p | 60 | 9,000–11,000 Kbps | NVENC P4 |
+| Kick | 1080p | 60 | 7,000 Kbps | NVENC P4 |
+
+Calculate your exact storage needs with our [Bitrate Calculator](/) or check platform settings at [Platform Guides](/platforms/).

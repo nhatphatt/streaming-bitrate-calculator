@@ -71,6 +71,46 @@ const tools = [
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     ),
   },
+  {
+    href: "/tools/aspect-ratio-calculator/",
+    title: "Aspect Ratio Calculator",
+    description:
+      "Calculate aspect ratio from any width and height. Presets for YouTube, TikTok, Instagram, and more.",
+    tag: "New",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    ),
+  },
+  {
+    href: "/tools/compression-calculator/",
+    title: "Compression Calculator",
+    description:
+      "Estimate how much smaller your video will be after converting to a different codec.",
+    tag: "New",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+    ),
+  },
+  {
+    href: "/tools/fps-calculator/",
+    title: "FPS Calculator",
+    description:
+      "Calculate total frames from duration, convert frames to time, and plan slow-motion shots.",
+    tag: "New",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+    ),
+  },
+  {
+    href: "/tools/disk-space-planner/",
+    title: "Disk Space Planner",
+    description:
+      "Plan your storage needs based on streaming schedule, resolution, and how long you keep recordings.",
+    tag: "New",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+    ),
+  },
 ];
 
 export default function ToolsIndexPage() {

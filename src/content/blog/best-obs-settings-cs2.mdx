@@ -1,0 +1,77 @@
+---
+slug: best-obs-settings-cs2
+title: "Best OBS Settings for Streaming CS2 in 2026"
+description: "Optimal OBS settings for streaming Counter-Strike 2. Bitrate, encoder, and in-game settings for competitive CS2 streaming on Twitch and YouTube."
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+readTime: "6 min read"
+---
+
+Counter-Strike 2 (CS2) is a competitive FPS where high frame rates are essential. Your OBS settings need to balance stream quality with minimal performance impact.
+
+## Recommended Settings
+
+### Twitch
+
+- **1080p 60fps:** 5,500–6,000 Kbps, NVENC (New), Preset P5
+- **720p 60fps:** 4,000–4,500 Kbps
+
+### YouTube Live
+
+- **1080p 60fps:** 8,000–10,000 Kbps
+- **1440p 60fps:** 12,000–15,000 Kbps
+
+## CS2 Compression Characteristics
+
+CS2 has moderate compression complexity. The Source 2 engine produces clean visuals with good anti-aliasing, but smoke grenades and flashbangs create temporary spikes in scene complexity.
+
+At 5,500–6,000 Kbps on Twitch, 1080p 60fps looks sharp. CS2's relatively static environments (compared to battle royales) compress efficiently between action moments.
+
+## Encoder Settings
+
+### NVENC
+
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
+- **Preset:** P5 (Slow)
+- **Profile:** High
+- **B-frames:** 2
+
+### x264
+
+- **Preset:** Fast or Faster (CS2 is CPU-intensive)
+- **Profile:** High
+
+## In-Game Settings
+
+For competitive CS2, prioritize FPS over visual quality:
+
+- **Global Shadow Quality:** Medium
+- **Model/Texture Detail:** Medium or High
+- **Shader Detail:** Medium
+- **Particle Detail:** Low
+- **Ambient Occlusion:** Off
+- **High Dynamic Range:** Performance
+- **FidelityFX Super Resolution:** Off (adds blur)
+- **MSAA:** 4x or 8x (helps stream quality by reducing aliasing)
+- **Texture Filtering:** Bilinear (minimal FPS impact)
+- **Motion Blur:** Off
+
+## Performance Tips
+
+1. CS2 is CPU-bound — use **NVENC** to keep CPU free for the game
+2. Cap FPS at 300 or your monitor refresh rate
+3. Use `-high` launch option for higher process priority
+4. Disable Steam overlay
+5. Set OBS to Game Capture mode
+
+## Quick Reference
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 5,500–6,000 Kbps | NVENC P5 |
+| Twitch | 720p | 60 | 4,000–4,500 Kbps | NVENC P5 |
+| YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC P5 |
+| Kick | 1080p | 60 | 6,500–7,000 Kbps | NVENC P5 |
+
+Use our [Bitrate Calculator](/) for file size estimates or check [Twitch settings](/platforms/twitch/) for more platform-specific tips.

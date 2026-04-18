@@ -1,0 +1,71 @@
+---
+slug: best-obs-settings-league-of-legends
+title: "Best OBS Settings for Streaming League of Legends in 2026"
+description: "Optimal OBS settings for streaming LoL on Twitch and YouTube. Bitrate, resolution, and encoder recommendations for smooth gameplay streaming."
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+readTime: "5 min read"
+---
+
+League of Legends is one of the easiest games to stream due to its fixed camera angle and stylized graphics. You can achieve excellent stream quality at relatively low bitrates.
+
+## Recommended Settings
+
+### Twitch
+
+- **1080p 60fps:** 4,500–6,000 Kbps, NVENC or x264 Medium
+- **1080p 30fps:** 3,500–4,500 Kbps — perfectly fine for LoL
+- **720p 60fps:** 3,000–4,000 Kbps
+
+### YouTube Live
+
+- **1080p 60fps:** 6,000–8,000 Kbps
+- **1440p 60fps:** 10,000–12,000 Kbps
+
+## Why LoL Compresses Well
+
+League of Legends has several characteristics that make it encoder-friendly:
+
+- **Fixed isometric camera** — no rapid camera movement
+- **Stylized art** with clean textures and limited visual noise
+- **Predictable scene complexity** — teamfights are the only high-complexity moments
+
+At 1080p 60fps, 4,500 Kbps looks excellent for laning phase. During 5v5 teamfights with lots of ability effects, 6,000 Kbps ensures clean output.
+
+## Encoder Settings
+
+### NVENC
+
+- **Rate Control:** CBR
+- **Bitrate:** 4,500–6,000 Kbps (Twitch) / 6,000–8,000 Kbps (YouTube)
+- **Preset:** P5 (Slow) — LoL is very light on GPU
+- **Profile:** High
+
+### x264
+
+LoL is CPU-light, making x264 a viable option:
+
+- **Preset:** Medium or Slow — you have plenty of CPU headroom
+- **Profile:** High
+
+## In-Game Settings
+
+LoL runs on almost any hardware, so max everything:
+
+- **Graphics Quality:** Very High
+- **Character Quality:** Very High
+- **Environment Quality:** Very High
+- **Effects Quality:** Very High
+- **Anti-Aliasing:** On
+- **Frame Rate Cap:** 144 or Uncapped
+- **Wait for Vertical Sync:** Off
+
+## Quick Reference
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 4,500–6,000 Kbps | NVENC P5 |
+| Twitch | 720p | 60 | 3,000–4,000 Kbps | x264 Medium |
+| YouTube | 1080p | 60 | 6,000–8,000 Kbps | NVENC P5 |
+
+Use our [Bitrate Calculator](/) for storage estimates or the [FPS Calculator](/tools/fps-calculator/) for frame count calculations.

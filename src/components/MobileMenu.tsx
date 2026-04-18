@@ -8,11 +8,16 @@ const TOOL_ITEMS = [
   { href: "/tools/bandwidth-calculator/", label: "Bandwidth Calculator" },
   { href: "/tools/upload-time-calculator/", label: "Upload Time Calculator" },
   { href: "/tools/recording-time-calculator/", label: "Recording Time Calculator" },
+  { href: "/tools/aspect-ratio-calculator/", label: "Aspect Ratio Calculator" },
+  { href: "/tools/compression-calculator/", label: "Compression Calculator" },
+  { href: "/tools/fps-calculator/", label: "FPS Calculator" },
+  { href: "/tools/disk-space-planner/", label: "Disk Space Planner" },
 ];
 
 const BROWSE_ITEMS = [
   { href: "/size/", label: "All Resolutions" },
   { href: "/compare/", label: "Compare Codecs" },
+  { href: "/platforms/", label: "Platform Settings" },
   { href: "/tools/", label: "All Tools" },
 ];
 

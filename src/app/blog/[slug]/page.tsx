@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllBlogPosts, getBlogPostBySlug, getAllBlogSlugs } from "@/lib/blog-content";
+import RelatedTools from "@/components/RelatedTools";
 
 const BLOG_CLUSTERS: Record<string, string[]> = {
   youtube: [
@@ -20,18 +21,36 @@ const BLOG_CLUSTERS: Record<string, string[]> = {
     "obs-bitrate-for-1080p-60fps",
     "obs-recording-settings-guide",
     "cbr-vs-vbr-for-streaming",
+    "nvenc-vs-x264-streaming",
+    "obs-vs-streamlabs-2026",
   ],
   bitrate: [
     "best-streaming-bitrate-by-resolution",
     "youtube-streaming-bitrate-guide",
     "twitch-streaming-bitrate-guide",
     "upload-speed-for-streaming-guide",
+    "best-internet-speed-for-streaming",
   ],
   codec: [
     "h264-vs-h265-vs-av1",
     "best-codec-for-live-streaming",
     "cbr-vs-vbr-for-streaming",
     "mp4-vs-mkv-vs-mov",
+    "nvenc-vs-x264-streaming",
+  ],
+  games: [
+    "best-obs-settings-fortnite",
+    "best-obs-settings-valorant",
+    "best-obs-settings-warzone",
+    "best-obs-settings-minecraft",
+    "best-obs-settings-apex-legends",
+    "best-obs-settings-cs2",
+  ],
+  hardware: [
+    "best-capture-card-for-streaming",
+    "best-microphone-for-streaming",
+    "best-streaming-software-2026",
+    "how-to-multistream",
   ],
 };
 
@@ -280,6 +299,8 @@ export default async function BlogPostPage({
             ))}
           </div>
         </section>
+
+        <RelatedTools current={`/blog/${post.slug}/`} />
       </div>
     </>
   );
