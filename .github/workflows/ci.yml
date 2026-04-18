@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        run: npx next lint --dir src
+        run: npx next lint src
 
       - name: Type-check (tsc)
         run: npx tsc --noEmit
