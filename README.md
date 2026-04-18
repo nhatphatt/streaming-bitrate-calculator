@@ -2,8 +2,7 @@
 
 A free online tool to calculate video file size, bitrate, and storage needs for streaming workflows. Supports resolutions from 720p to 8K, multiple codecs (H.264, HEVC, ProRes), and various frame rates.
 
-🔗 **Live:** [streamingcalculator.com](https://streamingcalculator.com) *(update with your actual URL)*
-
+🔗 **Live:** https://streamersize.com/
 ## Features
 
 - **Bitrate Calculator** – Estimate optimal bitrate for any resolution, frame rate, and codec
