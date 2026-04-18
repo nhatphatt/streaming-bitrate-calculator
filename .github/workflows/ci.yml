@@ -66,6 +66,7 @@ jobs:
           NEXT_PUBLIC_ADSENSE_SLOT: ${{ secrets.NEXT_PUBLIC_ADSENSE_SLOT }}
 
       - name: Deploy to Cloudflare Pages
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -102,6 +103,7 @@ jobs:
           NEXT_PUBLIC_ADSENSE_SLOT: ${{ secrets.NEXT_PUBLIC_ADSENSE_SLOT }}
 
       - name: Deploy Preview to Cloudflare Pages
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
