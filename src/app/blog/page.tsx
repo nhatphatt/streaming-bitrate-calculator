@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description:
       "Expert guides on streaming bitrate settings, video codecs, storage planning, and bandwidth requirements.",
     type: "website",
+    url: "/blog/",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "StreamerSize Blog" }],
   },
   twitter: {

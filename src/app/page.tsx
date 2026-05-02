@@ -76,6 +76,34 @@ export default function HomePage() {
             Estimate video file size, required bandwidth, and storage for any
             resolution, frame rate, and codec — instantly.
           </p>
+
+          {/* Trust signals */}
+          <ul className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--muted-foreground)]">
+            <li className="flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span><strong className="text-[var(--foreground)]">100% free</strong>, no signup</span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Runs in your browser — <strong className="text-[var(--foreground)]">no data sent</strong></span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Updated for <strong className="text-[var(--foreground)]">2026 codecs</strong> (H.264, HEVC, AV1, ProRes)</span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Trusted by streamers on <strong className="text-[var(--foreground)]">Twitch, YouTube, Kick</strong></span>
+            </li>
+          </ul>
         </section>
 
         {/* Calculator */}

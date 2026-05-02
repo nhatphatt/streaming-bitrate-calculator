@@ -15,7 +15,19 @@ export async function generateMetadata({ params }: { params: Promise<{ term: str
     title: `What Is ${t.term}? — Streaming Glossary`,
     description: t.shortDef,
     alternates: { canonical: `/glossary/${t.slug}/` },
-    openGraph: { title: `What Is ${t.term}?`, description: t.shortDef, type: "article" },
+    openGraph: {
+      title: `What Is ${t.term}?`,
+      description: t.shortDef,
+      type: "article",
+      url: `/glossary/${t.slug}/`,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${t.term} — StreamerSize Glossary` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `What Is ${t.term}?`,
+      description: t.shortDef,
+      images: ["/og-image.png"],
+    },
   };
 }
 

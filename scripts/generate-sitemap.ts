@@ -5,9 +5,10 @@
 
 import { getAllSlugs } from "../src/lib/seo-matrix";
 import { getAllBlogSlugs } from "../src/lib/blog-content";
-import { PRIORITY_SIZE_SLUGS, SIZE_HUBS } from "../src/lib/strategic-pages";
+import { PRIORITY_SIZE_SLUGS, PRIORITY_MATRIX_SLUGS, SIZE_HUBS } from "../src/lib/strategic-pages";
 import { getAllPlatformSlugs } from "../src/lib/platform-content";
 import { getAllGlossarySlugs } from "../src/data/glossary-terms";
+import { getAllUploadSlugs } from "../src/lib/upload-seo";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
@@ -25,6 +26,8 @@ const staticUrls = [
   { loc: "/tools/compression-calculator/", priority: "0.9" },
   { loc: "/tools/fps-calculator/", priority: "0.9" },
   { loc: "/tools/disk-space-planner/", priority: "0.9" },
+  { loc: "/tools/youtube-earnings-calculator/", priority: "0.9" },
+  { loc: "/tools/twitch-revenue-calculator/", priority: "0.9" },
   { loc: "/platforms/", priority: "0.9" },
   { loc: "/glossary/", priority: "0.8" },
   { loc: "/setup-wizard/", priority: "0.9" },
@@ -34,7 +37,7 @@ const staticUrls = [
   { loc: "/privacy-policy/", priority: "0.3" },
 ];
 
-const prioritySizeUrls = [...PRIORITY_SIZE_SLUGS, ...Object.keys(SIZE_HUBS)].map((slug) => ({
+const prioritySizeUrls = [...PRIORITY_SIZE_SLUGS, ...PRIORITY_MATRIX_SLUGS, ...Object.keys(SIZE_HUBS)].map((slug) => ({
   loc: `/size/${slug}/`,
   priority: "0.8",
 }));
@@ -54,7 +57,15 @@ const glossaryUrls = getAllGlossarySlugs().map((slug) => ({
   priority: "0.6",
 }));
 
-const allUrls = [...staticUrls, ...platformUrls, ...glossaryUrls, ...prioritySizeUrls, ...blogUrls];
+const uploadUrls = [
+  { loc: "/upload/", priority: "0.8" },
+  ...getAllUploadSlugs().map((slug) => ({
+    loc: `/upload/${slug}/`,
+    priority: "0.6",
+  })),
+];
+
+const allUrls = [...staticUrls, ...platformUrls, ...glossaryUrls, ...prioritySizeUrls, ...uploadUrls, ...blogUrls];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

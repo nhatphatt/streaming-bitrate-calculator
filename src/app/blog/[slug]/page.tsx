@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllBlogPosts, getBlogPostBySlug, getAllBlogSlugs } from "@/lib/blog-content";
 import RelatedTools from "@/components/RelatedTools";
+import { isHowToBlogSlug, extractHowToSteps, buildHowToSchema } from "@/lib/howto-schema";
 
 const BLOG_CLUSTERS: Record<string, string[]> = {
   youtube: [
@@ -45,6 +46,11 @@ const BLOG_CLUSTERS: Record<string, string[]> = {
     "best-obs-settings-minecraft",
     "best-obs-settings-apex-legends",
     "best-obs-settings-cs2",
+    "best-obs-settings-roblox",
+    "best-obs-settings-marvel-rivals",
+    "best-obs-settings-palworld",
+    "best-obs-settings-helldivers-2",
+    "best-obs-settings-rocket-league",
   ],
   hardware: [
     "best-capture-card-for-streaming",
@@ -92,6 +98,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.description,
       type: "article",
+      url: `/blog/${slug}/`,
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
       images: [{ url: "/og-image.png", width: 1200, height: 630, alt: post.title }],
@@ -159,6 +166,14 @@ export default async function BlogPostPage({
   const related = getClusterRelatedPosts(slug, allPosts);
   const contentHtml = markdownToHtml(post.content);
 
+  // HowTo schema (only for tutorial-style posts, with at least 3 extracted steps)
+  const howToSteps = isHowToBlogSlug(slug) ? extractHowToSteps(post.content, 10) : [];
+  const includeHowTo = howToSteps.length >= 3;
+  const totalTimeMinutes = (() => {
+    const m = post.readTime?.match(/(\d+)/);
+    return m ? Math.max(5, parseInt(m[1], 10) + 5) : 15;
+  })();
+
   return (
     <>
       <script
@@ -172,10 +187,14 @@ export default async function BlogPostPage({
             datePublished: post.publishedAt,
             dateModified: post.updatedAt,
             image: "https://streamersize.com/og-image.png",
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://streamersize.com/blog/${slug}/`,
+            },
             author: {
               "@type": "Organization",
-              name: "StreamerSize",
-              url: "https://streamersize.com",
+              name: "StreamerSize Editorial Team",
+              url: "https://streamersize.com/about/",
             },
             publisher: {
               "@type": "Organization",
@@ -203,6 +222,22 @@ export default async function BlogPostPage({
           }),
         }}
       />
+      {includeHowTo && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              buildHowToSchema({
+                slug,
+                title: post.title,
+                description: post.description,
+                totalTimeMinutes,
+                steps: howToSteps,
+              })
+            ),
+          }}
+        />
+      )}
 
       <div className="flex flex-col gap-12">
         {/* Breadcrumb */}

@@ -10,7 +10,8 @@ export const metadata: Metadata = {
     title: "Free Streaming & Video Tools",
     description: "Free tools for streamers: bitrate calc, codec comparison, bandwidth test, and more.",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    url: "/tools/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Free Streaming & Video Tools — StreamerSize" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -109,6 +110,26 @@ const tools = [
     tag: "New",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+    ),
+  },
+  {
+    href: "/tools/youtube-earnings-calculator/",
+    title: "YouTube Earnings Calculator",
+    description:
+      "Estimate your YouTube revenue from views, niche CPM, audience geography, and Shorts vs long-form format.",
+    tag: "Revenue",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M5 9c0-1.66 3.13-3 7-3s7 1.34 7 3-3.13 3-7 3-7 1.34-7 3 3.13 3 7 3 7-1.34 7-3"/></svg>
+    ),
+  },
+  {
+    href: "/tools/twitch-revenue-calculator/",
+    title: "Twitch Revenue Calculator",
+    description:
+      "Calculate Twitch monthly take-home from subs, bits, ads, donations, and sponsorships. Supports Affiliate to Partner Plus splits.",
+    tag: "Revenue",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269V0H2.149zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045H4.119V1.792h17.194v11.82z"/><path d="M11.611 4.836h1.792v5.373h-1.792zM16.448 4.836h1.792v5.373h-1.792z"/></svg>
     ),
   },
 ];

@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ platform:
       title: p.h1,
       description: p.description,
       type: "website",
-      images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+      url: `/platforms/${p.slug}/`,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: p.h1 }],
     },
     twitter: {
       card: "summary_large_image",

@@ -13,7 +13,7 @@ import {
 } from "@/lib/seo-matrix";
 import { generateContent } from "@/lib/content-generator";
 import { generateFaqForCombo } from "@/lib/seo";
-import { SIZE_HUBS, isSizeHubSlug, getSizeHubMetadata, isPrioritySizeSlug } from "@/lib/strategic-pages";
+import { SIZE_HUBS, isSizeHubSlug, getSizeHubMetadata, isIndexableSizeSlug } from "@/lib/strategic-pages";
 
 // --------------- SSG ---------------
 export function generateStaticParams() {
@@ -55,7 +55,7 @@ export async function generateMetadata({
 
   const { res, fps, codec } = parsed;
   const codecLabel = codec ? CODEC_LABELS[codec] : null;
-  const shouldIndex = !codec && isPrioritySizeSlug(slug);
+  const shouldIndex = isIndexableSizeSlug(slug);
 
   const title = codec
     ? `${res.label} ${fps.label} ${codecLabel} — Bitrate & File Size Calculator`
@@ -73,8 +73,14 @@ export async function generateMetadata({
       index: shouldIndex,
       follow: true,
     },
-    openGraph: { title, description, type: "website" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/size/${slug}/`,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: ["/og-image.png"] },
   };
 }
 
@@ -263,7 +269,8 @@ export default async function SizePage({
 
       <section>
         <h1 className="text-3xl md:text-4xl font-extrabold mb-3">
-          {pageTitle} — Bitrate &amp; Storage Calculator
+          {pageTitle}
+          {" "}— Bitrate &amp; Storage Calculator
         </h1>
         <p className="text-[var(--muted-foreground)] text-lg max-w-2xl">
           Instantly calculate the file size and bandwidth needed for{" "}

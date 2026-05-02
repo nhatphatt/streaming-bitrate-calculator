@@ -11,6 +11,14 @@ export const metadata: Metadata = {
     title: "Streaming & Video Glossary",
     description: "Simple definitions for bitrate, codec, FPS, and 20+ streaming terms.",
     type: "website",
+    url: "/glossary/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Streaming & Video Glossary — StreamerSize" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Streaming & Video Glossary",
+    description: "Simple definitions for bitrate, codec, FPS, and 20+ streaming terms.",
+    images: ["/og-image.png"],
   },
 };
 

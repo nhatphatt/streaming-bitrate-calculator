@@ -62,6 +62,18 @@ const ALL_TOOLS: Tool[] = [
     description: "Plan storage needs based on your streaming schedule",
     icon: "💿",
   },
+  {
+    href: "/tools/youtube-earnings-calculator/",
+    title: "YouTube Earnings Calculator",
+    description: "Estimate YouTube revenue from views, niche, and geography",
+    icon: "💰",
+  },
+  {
+    href: "/tools/twitch-revenue-calculator/",
+    title: "Twitch Revenue Calculator",
+    description: "Estimate Twitch income from subs, bits, ads, and donations",
+    icon: "💵",
+  },
 ];
 
 interface RelatedToolsProps {

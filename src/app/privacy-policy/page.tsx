@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
           Privacy Policy
         </h1>
         <p className="text-sm text-[var(--muted-foreground)] mb-8">
-          Effective Date: March 26, 2026 &middot; Last Updated: March 26, 2026
+          Effective Date: March 26, 2026 &middot; Last Updated: April 18, 2026
         </p>
 
         <p>

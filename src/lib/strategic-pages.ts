@@ -9,8 +9,51 @@ export const PRIORITY_SIZE_SLUGS = [
   "4k-60fps",
 ] as const;
 
+/**
+ * High-value 3-part matrix slugs that earn index — chosen for real US search demand.
+ * Everything else in the matrix stays noindex to avoid thin-content dilution.
+ */
+export const PRIORITY_MATRIX_SLUGS = [
+  // 720p — practical streaming
+  "720p-30fps-h264",
+  "720p-60fps-h264",
+  "720p-60fps-hevc",
+  // 1080p — sweet spot
+  "1080p-30fps-h264",
+  "1080p-30fps-hevc",
+  "1080p-60fps-h264",
+  "1080p-60fps-hevc",
+  "1080p-60fps-av1",
+  "1080p-120fps-h264",
+  "1080p-120fps-hevc",
+  // 1440p — gaming creators
+  "1440p-30fps-h264",
+  "1440p-60fps-h264",
+  "1440p-60fps-hevc",
+  "1440p-60fps-av1",
+  // 4K — pro production + premium creators
+  "4k-24fps-h264",
+  "4k-24fps-hevc",
+  "4k-24fps-prores",
+  "4k-30fps-h264",
+  "4k-30fps-hevc",
+  "4k-30fps-av1",
+  "4k-30fps-prores",
+  "4k-60fps-h264",
+  "4k-60fps-hevc",
+  "4k-60fps-av1",
+] as const;
+
 export function isPrioritySizeSlug(slug: string): boolean {
   return (PRIORITY_SIZE_SLUGS as readonly string[]).includes(slug);
+}
+
+export function isPriorityMatrixSlug(slug: string): boolean {
+  return (PRIORITY_MATRIX_SLUGS as readonly string[]).includes(slug);
+}
+
+export function isIndexableSizeSlug(slug: string): boolean {
+  return isPrioritySizeSlug(slug) || isPriorityMatrixSlug(slug);
 }
 
 export const SIZE_HUBS = {
@@ -110,7 +153,18 @@ export function getSizeHubMetadata(slug: SizeHubSlug): Metadata {
     title: hub.title,
     description: hub.description,
     alternates: { canonical: `/size/${slug}/` },
-    openGraph: { title: hub.title, description: hub.description, type: "website" },
-    twitter: { card: "summary_large_image", title: hub.title, description: hub.description },
+    openGraph: {
+      title: hub.title,
+      description: hub.description,
+      type: "website",
+      url: `/size/${slug}/`,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: hub.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: hub.title,
+      description: hub.description,
+      images: ["/og-image.png"],
+    },
   };
 }

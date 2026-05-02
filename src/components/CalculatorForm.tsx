@@ -223,21 +223,21 @@ export default function CalculatorForm({
     const bitsPerSecond = result.videoBitrateKbps * 1000;
     const value = bitsPerSecond / pixels;
     let label: string;
-    let color: string;
-    let icon: string;
+    let badge: string;
     let percent: number;
+    let tone: "excellent" | "good" | "ok" | "low" | "poor";
     if (value >= 0.15) {
-      label = "Excellent"; color = "text-green-600"; icon = "★★★"; percent = 100;
+      label = "Excellent"; badge = "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/40"; percent = 100; tone = "excellent";
     } else if (value >= 0.1) {
-      label = "Good"; color = "text-green-500"; icon = "★★☆"; percent = 75;
+      label = "Good"; badge = "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/40"; percent = 75; tone = "good";
     } else if (value >= 0.07) {
-      label = "Acceptable"; color = "text-yellow-500"; icon = "★☆☆"; percent = 50;
+      label = "Acceptable"; badge = "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/40"; percent = 50; tone = "ok";
     } else if (value >= 0.04) {
-      label = "Low"; color = "text-orange-500"; icon = "▽"; percent = 25;
+      label = "Low"; badge = "bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/40"; percent = 25; tone = "low";
     } else {
-      label = "Very Low"; color = "text-red-500"; icon = "▽▽"; percent = 10;
+      label = "Very Low"; badge = "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/40"; percent = 10; tone = "poor";
     }
-    return { value: value.toFixed(3), label, color, icon, percent };
+    return { value: value.toFixed(3), label, badge, percent, tone };
   }, [selectedRes, fps, result.videoBitrateKbps]);
 
   return (
@@ -477,7 +477,7 @@ export default function CalculatorForm({
       </div>
 
       {/* ===== OUTPUT PANEL ===== */}
-      <div className="space-y-5" aria-live="polite" aria-label="Calculator results">
+      <div id="calculator-results" className="space-y-5 pb-24 lg:pb-0" aria-live="polite" aria-label="Calculator results">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-2 h-2 rounded-full bg-green-500" />
           <h2 className="text-lg font-bold">Results</h2>
@@ -525,19 +525,25 @@ export default function CalculatorForm({
 
         {/* BPP Quality Indicator */}
         {bpp && (
-          <div className="rounded-lg border border-[var(--border)] px-4 py-3">
-            <div className="flex items-center justify-between mb-2">
-              <div className="text-sm flex items-center gap-2">
+          <div
+            className="rounded-lg border border-[var(--border)] px-4 py-3"
+            title="Bits-per-pixel — a quality density metric. Higher = more visual data per pixel = better detail retention."
+          >
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <div className="flex items-center gap-2 text-sm">
                 <span className="text-[var(--muted-foreground)]">Quality:</span>
-                <span className={`font-semibold ${bpp.color}`} aria-label={`Quality: ${bpp.label}`}>
-                  {bpp.icon} {bpp.label}
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold ${bpp.badge}`}
+                  aria-label={`Quality rating: ${bpp.label}`}
+                >
+                  <span aria-hidden="true">●</span> {bpp.label}
                 </span>
               </div>
               <div className="text-xs text-[var(--muted-foreground)] tabular-nums">
                 {bpp.value} bits/pixel
               </div>
             </div>
-            <div className="w-full h-1.5 bg-[var(--muted)] rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-[var(--muted)] rounded-full overflow-hidden" aria-hidden="true">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${
                   bpp.percent >= 75 ? "bg-green-500" : bpp.percent >= 50 ? "bg-yellow-500" : bpp.percent >= 25 ? "bg-orange-500" : "bg-red-500"
@@ -599,6 +605,48 @@ export default function CalculatorForm({
             activeCodec={codec}
           />
         </div>
+
+        {/* Recent calculations (localStorage) */}
+        {history.length > 1 && (
+          <details className="rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-5 open:pb-3">
+            <summary className="text-sm font-semibold cursor-pointer">
+              Recent calculations
+              <span className="text-xs text-[var(--muted-foreground)] font-normal ml-2">({history.length})</span>
+            </summary>
+            <ul className="mt-4 grid gap-2">
+              {history.map((h) => {
+                const isCurrent = h.resolution === resolution && h.fps === fps && h.codec === codec;
+                return (
+                  <li key={h.timestamp}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setResolution(h.resolution);
+                        setFps(h.fps);
+                        setCodec(h.codec);
+                      }}
+                      disabled={isCurrent}
+                      className={`w-full flex items-center justify-between gap-3 rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
+                        isCurrent
+                          ? "border-[var(--primary)] bg-[var(--accent)] cursor-default"
+                          : "border-[var(--border)] hover:border-[var(--primary)] hover:bg-[var(--accent)] cursor-pointer"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2 min-w-0">
+                        <span className="font-semibold tabular-nums whitespace-nowrap">
+                          {h.resolution} · {h.fps}fps · {h.codec.toUpperCase()}
+                        </span>
+                      </span>
+                      <span className="text-[var(--muted-foreground)] tabular-nums whitespace-nowrap">
+                        {h.fileSize}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </details>
+        )}
 
         {/* Next Steps */}
         <div className="rounded-xl border border-dashed border-[var(--primary-30)] bg-[var(--accent)] p-5">
@@ -664,6 +712,32 @@ export default function CalculatorForm({
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Mobile sticky result bar — appears once user scrolls past inputs */}
+      <div
+        className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-[var(--border)] bg-[var(--background-80)] backdrop-blur-md px-4 py-2.5 flex items-center justify-between gap-3 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]"
+        role="status"
+        aria-live="polite"
+        aria-label="Current calculation result"
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" aria-hidden="true" />
+          <div className="min-w-0">
+            <div className="text-[10px] uppercase tracking-wide text-[var(--muted-foreground)] leading-tight">File size</div>
+            <div className="text-base font-bold text-[var(--primary)] tabular-nums truncate">{result.fileSizeFormatted}</div>
+          </div>
+          <div className="border-l border-[var(--border)] pl-3 ml-1 min-w-0">
+            <div className="text-[10px] uppercase tracking-wide text-[var(--muted-foreground)] leading-tight">Bitrate</div>
+            <div className="text-sm font-semibold tabular-nums truncate">{result.totalBitrateMbps} <span className="text-[10px] text-[var(--muted-foreground)] font-normal">Mbps</span></div>
+          </div>
+        </div>
+        <a
+          href="#calculator-results"
+          className="rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] px-3 py-1.5 text-xs font-semibold whitespace-nowrap hover:opacity-90 transition-opacity"
+        >
+          See details ↓
+        </a>
       </div>
     </div>
   );

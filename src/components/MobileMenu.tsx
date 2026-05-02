@@ -12,6 +12,8 @@ const TOOL_ITEMS = [
   { href: "/tools/compression-calculator/", label: "Compression Calculator" },
   { href: "/tools/fps-calculator/", label: "FPS Calculator" },
   { href: "/tools/disk-space-planner/", label: "Disk Space Planner" },
+  { href: "/tools/youtube-earnings-calculator/", label: "YouTube Earnings Calculator" },
+  { href: "/tools/twitch-revenue-calculator/", label: "Twitch Revenue Calculator" },
 ];
 
 const BROWSE_ITEMS = [
