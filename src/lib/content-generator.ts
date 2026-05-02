@@ -173,6 +173,90 @@ const CODEC_CONTEXT: Record<Codec, {
 };
 
 /* ------------------------------------------------------------------ */
+/*  Real-world examples — bring abstract numbers down to earth        */
+/* ------------------------------------------------------------------ */
+
+const REAL_WORLD_EXAMPLES: Record<Resolution, string[]> = {
+  "720p": [
+    "a typical 30-minute Twitch \"Just Chatting\" stream",
+    "a 20-minute educational webinar uploaded to YouTube",
+    "a 45-minute mobile gameplay capture from an iPhone",
+  ],
+  "1080p": [
+    "a 90-minute Valorant ranked session",
+    "a 60-minute YouTube vlog with B-roll cutaways",
+    "a 45-minute Fortnite arena stream with overlays and webcam",
+    "a 2-hour Twitch IRL stream with multiple scene transitions",
+  ],
+  "1440p": [
+    "a 60-minute Apex Legends competitive match recording",
+    "a 30-minute tech review with screen capture and chroma key",
+    "a 90-minute MMORPG raid recording for YouTube upload",
+  ],
+  "4k": [
+    "a 10-minute travel B-roll edited from a Sony A7 IV",
+    "a 30-minute drone flight footage",
+    "a 60-minute professional interview shot on a cinema camera",
+    "a 20-minute Steam Deck gameplay capture upscaled for YouTube",
+  ],
+  "8k": [
+    "a 5-minute commercial spot intended for cinematic delivery",
+    "a 10-minute archival master file for future-proofing",
+    "a 3-minute VR/360° excerpt destined for headset playback",
+  ],
+};
+
+/* ------------------------------------------------------------------ */
+/*  Pro tips & common mistakes — keyed by codec for variation         */
+/* ------------------------------------------------------------------ */
+
+const PRO_TIPS: Record<Codec, string[]> = {
+  h264: [
+    "Use the <strong>High profile, Level 4.2 (or higher)</strong> in OBS or your encoder for the best compatibility-to-quality ratio. Avoid Baseline profile unless you target legacy devices.",
+    "Set your <strong>keyframe interval to 2 seconds</strong> for streaming — this is required by Twitch and recommended by YouTube Live for smooth ABR transcoding.",
+    "If you have an NVIDIA RTX 30/40 series GPU, switch from x264 to <strong>NVENC HEVC</strong> for noticeably better quality at the same bitrate, with no CPU overhead.",
+  ],
+  hevc: [
+    "Enable <strong>10-bit color depth (Main10 profile)</strong> if your source supports it — banding in dark scenes is dramatically reduced with virtually no extra bitrate cost.",
+    "For YouTube uploads, encode HEVC at the <strong>recommended bitrate × 0.7</strong> — YouTube re-encodes anyway, so over-spending bitrate yields no quality gain.",
+    "Hardware HEVC encoders on Apple Silicon (M-series) and recent NVIDIA/AMD GPUs are now production-grade. CPU x265 is only worth the wait for archival masters.",
+  ],
+  av1: [
+    "AV1 hardware encoding requires <strong>Intel Arc, NVIDIA RTX 40-series, or AMD RX 7000+</strong>. Older GPUs fall back to slow software encoding.",
+    "YouTube serves AV1 to compatible devices automatically once you upload — you don't need to upload as AV1, but if you do, use a 30–50% lower bitrate than H.264.",
+    "Twitch added AV1 support via Enhanced Broadcasting in 2024, but availability is still partner-tier. Most streamers should stick with HEVC or H.264 for live.",
+  ],
+  prores: [
+    "ProRes is an <strong>intra-frame mezzanine codec</strong> — every frame is independent. It is meant for editing, not delivery. Always export to H.264/HEVC for upload.",
+    "Use <strong>ProRes 422 LT</strong> for proxies and casual editing, <strong>422 HQ</strong> for color grading, and <strong>4444</strong> only when you need an alpha channel or extreme grading latitude.",
+    "ProRes files balloon fast: a 10-minute 4K clip easily exceeds 50 GB. Plan SSD/NAS storage and use a 10 Gbps network if multiple editors share assets.",
+  ],
+};
+
+const COMMON_MISTAKES: Record<Codec, string[]> = {
+  h264: [
+    "Setting bitrate <strong>too high for your upload speed</strong> — viewers will buffer instead of seeing higher quality. Always cap stream bitrate at ~75% of measured upload.",
+    "Using <strong>VBR for live streaming</strong> — Twitch and most platforms expect CBR. VBR is fine for VOD recording but causes ABR transcoding issues live.",
+    "Leaving the <strong>preset on \"ultrafast\"</strong> in OBS x264. \"veryfast\" is the sweet spot for most CPUs; \"medium\" only if you have a Threadripper-class chip.",
+  ],
+  hevc: [
+    "Streaming HEVC live to <strong>Twitch</strong> — Twitch's ingest still expects H.264 except via Enhanced Broadcasting beta. HEVC live works on YouTube and Kick.",
+    "Forgetting that <strong>iOS/macOS Safari</strong> handles HEVC natively but older Android Chrome may not — check your audience's device mix before committing.",
+    "Confusing HEVC <strong>bit depth (8 vs 10)</strong> with HDR. 10-bit improves gradients in SDR too; HDR additionally requires a PQ/HLG transfer function.",
+  ],
+  av1: [
+    "Trying to <strong>encode AV1 on CPU</strong> for anything longer than 5 minutes — even a Ryzen 9 takes hours. Use SVT-AV1 or hardware encoders.",
+    "Assuming AV1 is universally supported. <strong>Smart TVs from 2021 or older</strong>, most game consoles, and some browsers still cannot decode AV1.",
+    "Setting AV1 bitrate using H.264 numbers — you'll waste 30–50% of file size with no quality gain. Drop your target bitrate accordingly.",
+  ],
+  prores: [
+    "Uploading <strong>ProRes directly to YouTube/Vimeo</strong> — it works, but takes hours and the platform re-encodes anyway. Export H.264/HEVC at the platform's recommended bitrate.",
+    "Storing ProRes masters on <strong>spinning hard drives</strong> for 4K editing — you'll hit playback stutters above 1 stream. Use NVMe SSDs or a 10 GbE NAS.",
+    "Choosing <strong>ProRes 4444 by default</strong> when you don't need an alpha channel — it doubles file size compared to 422 HQ for no perceptual benefit.",
+  ],
+};
+
+/* ------------------------------------------------------------------ */
 /*  Intro paragraph templates — 6 variants, selected by hash          */
 /* ------------------------------------------------------------------ */
 
@@ -292,12 +376,51 @@ export function generateContent(
 
   const p5 = `With these settings, a <strong>10-minute clip weighs approximately ${calc10min.fileSizeFormatted}</strong>, while a <strong>full hour reaches ${calc1hr.fileSizeFormatted}</strong>. You will need a minimum upload speed of <strong>${calc1hr.recommendedBandwidthMbps} Mbps</strong> for reliable streaming. The total video bitrate for this configuration is <strong>${(calc1hr.videoBitrateKbps / 1000).toFixed(1)} Mbps</strong>.`;
 
+  // Real-world example tied to this combo
+  const exampleList = REAL_WORLD_EXAMPLES[resolution];
+  const example = exampleList[hash % exampleList.length];
+  const exampleCalc = calculate({
+    resolution,
+    fps,
+    codec,
+    audioBitrateKbps: 128,
+    durationSeconds: toDurationSeconds(0, 30, 0),
+  });
+  const realWorldHtml = `<h3 class="mt-6 mb-2 text-lg font-semibold">Real-world example</h3><p>Take ${example} — at ${res.name}, ${fpsCtx.name}, encoded with ${codecCtx.fullName}, you should expect roughly <strong>${exampleCalc.fileSizeFormatted}</strong> for the full 30-minute capture, plus headroom for thumbnails, audio assets, and project files.</p>`;
+
+  // Codec comparison mini-table for THIS resolution+fps
+  const compRows = (["h264", "hevc", "av1", "prores"] as Codec[]).map((c) => {
+    const r = calculate({
+      resolution,
+      fps,
+      codec: c === "prores" ? "prores422" : c,
+      audioBitrateKbps: 128,
+      durationSeconds: toDurationSeconds(1, 0, 0),
+    });
+    const isCurrent = c === codec;
+    const label = CODEC_CONTEXT[c].fullName;
+    return `<tr${isCurrent ? ' class="font-semibold"' : ""}><td class="py-2 pr-4">${label}${isCurrent ? " <span class=\"text-xs text-[var(--primary)]\">(this page)</span>" : ""}</td><td class="py-2 pr-4">${r.fileSizeFormatted}</td><td class="py-2 pr-4">${(r.videoBitrateKbps / 1000).toFixed(1)} Mbps</td><td class="py-2">${r.recommendedBandwidthMbps} Mbps</td></tr>`;
+  }).join("");
+
+  const tableHtml = `<h3 class="mt-6 mb-2 text-lg font-semibold">Codec comparison at ${res.name} ${fpsCtx.name} (1 hour, 128 Kbps audio)</h3><div class="overflow-x-auto"><table class="w-full text-sm border-collapse"><thead><tr class="border-b border-[var(--border)] text-left text-[var(--foreground)]"><th class="pb-2 pr-4 font-semibold">Codec</th><th class="pb-2 pr-4 font-semibold">File size / hour</th><th class="pb-2 pr-4 font-semibold">Video bitrate</th><th class="pb-2 font-semibold">Upload needed</th></tr></thead><tbody class="[&_tr]:border-b [&_tr]:border-[var(--border)] [&_tr:last-child]:border-0">${compRows}</tbody></table></div>`;
+
+  // Pro tip + common mistake
+  const tip = PRO_TIPS[codec][hash % PRO_TIPS[codec].length];
+  const mistake = COMMON_MISTAKES[codec][(hash + 1) % COMMON_MISTAKES[codec].length];
+
+  const tipHtml = `<h3 class="mt-6 mb-2 text-lg font-semibold">Pro tip for ${codecCtx.fullName}</h3><p>${tip}</p>`;
+  const mistakeHtml = `<h3 class="mt-6 mb-2 text-lg font-semibold">Common mistake to avoid</h3><p>${mistake}</p>`;
+
   const articleHtml = [
     `<p>${p1}</p>`,
     `<p>${p2}</p>`,
     `<p>${p3}</p>`,
     `<p>${p4}</p>`,
     `<p>${p5}</p>`,
+    realWorldHtml,
+    tableHtml,
+    tipHtml,
+    mistakeHtml,
   ].join("\n");
 
   const summary = `${res.name} at ${fpsCtx.name} with ${codecCtx.fullName}: ${calc1hr.fileSizeFormatted}/hour, ${calc1hr.totalBitrateMbps} Mbps bitrate. ${codecCtx.bestFor}.`;

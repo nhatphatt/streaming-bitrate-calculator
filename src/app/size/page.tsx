@@ -16,12 +16,15 @@ export const metadata: Metadata = {
     description:
       "Browse file size calculators for every resolution (720p to 8K) and frame rate (24–120fps). Find the exact bitrate and storage you need.",
     type: "website",
+    url: "/size/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Video File Size Calculator — StreamerSize" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Video File Size Calculator — All Resolutions & Frame Rates",
     description:
       "Browse file size calculators for every resolution (720p to 8K) and frame rate (24–120fps).",
+    images: ["/og-image.png"],
   },
 };
 

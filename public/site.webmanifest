@@ -1,0 +1,26 @@
+{
+  "name": "StreamerSize — Bitrate & Storage Calculator",
+  "short_name": "StreamerSize",
+  "description": "Free tools for streamers and video creators. Calculate bitrate, file size, storage, and bandwidth instantly.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "lang": "en-US"
+}

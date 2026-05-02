@@ -1,0 +1,101 @@
+---
+slug: best-obs-settings-roblox
+title: "Best OBS Settings for Streaming Roblox in 2026"
+description: "Optimal OBS bitrate, encoder, and resolution settings for streaming Roblox to Twitch and YouTube. Includes capture method, FPS targets, and low-end PC tips."
+publishedAt: "2026-04-22"
+updatedAt: "2026-04-22"
+readTime: "8 min read"
+---
+
+Roblox is one of the most-streamed platforms on YouTube and Twitch, especially among younger creators. Because Roblox renders relatively simple scenes compared to AAA titles, it compresses cleanly at moderate bitrates — but you still need the right OBS configuration to keep streams smooth and viewer-friendly.
+
+## Why Roblox is forgiving on bitrate
+
+Most Roblox experiences use flat shading, low-poly models, and minimal post-processing. That means less visual entropy per frame, so an encoder can produce a clean image at a lower bitrate than it would for fast-paced AAA games. A typical Roblox stream looks crisp at **4,000–5,000 Kbps at 1080p 60fps** — far below the bitrate a Fortnite or Warzone stream would need at the same settings.
+
+The exceptions are graphics-heavy experiences (Phantom Forces, Doors, Arsenal with full effects) or first-person obby games with rapid camera movement. For these, treat your bitrate budget like a Valorant or Apex Legends stream and bump it 20-30% higher.
+
+## Recommended OBS settings for Roblox
+
+### Twitch (6,000 Kbps cap)
+
+- **Resolution:** 1920×1080 (or 1280×720 for older PCs)
+- **FPS:** 60
+- **Encoder:** NVENC (New) on NVIDIA GPUs, AMF on AMD, or x264 medium preset
+- **Bitrate:** 4,500 Kbps for most experiences, 6,000 Kbps for graphics-heavy games
+- **Rate control:** CBR
+- **Keyframe interval:** 2 seconds
+- **Profile:** High
+- **B-frames:** 2
+
+### YouTube Live
+
+- **Resolution:** 1920×1080
+- **FPS:** 60
+- **Bitrate:** 6,000–9,000 Kbps for sharper edges and text overlay readability
+- **Encoder:** NVENC P5 (Slow) or x264 Medium
+
+### Kick
+
+- **Resolution:** 1920×1080
+- **FPS:** 60
+- **Bitrate:** 7,000 Kbps (Kick allows higher caps than Twitch)
+- **Encoder:** NVENC P5 or x264 Medium
+
+## Choosing your capture method
+
+Roblox runs in a windowed or borderless window by default. In OBS:
+
+1. Add a **Game Capture** source.
+2. Set Mode to "Capture specific window."
+3. Choose `RobloxPlayerBeta.exe` from the dropdown.
+4. Enable "Allow transparency" only if you want to overlay scenes — most streamers leave this off.
+
+If Game Capture comes up black (a common Roblox issue), fall back to **Display Capture** and use OBS's window crop to trim out your taskbar.
+
+## Roblox in-game settings that affect stream quality
+
+Several Roblox client settings change how your game compresses on stream:
+
+- **Graphics Quality:** Set to 6-8 for clean visuals; max (10) only if your PC has headroom.
+- **Render Quality:** Auto is fine; set manually only if you're frame-pacing manually.
+- **Performance Stats:** Off — the FPS overlay creates flickering high-frequency text that wastes bitrate.
+- **Camera Mode:** Classic — Follow Camera adds motion smoothing that compresses worse.
+
+For first-person experiences, lower mouse sensitivity slightly. Sudden 180° flicks create motion blur that the encoder will smear regardless of bitrate, especially at 60fps.
+
+## Low-end PC optimizations
+
+Roblox is the favorite gateway for kid streamers, many on entry-level laptops or older desktops. If you can't hold 60fps on stream, drop to **720p 30fps at 3,000 Kbps** before lowering Roblox's graphics. Your viewers will tolerate slightly lower resolution far better than chuggy frame rate.
+
+Other low-end tips:
+
+- Use **NVENC** if you have any NVIDIA GTX 16 series or newer — it's free GPU encoding that doesn't tax your CPU.
+- Enable OBS's **Process Priority: Above Normal** under Advanced settings.
+- Close Discord overlay, browsers, and capture cards you aren't using.
+- Disable Windows Game Bar (`Win+G`) — it conflicts with OBS Game Capture on Roblox.
+
+## Audio for Roblox streams
+
+Roblox audio is heavily loop-based and rarely needs more than 96-128 Kbps AAC:
+
+- **Audio bitrate:** 128 Kbps (default) is plenty.
+- **Sample rate:** 48 kHz.
+- **Channels:** Stereo.
+- Use OBS's **Noise Suppression: RNNoise** filter on your microphone — Roblox audiences are sensitive to background noise during quiet exploration sections.
+
+## Recommended upload speed
+
+For 1080p 60fps Roblox at 4,500 Kbps, you need at least **8 Mbps upload**. For YouTube at 9,000 Kbps, target **15 Mbps**. Many home connections in the US offer 10-25 Mbps upload on cable, which is more than enough for Roblox-quality streams. Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify yours.
+
+## Quick reference table
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 4,500–6,000 Kbps | NVENC P5 |
+| Twitch | 720p | 60 | 3,000 Kbps | NVENC P4 |
+| YouTube | 1080p | 60 | 6,000–9,000 Kbps | NVENC P5 |
+| YouTube | 1080p | 30 | 4,500 Kbps | NVENC P5 |
+| Kick | 1080p | 60 | 7,000 Kbps | NVENC P5 |
+
+Use our [Bitrate & Storage Calculator](/) to calculate exact recording sizes for your Roblox sessions before you start a long stream.

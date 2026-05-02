@@ -11,7 +11,14 @@ export const metadata: Metadata = {
     title: "Stream Setup Wizard — Personalized OBS Settings",
     description: "Get personalized streaming settings in 30 seconds.",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    url: "/setup-wizard/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Stream Setup Wizard — StreamerSize" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Stream Setup Wizard — Personalized OBS Settings",
+    description: "Get personalized streaming settings in 30 seconds.",
+    images: ["/og-image.png"],
   },
 };
 

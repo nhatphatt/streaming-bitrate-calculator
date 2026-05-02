@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,6 +15,16 @@ import MobileMenu from "@/components/MobileMenu";
 import Analytics from "@/components/Analytics";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  colorScheme: "light dark",
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Streaming Bitrate & Storage Calculator | Free Online Tool",
@@ -27,6 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: "https://streamersize.com",
     siteName: "StreamerSize — Bitrate & Storage Calculator",
     images: [
       {
@@ -43,21 +53,33 @@ export const metadata: Metadata = {
     description:
       "Calculate video file size, streaming bitrate, and storage requirements for any resolution, frame rate, and codec.",
     images: ["/og-image.png"],
+    site: "@streamersize",
+    creator: "@streamersize",
   },
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
+    canonical: "/",
     languages: {
       "en-US": "https://streamersize.com",
       "x-default": "https://streamersize.com",
     },
   },
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.png",
   },
+  manifest: "/site.webmanifest",
+  applicationName: "StreamerSize",
+  authors: [{ name: "StreamerSize", url: "https://streamersize.com" }],
+  creator: "StreamerSize",
+  publisher: "StreamerSize",
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -117,12 +139,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen antialiased" suppressHydrationWarning>
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8696412606318158"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
         <Analytics />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-[var(--primary)] focus:px-4 focus:py-2 focus:text-[var(--primary-foreground)] focus:font-semibold"
+        >
+          Skip to main content
+        </a>
         <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background-80)] backdrop-blur-md">
           <nav className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
             <Link
@@ -167,7 +190,7 @@ export default function RootLayout({
           </nav>
         </header>
 
-        <main className="mx-auto max-w-5xl px-4 py-8" aria-label="Main content">
+        <main id="main-content" className="mx-auto max-w-5xl px-4 py-8" aria-label="Main content">
           <ErrorBoundary>{children}</ErrorBoundary>
         </main>
 
@@ -210,8 +233,9 @@ export default function RootLayout({
                   <li><Link href="/compare/" className="hover:text-[var(--primary)] transition-colors">Codec Comparison</Link></li>
                   <li><Link href="/tools/bandwidth-calculator/" className="hover:text-[var(--primary)] transition-colors">Bandwidth Calculator</Link></li>
                   <li><Link href="/tools/upload-time-calculator/" className="hover:text-[var(--primary)] transition-colors">Upload Time Calculator</Link></li>
-                  <li><Link href="/tools/recording-time-calculator/" className="hover:text-[var(--primary)] transition-colors">Recording Time Calculator</Link></li>
-                  <li><Link href="/tools/aspect-ratio-calculator/" className="hover:text-[var(--primary)] transition-colors">Aspect Ratio Calculator</Link></li>
+                  <li><Link href="/tools/youtube-earnings-calculator/" className="hover:text-[var(--primary)] transition-colors">YouTube Earnings</Link></li>
+                  <li><Link href="/tools/twitch-revenue-calculator/" className="hover:text-[var(--primary)] transition-colors">Twitch Revenue</Link></li>
+                  <li><Link href="/tools/" className="hover:text-[var(--primary)] transition-colors">All tools &rarr;</Link></li>
                 </ul>
               </div>
 

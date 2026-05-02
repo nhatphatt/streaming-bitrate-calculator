@@ -11,7 +11,14 @@ export const metadata: Metadata = {
     title: "Streaming Platform Settings Guide",
     description: "Best streaming settings for Twitch, YouTube, Kick, Facebook, and Discord.",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    url: "/platforms/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Streaming Platform Settings — StreamerSize" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Streaming Platform Settings Guide",
+    description: "Best streaming settings for Twitch, YouTube, Kick, Facebook, and Discord.",
+    images: ["/og-image.png"],
   },
 };
 

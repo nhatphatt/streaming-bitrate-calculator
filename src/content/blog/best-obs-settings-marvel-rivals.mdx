@@ -1,0 +1,107 @@
+---
+slug: best-obs-settings-marvel-rivals
+title: "Best OBS Settings for Streaming Marvel Rivals in 2026"
+description: "Optimal OBS bitrate, encoder, and graphics settings for streaming Marvel Rivals to Twitch, YouTube, and Kick. Covers 1080p 60fps, GPU pressure, and ability-clarity tips."
+publishedAt: "2026-04-23"
+updatedAt: "2026-04-23"
+readTime: "8 min read"
+---
+
+Marvel Rivals exploded in 2024-2026 as one of the most-watched 6v6 hero shooters on Twitch and YouTube. Its colorful particle-heavy combat puts real pressure on encoders — bright explosions, layered ability effects, and rapid camera turns all reduce compression efficiency. Here's how to dial OBS in so your stream looks competitive even at the bitrate caps.
+
+## Why Marvel Rivals stresses your encoder
+
+Three things make Marvel Rivals harder to stream than most hero shooters:
+
+1. **Particle density** — Iron Man, Storm, Magneto, and Scarlet Witch all generate stacked effects that fill the screen with high-frequency detail.
+2. **Camera shake and screen warps** — Ultimates like Doctor Strange's portal and Hulk's smashes introduce motion blur the encoder can't predict.
+3. **Vertical movement** — flying heroes (Iron Man, Storm, Magneto) cause constant vertical pans that destroy temporal compression efficiency.
+
+Translation: at the same Twitch 6,000 Kbps cap, Marvel Rivals will look noticeably softer than Valorant or CS2. To compensate, lean on the highest-quality encoder preset your hardware can handle.
+
+## Recommended OBS settings for Marvel Rivals
+
+### Twitch (6,000 Kbps cap, no Enhanced Broadcasting)
+
+- **Resolution:** 1920×1080
+- **FPS:** 60
+- **Encoder:** NVENC HEVC (if Enhanced Broadcasting) or NVENC H.264 (New)
+- **Preset:** P5 (Slow) — P4 only if your GPU is overloaded
+- **Bitrate:** 6,000 Kbps (max non-partner)
+- **Rate control:** CBR
+- **Keyframe interval:** 2 seconds
+- **Profile:** High
+- **Psycho Visual Tuning:** On
+- **B-frames:** 2
+
+### Twitch (Enhanced Broadcasting / 8,000+ Kbps)
+
+If you have access to Twitch Enhanced Broadcasting, switch to multitrack with HEVC and push **8,000–10,000 Kbps**. The HEVC efficiency gain alone makes Marvel Rivals look meaningfully cleaner during teamfights.
+
+### YouTube Live
+
+- **Resolution:** 1920×1080 or 2560×1440
+- **FPS:** 60
+- **Bitrate:** 9,000–12,000 Kbps (1080p) or 14,000–18,000 Kbps (1440p)
+- **Encoder:** NVENC P5/P4 or x264 Medium
+
+### Kick
+
+- **Resolution:** 1920×1080
+- **FPS:** 60
+- **Bitrate:** 8,000 Kbps (Kick has no formal cap; 8K is a safe sweet spot)
+- **Encoder:** NVENC P5
+
+## In-game graphics that affect stream quality
+
+Marvel Rivals' Lumen-based lighting and dynamic shadows are gorgeous but expensive. Tune for stream readability over photorealism:
+
+- **Graphics Quality preset:** Medium or High — Ultra/Cinematic offer diminishing returns at 1080p stream output.
+- **Anti-Aliasing:** TSR (Temporal Super Resolution) — produces a clean edge profile that compresses well.
+- **Motion Blur:** Off. Always. It hides ability tells and makes encoded footage look smeared.
+- **Bloom and Lens Flare:** Medium. Maxed bloom adds high-frequency noise that eats bitrate without improving clarity.
+- **Shadows:** High. Low/Medium shadows cause shimmering at distance that wastes bitrate.
+- **DLSS / FSR:** Quality mode if you have an RTX 30/40 or RDNA3 GPU. Significantly reduces GPU load with minimal visual cost.
+
+## Encoder choice — NVIDIA vs AMD vs CPU
+
+| Hardware | Best encoder for Marvel Rivals |
+|----------|--------------------------------|
+| RTX 40-series | NVENC HEVC P5 — cleanest output of any consumer encoder |
+| RTX 30-series | NVENC H.264 P5 — Twitch-compatible, near-equal quality |
+| RTX 20-series | NVENC H.264 P4 — keep preset on Medium to preserve frames |
+| GTX 16-series | NVENC H.264 Quality — older NVENC, still better than x264 fast |
+| RX 7000-series | AMF HEVC High — improved noticeably in 2024 driver updates |
+| RX 6000-series | AMF H.264 High — usable, but consider switching to RTX |
+| Ryzen 7/9 CPU only | x264 Medium — high CPU usage, may drop game FPS |
+
+For most streamers, **NVENC on a dedicated RTX card is the clear winner** because it leaves your CPU free for game logic and Discord/browser sources.
+
+## Two-PC setup considerations
+
+If you stream Marvel Rivals from a single PC and find your in-game frame rate dropping in late-game teamfights, a dedicated streaming PC + capture card eliminates the contention. The capture PC handles encoding entirely; the gaming PC focuses on rendering. With a consumer capture card (Elgato 4K X, AVerMedia Live Gamer 4K) you can capture 1440p144 from your gaming PC and re-encode at 1080p60 for stream — getting both performance and quality.
+
+## Audio recommendations
+
+Marvel Rivals' SFX layer is dense and important — viewers rely on audio cues for ability timings. Don't crush the game audio underneath your voice:
+
+- **Game audio:** -10 dB ducking when you talk, with OBS's compressor on your mic instead of pure ducking.
+- **Mic bitrate:** 128 Kbps minimum, 160 Kbps for higher fidelity.
+- **Mic filters:** RNNoise + Compressor + Limiter at -3 dB.
+- **Sample rate:** 48 kHz to match game audio engine output.
+
+## Recommended upload speed
+
+For 1080p 60fps Marvel Rivals at 6,000 Kbps Twitch, you need at least **10 Mbps upload**. For YouTube 9,000 Kbps, target **15 Mbps**. Cable connections in major US metros typically deliver 20-50 Mbps upload — comfortable for any setting in the table below. Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm yours.
+
+## Quick reference table
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch standard | 1080p | 60 | 6,000 Kbps | NVENC P5 |
+| Twitch Enhanced | 1080p | 60 | 8,000 Kbps HEVC | NVENC HEVC P5 |
+| YouTube | 1080p | 60 | 9,000–12,000 Kbps | NVENC P5 |
+| YouTube | 1440p | 60 | 14,000–18,000 Kbps | NVENC P4 |
+| Kick | 1080p | 60 | 8,000 Kbps | NVENC P5 |
+
+Use our [Bitrate & Storage Calculator](/) to estimate exact recording sizes for Marvel Rivals VOD storage and your [Codec Comparison](/compare/) tool to weigh HEVC vs H.264 for your audience.

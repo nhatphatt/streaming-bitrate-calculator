@@ -18,12 +18,15 @@ export const metadata: Metadata = {
     description:
       "Compare video codecs side-by-side: H.264, HEVC (H.265), VP9, AV1, ProRes 422, ProRes 4444. See file size, bitrate, and quality differences for every resolution.",
     type: "website",
+    url: "/compare/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Codec Comparison — StreamerSize" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Video Codec Comparison — H.264 vs HEVC vs VP9 vs AV1 vs ProRes",
     description:
       "Compare video codecs side-by-side. See file size, bitrate, and quality differences for every resolution.",
+    images: ["/og-image.png"],
   },
 };
 

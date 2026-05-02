@@ -10,7 +10,8 @@ export const metadata: Metadata = {
     title: "About StreamerSize",
     description: "Free tools for streamers and video creators.",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    url: "/about/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About StreamerSize" }],
   },
   twitter: {
     card: "summary_large_image",
