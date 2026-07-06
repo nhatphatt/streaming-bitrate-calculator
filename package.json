@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "deploy": "npm run build && npx wrangler pages deploy ./out --project-name streamersize --branch main --commit-dirty=true",
+    "indexnow": "tsx scripts/submit-indexnow.ts",
+    "deploy": "npm run build && npx wrangler pages deploy ./out --project-name streamersize --branch main --commit-dirty=true && npm run indexnow",
     "deploy:preview": "npm run build && npx wrangler pages deploy ./out --project-name streamersize --commit-dirty=true",
     "test": "vitest run",
     "test:watch": "vitest"

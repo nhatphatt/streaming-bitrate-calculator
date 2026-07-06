@@ -8,6 +8,7 @@ import {
   calcUploadSeconds,
   formatDuration,
   formatRealDuration,
+  getUploadInsight,
   FILE_SIZES,
   SPEEDS,
   getAllUploadCombos,
@@ -66,6 +67,7 @@ export default async function UploadTimePage({
   const secs = calcUploadSeconds(combo.sizeMB, combo.speedMbps);
   const dur = formatDuration(secs);
   const realDur = formatRealDuration(secs);
+  const insight = getUploadInsight(combo);
 
   // Comparison: same file at all speeds
   const speedComparison = SPEEDS.map((speed) => {
@@ -182,6 +184,23 @@ export default async function UploadTimePage({
             <div className="text-sm text-[var(--muted-foreground)] mb-2">Real-world (~80% efficiency)</div>
             <div className="text-4xl font-extrabold tabular-nums">{realDur}</div>
           </div>
+        </section>
+
+        {/* Context — unique per file size + speed tier */}
+        <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <h2 className="text-xl font-bold mb-3">
+            What {combo.sizeLabel} at {combo.speedLabel} actually means
+          </h2>
+          <p className="text-[var(--muted-foreground)] leading-relaxed mb-3">
+            A <strong>{combo.sizeLabel}</strong> file is roughly the size of {insight.sizeExamples}
+            {" "}— the kind of transfer you&apos;d do when {insight.useCase}. At{" "}
+            <strong>{combo.speedLabel}</strong> ({insight.speedTierName}), {insight.speedBlurb}
+          </p>
+          <p className="text-[var(--muted-foreground)] leading-relaxed">
+            {insight.durationTip} To move a file this size in under an hour, you&apos;d need at
+            least <strong>{insight.mbpsForOneHour.toFixed(1)} Mbps</strong> of real-world upload
+            speed.
+          </p>
         </section>
 
         <SponsoredButton />

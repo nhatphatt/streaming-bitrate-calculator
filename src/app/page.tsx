@@ -289,6 +289,27 @@ export default function HomePage() {
             </div>
           </section>
 
+          <section>
+            <h2 className="text-2xl font-bold mb-6">More free tools &amp; references</h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                ["/tools/", "All calculators & tools"],
+                ["/upload/", "Upload time table (every file size)"],
+                ["/size/", "File size calculator by resolution"],
+                ["/compare/", "Video codec comparison (H.264 vs HEVC vs AV1)"],
+                ["/platforms/", "All platform streaming guides"],
+                ["/glossary/", "Streaming & video glossary"],
+                ["/tools/bandwidth-calculator/", "Bandwidth calculator"],
+                ["/tools/recording-time-calculator/", "Recording time calculator"],
+                ["/blog/", "Streaming guides & blog"],
+              ].map(([href, label]) => (
+                <Link key={href} href={href} className="rounded-xl border border-[var(--border)] px-4 py-3 text-sm font-medium hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </section>
+
           <section className="rounded-xl border-2 border-[var(--primary-20)] bg-[var(--accent)] p-6 text-center">
             <h2 className="text-xl font-bold mb-2">Not sure what settings to use?</h2>
             <p className="text-[var(--muted-foreground)] mb-4 text-sm">

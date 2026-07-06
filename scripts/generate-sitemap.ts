@@ -13,7 +13,9 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 
 const SITE_URL = "https://streamersize.com";
-const DEFAULT_LASTMOD = "2026-06-15";
+// Use the build date so the sitemap signals freshness on every deploy,
+// instead of a hardcoded date that goes stale.
+const DEFAULT_LASTMOD = new Date().toISOString().slice(0, 10);
 
 type SitemapUrl = {
   loc: string;

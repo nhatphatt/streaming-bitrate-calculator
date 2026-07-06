@@ -107,3 +107,111 @@ export function formatRealDuration(seconds: number): string {
 
 /** All file sizes for cross-comparison on a speed page */
 export { FILE_SIZES, SPEEDS };
+
+// ---------------------------------------------------------------------------
+// Context helpers — give every /upload/[slug]/ page genuinely different prose
+// (not just swapped numbers) so search engines don't treat them as duplicates.
+// All outputs are a deterministic function of the size/speed, so a given page
+// always renders the same text.
+// ---------------------------------------------------------------------------
+
+interface SpeedTier {
+  name: string;
+  blurb: string;
+}
+
+function getSpeedTier(mbps: number): SpeedTier {
+  if (mbps < 10)
+    return {
+      name: "entry-level broadband",
+      blurb:
+        "This sits at the slower end of today's connections — common on older DSL lines, rural links, or throttled mobile hotspots. Uploads are the bottleneck here, so plan large transfers for when you're not using the connection for anything else.",
+    };
+  if (mbps < 50)
+    return {
+      name: "standard home broadband",
+      blurb:
+        "This is a typical cable or entry fiber plan that most households run. It handles day-to-day uploads comfortably, though very large files still take real time.",
+    };
+  if (mbps < 200)
+    return {
+      name: "fast fiber / cable",
+      blurb:
+        "This is a fast, upload-friendly connection — great for creators who regularly push 4K footage or large project files to the cloud without waiting around.",
+    };
+  return {
+    name: "gigabit-class fiber",
+    blurb:
+      "This is a top-tier symmetrical fiber connection. Upload time is rarely a concern at this speed; your storage drive or the receiving server is usually the real limit.",
+  };
+}
+
+interface SizeContext {
+  examples: string;
+  useCase: string;
+}
+
+function getSizeContext(mb: number): SizeContext {
+  if (mb <= 1024)
+    return {
+      examples:
+        "a short HD video clip, a batch of RAW photos, or a small app installer",
+      useCase: "sharing on Discord, emailing a client, or a quick cloud sync",
+    };
+  if (mb <= 10240)
+    return {
+      examples:
+        "a full-length HD movie, a folder of 4K clips, or a mid-size game update",
+      useCase: "uploading to YouTube or backing up to Google Drive / Dropbox",
+    };
+  if (mb <= 102400)
+    return {
+      examples:
+        "a finished 4K video project, a AAA game install, or an entire photo library",
+      useCase:
+        "cloud backup to Backblaze or handing off project files to an editor",
+    };
+  return {
+    examples:
+      "a full system backup, an archive of raw footage, or a large media-server library",
+    useCase: "offsite backup or migrating an entire media collection",
+  };
+}
+
+/** A practical, duration-aware tip that differs across pages. */
+function getDurationTip(seconds: number): string {
+  const realSeconds = seconds / 0.8;
+  if (realSeconds < 60)
+    return "This finishes almost instantly, so you can fire it off mid-task without a second thought.";
+  if (realSeconds < 15 * 60)
+    return "This is quick enough to wait out with a coffee — just avoid starting a second big upload at the same time, since they'll share your bandwidth.";
+  if (realSeconds < 2 * 3600)
+    return "For a transfer this long, a wired Ethernet connection instead of Wi-Fi will keep the speed steady and prevent stalls that restart chunks.";
+  if (realSeconds < 12 * 3600)
+    return "Uploads this size are best kicked off in the evening and left to run — pause other heavy network use so it doesn't get starved of bandwidth.";
+  return "A transfer this large realistically runs overnight (or across days). Consider splitting it into batches, or use a service with resumable uploads so a dropped connection doesn't force you to start over.";
+}
+
+export interface UploadInsight {
+  speedTierName: string;
+  speedBlurb: string;
+  sizeExamples: string;
+  useCase: string;
+  durationTip: string;
+  /** Minimum real-world Mbps needed to finish this file in under an hour. */
+  mbpsForOneHour: number;
+}
+
+export function getUploadInsight(combo: UploadCombo): UploadInsight {
+  const secs = calcUploadSeconds(combo.sizeMB, combo.speedMbps);
+  const tier = getSpeedTier(combo.speedMbps);
+  const size = getSizeContext(combo.sizeMB);
+  return {
+    speedTierName: tier.name,
+    speedBlurb: tier.blurb,
+    sizeExamples: size.examples,
+    useCase: size.useCase,
+    durationTip: getDurationTip(secs),
+    mbpsForOneHour: Math.max(0.1, (combo.sizeMB * 8) / 3600 / 0.8),
+  };
+}
