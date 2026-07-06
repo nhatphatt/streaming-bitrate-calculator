@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdSlot from "@/components/AdSlot";
+import CopyButton from "@/components/CopyButton";
+
+const EMBED_CODE = `<iframe src="https://streamersize.com/embed/" width="100%" height="720" style="border:1px solid #e5e7eb;border-radius:12px" title="StreamerSize Bitrate Calculator" loading="lazy"></iframe>`;
 
 export const metadata: Metadata = {
   title: "Free Streaming & Video Tools",
@@ -181,6 +185,8 @@ export default function ToolsIndexPage() {
           </p>
         </section>
 
+        <AdSlot />
+
         <section>
           <div className="grid gap-4 md:grid-cols-2">
             {tools.map((tool) => (
@@ -207,6 +213,27 @@ export default function ToolsIndexPage() {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Embed CTA — free backlinks */}
+        <section className="rounded-xl border border-dashed border-[var(--primary-30)] bg-[var(--accent)] p-6">
+          <h2 className="text-2xl font-bold mb-2">Add this calculator to your site</h2>
+          <p className="text-[var(--muted-foreground)] mb-4 max-w-2xl">
+            Run a streaming blog, gear guide, or creator resource? Embed the free
+            StreamerSize bitrate calculator with one line of HTML — no scripts, no
+            tracking, always up to date.
+          </p>
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-4">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
+                Embed code
+              </span>
+              <CopyButton text={EMBED_CODE} />
+            </div>
+            <pre className="overflow-x-auto text-xs text-[var(--foreground)] whitespace-pre-wrap break-all">
+              <code>{EMBED_CODE}</code>
+            </pre>
           </div>
         </section>
       </div>

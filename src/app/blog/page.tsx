@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllBlogPosts } from "@/lib/blog-content";
+import AdSlot from "@/components/AdSlot";
 
 const BLOG_POSTS = getAllBlogPosts();
 
@@ -89,6 +90,7 @@ export default function BlogIndexPage() {
             </Link>
           ))}
         </div>
+        <AdSlot format="native" />
         <div className="grid gap-6">
           {BLOG_POSTS.map((post) => (
             <Link

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import DiskSpacePlanner from "@/components/DiskSpacePlanner";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title: "Disk Space Planner — How Much Storage Do You Need for Streaming?",
@@ -89,9 +92,9 @@ export default function DiskSpacePlannerPage() {
         <section>
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--muted-foreground)] mb-4">
             <ol className="flex items-center gap-1.5">
-              <li><a href="/" className="hover:text-[var(--primary)] transition-colors">Home</a></li>
+              <li><Link href="/" className="hover:text-[var(--primary)] transition-colors">Home</Link></li>
               <li>/</li>
-              <li><a href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</a></li>
+              <li><Link href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</Link></li>
               <li>/</li>
               <li className="text-[var(--foreground)] font-medium">Disk Space Planner</li>
             </ol>
@@ -110,6 +113,10 @@ export default function DiskSpacePlannerPage() {
           </div>
         </section>
 
+        <SponsoredButton />
+
+        <AdSlot />
+
         <section>
           <h2 className="text-2xl font-bold mb-4">Planning Your Storage</h2>
           <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
@@ -117,7 +124,7 @@ export default function DiskSpacePlannerPage() {
           </p>
           <p className="text-[var(--muted-foreground)] leading-relaxed">
             We recommend keeping at least <strong>20% free space</strong> on your recording drive for optimal performance. The recommended drive size above includes this headroom. For exact per-session calculations, use our{" "}
-            <a href="/tools/recording-time-calculator/" className="text-[var(--primary)] underline underline-offset-2">Recording Time Calculator</a>.
+            <Link href="/tools/recording-time-calculator/" className="text-[var(--primary)] underline underline-offset-2">Recording Time Calculator</Link>.
           </p>
         </section>
 

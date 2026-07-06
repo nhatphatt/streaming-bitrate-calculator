@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import AspectRatioCalculator from "@/components/AspectRatioCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title: "Aspect Ratio Calculator — Free Online Tool for Video & Images",
@@ -89,9 +92,9 @@ export default function AspectRatioCalcPage() {
         <section>
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--muted-foreground)] mb-4">
             <ol className="flex items-center gap-1.5">
-              <li><a href="/" className="hover:text-[var(--primary)] transition-colors">Home</a></li>
+              <li><Link href="/" className="hover:text-[var(--primary)] transition-colors">Home</Link></li>
               <li>/</li>
-              <li><a href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</a></li>
+              <li><Link href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</Link></li>
               <li>/</li>
               <li className="text-[var(--foreground)] font-medium">Aspect Ratio Calculator</li>
             </ol>
@@ -109,6 +112,10 @@ export default function AspectRatioCalcPage() {
             <AspectRatioCalculator />
           </div>
         </section>
+
+        <SponsoredButton />
+
+        <AdSlot />
 
         <section>
           <h2 className="text-2xl font-bold mb-4">Understanding Aspect Ratios</h2>

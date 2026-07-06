@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PLATFORM_CONTENT } from "@/lib/platform-content";
+import AdSlot from "@/components/AdSlot";
 
 export const metadata: Metadata = {
   title: "Streaming Platform Settings — Twitch, YouTube, Kick & More",
@@ -67,6 +68,8 @@ export default function PlatformsIndexPage() {
             Every platform has different bitrate limits, resolution caps, and codec support. Choose your platform below to get the optimal settings.
           </p>
         </section>
+
+        <AdSlot />
 
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {PLATFORM_CONTENT.map((p) => (

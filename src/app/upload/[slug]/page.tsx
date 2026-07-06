@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 import {
   getAllUploadSlugs,
   getUploadCombo,
@@ -181,6 +183,10 @@ export default async function UploadTimePage({
             <div className="text-4xl font-extrabold tabular-nums">{realDur}</div>
           </div>
         </section>
+
+        <SponsoredButton />
+
+        <AdSlot />
 
         {/* Explanation */}
         <section>

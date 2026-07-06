@@ -38,10 +38,12 @@ export interface CalcResult {
  * Calculate estimated video bitrate based on resolution, fps, and codec.
  *
  * Formula:
- *   videoBitrate = baseBitrate(resolution) × (fps / 30) × codecEfficiency
+ *   videoBitrate = baseBitrate(resolution) × fpsMultiplier × codecEfficiency
  *
  * - baseBitrate: industry-standard H.264 bitrate at 30fps for each resolution
- * - fps scaling: linear ratio vs 30fps baseline
+ * - fps scaling: SUB-linear. Doubling fps adds ~50% bitrate, not 100%, because
+ *   temporal (inter-frame) compression reuses data across similar frames.
+ *   multiplier = 1 + 0.5·log2(fps/30) → 24fps≈0.84, 30fps=1.0, 60fps=1.5, 120fps=2.0
  * - codecEfficiency: multiplier from CODECS preset (H.264=1.0, HEVC=0.6, etc.)
  */
 export function calculateVideoBitrateKbps(
@@ -49,12 +51,14 @@ export function calculateVideoBitrateKbps(
   fps: number,
   codecId: string
 ): number {
+  if (fps <= 0) return 0;
+
   const baseBitrate = BASE_BITRATES[resolution] ?? 8000;
   const codec = CODECS.find((c) => c.id === codecId);
   const efficiencyFactor = codec?.efficiencyFactor ?? 1.0;
 
-  // FPS scaling: linear interpolation from 30fps baseline
-  const fpsMultiplier = fps / 30;
+  // Sub-linear FPS scaling vs 30fps baseline (see formula note above).
+  const fpsMultiplier = 1 + 0.5 * Math.log2(fps / 30);
 
   return baseBitrate * fpsMultiplier * efficiencyFactor;
 }

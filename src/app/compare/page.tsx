@@ -4,6 +4,8 @@ import { RESOLUTIONS, FPS_OPTIONS, CODECS } from "@/data/presets";
 import { calculate, toDurationSeconds } from "@/lib/calculate";
 import CodecCompareClient from "@/components/CodecCompareClient";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 
 export const metadata: Metadata = {
@@ -99,7 +101,9 @@ export default function ComparePage() {
         </div>
       </section>
 
-      {/* === AD SLOT === */}
+      <SponsoredButton />
+
+      <AdSlot />
 
       {/* Static reference tables per resolution */}
       <section>
@@ -170,7 +174,7 @@ export default function ComparePage() {
         ))}
       </section>
 
-      {/* === AD SLOT === */}
+      <AdSlot format="native" />
 
       {/* SEO Content */}
       <section className="max-w-none">

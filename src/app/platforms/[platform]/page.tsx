@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPlatformContent, getAllPlatformSlugs } from "@/lib/platform-content";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
 
 export function generateStaticParams() {
   return getAllPlatformSlugs().map((platform) => ({ platform }));
@@ -125,6 +126,8 @@ export default async function PlatformPage({ params }: { params: Promise<{ platf
             </table>
           </div>
         </section>
+
+        <AdSlot />
 
         {/* Tips */}
         <section>

@@ -9,7 +9,22 @@ readTime: "7 min read"
 
 ![CBR vs VBR Bitrate comparison diagram showing constant vs variable bitrate over time](/blog/cbr-vs-vbr-diagram.svg)
 
-Should you use CBR or VBR for your stream or recording? It's one of the most common questions in OBS settings, and the wrong choice can ruin your video quality or cause buffering for viewers. This guide breaks down exactly when to use each mode.
+Should you use CBR or VBR for your stream or recording? It's one of the most common questions in OBS settings, and the wrong choice can ruin your video quality or cause buffering for viewers.
+
+## Quick Answer: CBR vs VBR
+
+**Use CBR for live streaming and VBR/CQP/CRF for recording or uploads.** CBR keeps bitrate constant, which makes Twitch, YouTube Live, Kick, and OBS streams more stable. VBR changes bitrate based on scene complexity, which gives better quality per file size for local recordings, YouTube uploads, TikTok exports, and archived videos.
+
+| Use case | Best mode | Why |
+|---|---|---|
+| Twitch live streaming | CBR | Stable upload and lower buffering risk |
+| YouTube Live streaming | CBR | Predictable ingest and transcoding |
+| Kick streaming | CBR | RTMP stability |
+| OBS local recording | CQP/CRF | Better quality without fixed bitrate waste |
+| YouTube or TikTok upload | VBR or CRF | Smaller files with higher source quality |
+| Editing/archive exports | VBR, CRF, or ProRes | Better quality control |
+
+For most creators, the simple rule is: **CBR for streaming, VBR for files.** If you are tuning OBS, pair CBR with our [OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) and check your upload headroom with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
 
 ## What Is CBR (Constant Bitrate)?
 
@@ -59,6 +74,8 @@ Recommended CBR settings for streaming:
 
 Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to check if your upload speed supports your target bitrate.
 
+For detailed OBS values, see our [best OBS bitrate settings](/blog/best-obs-bitrate-settings/) and [OBS bitrate for 1080p 60fps](/blog/obs-bitrate-for-1080p-60fps/) guides.
+
 ### Video Calls and Conferencing
 
 Real-time communication benefits from CBR's predictable bandwidth usage. Most video calling software (Zoom, Discord) uses CBR internally.
@@ -78,6 +95,8 @@ In OBS, set the rate control to **CQP** (Constant Quantization Parameter) or **C
 ### YouTube/TikTok Uploads
 
 When exporting video for upload, VBR produces the best quality-to-size ratio. YouTube re-encodes everything anyway, so giving it the highest quality source file matters more than bitrate consistency. Use our [Upload Time Calculator](/tools/upload-time-calculator/) to estimate how long your VBR file will take to upload.
+
+For YouTube containers and upload formats, see [MP4 vs MKV vs MOV](/blog/mp4-vs-mkv-vs-mov/) and [best video format for YouTube](/blog/best-video-format-for-youtube/).
 
 ### Video Editing and Archiving
 
@@ -113,6 +132,32 @@ A 6,000 Kbps CBR stream at 720p 30fps looks **significantly better** than 6,000 
 - **Recording locally?** → Use **CQP/CRF** (quality-based VBR)
 - **Exporting for upload?** → Use **VBR** or **CRF**
 - **Doing both simultaneously?** → Set stream to CBR, recording to CQP (OBS supports separate encoding for each)
+
+## FAQ
+
+### Is CBR or VBR better for OBS?
+
+Use **CBR for OBS streaming** and **CQP/CRF for OBS recording**. OBS lets you set separate stream and recording encoders, so you do not need one bitrate mode for both jobs.
+
+### Should I use CBR or VBR for Twitch?
+
+Use **CBR for Twitch**. Twitch expects stable bitrate, and VBR spikes can cause dropped frames or buffering for viewers, especially when transcoding is not available.
+
+### Should I use CBR or VBR for YouTube?
+
+Use **CBR for YouTube Live** and **VBR/CRF for uploaded videos**. Live streams need stable ingest; uploads benefit from better quality per file size.
+
+### Is VBR bad for streaming?
+
+VBR is not bad quality, but it is risky for live streaming because bitrate spikes can exceed your upload speed. For live streaming, CBR is the safer choice.
+
+### What does CBR mean in bitrate settings?
+
+CBR means **Constant Bitrate**. The encoder tries to use the same bitrate every second, even when the video scene is simple or complex. Learn the short definition in the [CBR glossary](/glossary/cbr/).
+
+### What does VBR mean in bitrate settings?
+
+VBR means **Variable Bitrate**. The encoder raises bitrate for complex scenes and lowers it for simple scenes. See the [VBR glossary](/glossary/vbr/) for the short definition.
 
 ## Summary
 

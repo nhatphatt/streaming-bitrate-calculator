@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import UploadTimeCalculator from "@/components/UploadTimeCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title: "Upload Time Calculator — How Long to Upload Your Video?",
@@ -101,6 +103,10 @@ export default function UploadTimePage() {
             <UploadTimeCalculator />
           </div>
         </section>
+
+        <SponsoredButton />
+
+        <AdSlot />
 
         <div className="flex flex-col gap-10">
           <section>

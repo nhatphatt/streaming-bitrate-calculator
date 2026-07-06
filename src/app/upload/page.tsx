@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdSlot from "@/components/AdSlot";
 import {
   FILE_SIZES,
   SPEEDS,
@@ -72,6 +73,8 @@ export default function UploadIndexPage() {
           </p>
         </section>
 
+        <AdSlot />
+
         {/* Master cross-reference table */}
         <section>
           <div className="overflow-x-auto">
@@ -134,7 +137,7 @@ export default function UploadIndexPage() {
             detailed page with real-world estimates.
           </p>
           <p className="text-[var(--muted-foreground)] leading-relaxed">
-            Cells marked "—" represent combos that either finish in under 2 seconds (too
+            Cells marked &ldquo;—&rdquo; represent combos that either finish in under 2 seconds (too
             fast to be meaningful) or take over 7 days (impractical). For those edge
             cases, use our{" "}
             <Link href="/tools/upload-time-calculator/" className="text-[var(--primary)] underline underline-offset-2">

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import CompressionCalculator from "@/components/CompressionCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title: "Video Compression Calculator — Estimate File Size After Converting",
@@ -89,9 +92,9 @@ export default function CompressionCalcPage() {
         <section>
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--muted-foreground)] mb-4">
             <ol className="flex items-center gap-1.5">
-              <li><a href="/" className="hover:text-[var(--primary)] transition-colors">Home</a></li>
+              <li><Link href="/" className="hover:text-[var(--primary)] transition-colors">Home</Link></li>
               <li>/</li>
-              <li><a href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</a></li>
+              <li><Link href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</Link></li>
               <li>/</li>
               <li className="text-[var(--foreground)] font-medium">Compression Calculator</li>
             </ol>
@@ -110,6 +113,10 @@ export default function CompressionCalcPage() {
           </div>
         </section>
 
+        <SponsoredButton />
+
+        <AdSlot />
+
         <section>
           <h2 className="text-2xl font-bold mb-4">How Video Compression Works</h2>
           <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
@@ -117,7 +124,7 @@ export default function CompressionCalcPage() {
           </p>
           <p className="text-[var(--muted-foreground)] leading-relaxed">
             The estimates above are based on typical compression ratios. Actual results vary depending on video content (fast motion needs more data), encoding settings (CRF/CQ value), and encoder implementation. Use our{" "}
-            <a href="/" className="text-[var(--primary)] underline underline-offset-2">Bitrate Calculator</a>{" "}
+            <Link href="/" className="text-[var(--primary)] underline underline-offset-2">Bitrate Calculator</Link>{" "}
             for more precise estimates based on resolution and frame rate.
           </p>
         </section>

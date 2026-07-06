@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import RecordingTimeCalculator from "@/components/RecordingTimeCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
-  title: "Recording Time Calculator — How Long Can You Record?",
+  title: "Recording Time Calculator — How Long Can I Record?",
   description:
     "Calculate how much recording time your storage can hold based on resolution, frame rate, and codec. Supports 720p to 8K, H.264, HEVC, AV1, and ProRes.",
   alternates: { canonical: "/tools/recording-time-calculator/" },
@@ -96,11 +98,37 @@ export default function RecordingTimePage() {
           </p>
         </section>
 
+        <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <h2 className="text-2xl font-bold mb-4">Quick answer: how long can you record?</h2>
+          <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
+            Recording time depends on storage size divided by video bitrate. As a rough guide,
+            <strong> 1TB holds about 66 hours of 4K 30fps H.264</strong>, about
+            <strong> 110 hours with HEVC</strong>, or about <strong>19 hours with ProRes 422</strong>.
+            For OBS recording, use MKV plus CQP/CRF for safer, higher-quality files.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["/blog/obs-recording-settings-guide/", "OBS recording settings"],
+              ["/blog/mp4-vs-mkv-vs-mov/", "MP4 vs MKV vs MOV"],
+              ["/blog/cbr-vs-vbr-bitrate-explained/", "CBR vs VBR"],
+              ["/tools/disk-space-planner/", "Disk space planner"],
+            ].map(([href, label]) => (
+              <Link key={href} href={href} className="rounded-lg border border-[var(--border)] px-4 py-3 text-sm font-medium hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors">
+                {label}
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <section>
           <div className="rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-6 shadow-sm">
             <RecordingTimeCalculator />
           </div>
         </section>
+
+        <SponsoredButton />
+
+        <AdSlot />
 
         <div className="flex flex-col gap-10">
           <section>
@@ -128,6 +156,34 @@ export default function RecordingTimePage() {
               </Link>{" "}
               to see how codecs stack up.
             </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Popular recording time estimates</h2>
+            <div className="overflow-x-auto rounded-xl border border-[var(--border)]">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-[var(--border)] text-left">
+                    <th className="p-3 font-semibold">Storage</th>
+                    <th className="p-3 font-semibold">1080p 60fps H.264</th>
+                    <th className="p-3 font-semibold">4K 30fps H.264</th>
+                    <th className="p-3 font-semibold">4K 30fps HEVC</th>
+                  </tr>
+                </thead>
+                <tbody className="text-[var(--muted-foreground)]">
+                  {[
+                    ["256GB", "~17 hours", "~17 hours", "~28 hours"],
+                    ["512GB", "~34 hours", "~34 hours", "~56 hours"],
+                    ["1TB", "~66 hours", "~66 hours", "~110 hours"],
+                    ["2TB", "~132 hours", "~132 hours", "~220 hours"],
+                  ].map((row) => (
+                    <tr key={row[0]} className="border-b border-[var(--border)] last:border-0">
+                      {row.map((cell, i) => <td key={cell} className={`p-3 ${i === 0 ? "font-medium text-[var(--foreground)]" : ""}`}>{cell}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section>

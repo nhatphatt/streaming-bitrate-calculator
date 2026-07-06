@@ -13,6 +13,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 import ToolsDropdown from "@/components/ToolsDropdown";
 import MobileMenu from "@/components/MobileMenu";
 import Analytics from "@/components/Analytics";
+import AdsterraPopunder from "@/components/adsterra/AdsterraPopunder";
+import AdsterraStickyBanner from "@/components/adsterra/AdsterraStickyBanner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const viewport: Viewport = {
@@ -69,10 +71,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon.png", type: "image/png" },
     ],
     apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: "/favicon.png",
+    shortcut: "/favicon.ico",
   },
   manifest: "/site.webmanifest",
   applicationName: "StreamerSize",
@@ -93,8 +96,8 @@ export default function RootLayout({
         {/* Preconnect to external resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://disintegratehesitate.com" />
         {/* Inline script to prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{
@@ -140,6 +143,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen antialiased" suppressHydrationWarning>
         <Analytics />
+        <AdsterraPopunder />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-[var(--primary)] focus:px-4 focus:py-2 focus:text-[var(--primary-foreground)] focus:font-semibold"
@@ -166,6 +170,12 @@ export default function RootLayout({
             </Link>
             <div className="flex items-center gap-4">
               <ToolsDropdown />
+              <Link
+                href="/obs/"
+                className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors hidden md:inline"
+              >
+                OBS
+              </Link>
               <Link
                 href="/platforms/"
                 className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors hidden md:inline"
@@ -195,7 +205,7 @@ export default function RootLayout({
         </main>
 
         <footer className="border-t border-[var(--border)] mt-20 bg-[var(--muted)]">
-          <div className="mx-auto max-w-5xl px-4 pt-12 pb-8">
+          <div className="mx-auto max-w-5xl px-4 pt-12 pb-24 sm:pb-8">
             {/* Top section: brand + columns */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
               {/* Brand */}
@@ -247,6 +257,7 @@ export default function RootLayout({
                   <li><Link href="/blog/youtube-streaming-bitrate-guide/" className="hover:text-[var(--primary)] transition-colors">YouTube Bitrate Guide</Link></li>
                   <li><Link href="/blog/twitch-streaming-bitrate-guide/" className="hover:text-[var(--primary)] transition-colors">Twitch Bitrate Guide</Link></li>
                   <li><Link href="/blog/best-obs-bitrate-settings/" className="hover:text-[var(--primary)] transition-colors">OBS Bitrate Guide</Link></li>
+                  <li><Link href="/obs/" className="hover:text-[var(--primary)] transition-colors">OBS Settings Hub</Link></li>
                   <li><Link href="/platforms/" className="hover:text-[var(--primary)] transition-colors">Platform Settings</Link></li>
                   <li><Link href="/glossary/" className="hover:text-[var(--primary)] transition-colors">Glossary</Link></li>
                   <li><Link href="/about/" className="hover:text-[var(--primary)] transition-colors">About</Link></li>
@@ -268,6 +279,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <AdsterraStickyBanner />
       </body>
     </html>
   );

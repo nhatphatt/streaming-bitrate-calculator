@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import YoutubeEarningsCalculator from "@/components/YoutubeEarningsCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title:
@@ -126,6 +128,10 @@ export default function YoutubeEarningsPage() {
             <YoutubeEarningsCalculator />
           </div>
         </section>
+
+        <SponsoredButton />
+
+        <AdSlot />
 
         <div className="flex flex-col gap-12">
           <section>

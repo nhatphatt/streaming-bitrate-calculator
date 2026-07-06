@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { RESOLUTIONS, FPS_OPTIONS } from "@/data/presets";
 import CalculatorForm from "@/components/CalculatorForm";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
+import AdUnit from "@/components/AdUnit";
 
 import { breadcrumbSchema, faqPageSchema } from "@/lib/seo";
 import {
@@ -109,6 +112,8 @@ export default async function SizePage({
           <h1 className="text-3xl md:text-4xl font-extrabold mb-3">{hub.h1}</h1>
           <p className="text-[var(--muted-foreground)] text-lg max-w-3xl">{hub.intro}</p>
         </section>
+
+        <AdSlot />
 
         <section className="rounded-xl border border-[var(--border)] p-6">
           <h2 className="text-2xl font-bold mb-4">Recommended bitrate by platform</h2>
@@ -294,6 +299,12 @@ export default async function SizePage({
           />
         </div>
       </section>
+
+      <SponsoredButton />
+
+      <AdSlot />
+
+      <AdUnit format="horizontal" />
 
 
       {/* === UNIQUE ARTICLE CONTENT === */}

@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
           Privacy Policy
         </h1>
         <p className="text-sm text-[var(--muted-foreground)] mb-8">
-          Effective Date: March 26, 2026 &middot; Last Updated: April 18, 2026
+          Effective Date: March 26, 2026 &middot; Last Updated: June 15, 2026
         </p>
 
         <p>
@@ -170,21 +170,23 @@ export default function PrivacyPolicyPage() {
         </p>
 
         {/* ====== Section 4 ====== */}
-        <h2>4. Google AdSense &amp; Advertising Cookies</h2>
+        <h2>4. Third-Party Advertising &amp; Advertising Cookies</h2>
         <p>
-          We use <strong>Google AdSense</strong> to display advertisements on our
-          Website. Google, as a third-party advertising vendor, uses cookies
-          &mdash; including the <strong>DoubleClick DART cookie</strong> &mdash;
-          to serve ads based on your prior visits to this Website and other
-          websites on the internet.
+          We may use third-party advertising networks to display advertisements
+          on our Website. These partners may use cookies, JavaScript, web
+          beacons, and similar technologies to deliver ads, measure ad
+          performance, prevent fraud, and personalize ads based on your visits to
+          this Website and other websites on the internet.
         </p>
         <p>
-          Google&apos;s use of the DART cookie enables it and its partners to
-          serve advertisements to you based on your browsing history. This means
-          the ads you see may be tailored to your interests.
+          Advertising scripts may be served from third-party domains, including
+          ad delivery domains used by our advertising partners. These third
+          parties may automatically receive your IP address, browser details,
+          device information, and page URL when ads are requested.
         </p>
         <p>
           <strong>You can opt out of personalized advertising</strong> by
+          adjusting your browser settings, blocking third-party cookies, or
           visiting{" "}
           <a
             href="https://www.google.com/settings/ads"
@@ -193,8 +195,8 @@ export default function PrivacyPolicyPage() {
           >
             Google&apos;s Ads Settings
           </a>
-          . Alternatively, you can opt out of third-party vendor cookies by
-          visiting the{" "}
+          {" "}where applicable. You can also opt out of participating third-party
+          vendor cookies by visiting the{" "}
           <a
             href="https://optout.networkadvertising.org/"
             target="_blank"
@@ -213,8 +215,8 @@ export default function PrivacyPolicyPage() {
           .
         </p>
         <p>
-          For more information on how Google uses data when you use our Website,
-          please visit{" "}
+          If Google advertising services are enabled on the Website, you can
+          learn how Google uses data by visiting{" "}
           <a
             href="https://policies.google.com/technologies/partner-sites"
             target="_blank"

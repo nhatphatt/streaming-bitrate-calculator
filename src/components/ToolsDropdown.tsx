@@ -78,6 +78,7 @@ const TOOLS = [
 
 const EXTRA_LINKS = [
   { href: "/setup-wizard/", label: "Setup Wizard ✨" },
+  { href: "/obs/", label: "OBS Settings" },
   { href: "/size/", label: "All Resolutions" },
   { href: "/upload/", label: "Upload Time Table" },
   { href: "/tools/", label: "All Tools" },

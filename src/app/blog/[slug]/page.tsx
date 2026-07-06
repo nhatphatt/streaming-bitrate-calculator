@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllBlogPosts, getBlogPostBySlug, getAllBlogSlugs } from "@/lib/blog-content";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
+import AdUnit from "@/components/AdUnit";
 import { isHowToBlogSlug, extractHowToSteps, buildHowToSchema } from "@/lib/howto-schema";
 
 const BLOG_CLUSTERS: Record<string, string[]> = {
@@ -297,6 +300,12 @@ export default async function BlogPostPage({
           className="max-w-3xl [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-8 [&_h2]:mb-4 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:text-[var(--muted-foreground)] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:text-[var(--muted-foreground)] [&_li]:mb-1.5 [&_a]:text-[var(--primary)] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80 [&_table]:w-full [&_table]:text-sm [&_table]:mb-4 [&_th]:text-left [&_th]:pb-2 [&_th]:px-4 [&_th]:border-b [&_th]:border-[var(--border)] [&_th]:font-semibold [&_td]:py-3 [&_td]:px-4 [&_td]:border-b [&_td]:border-[var(--border)/50] [&_td]:text-[var(--muted-foreground)] [&_tr:first-child_td]:font-semibold [&_tr:first-child_td]:text-[var(--foreground)] [&_tr:first-child_td]:border-b-2 [&_tr:first-child_td]:border-[var(--border)] [&_strong]:text-[var(--foreground)]"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
+
+        <SponsoredButton className="max-w-3xl" />
+
+        <AdSlot format="native" className="max-w-3xl" />
+
+        <AdUnit format="auto" className="max-w-3xl" />
 
         {/* CTA: Try the calculator */}
         <div className="rounded-xl border-2 border-[var(--primary-20)] bg-[var(--accent)] p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">

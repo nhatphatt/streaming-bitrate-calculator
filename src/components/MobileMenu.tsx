@@ -18,6 +18,7 @@ const TOOL_ITEMS = [
 
 const BROWSE_ITEMS = [
   { href: "/size/", label: "All Resolutions" },
+  { href: "/obs/", label: "OBS Settings" },
   { href: "/compare/", label: "Compare Codecs" },
   { href: "/platforms/", label: "Platform Settings" },
   { href: "/tools/", label: "All Tools" },

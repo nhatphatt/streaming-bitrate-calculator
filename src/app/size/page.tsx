@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdSlot from "@/components/AdSlot";
 import { RESOLUTIONS, FPS_OPTIONS } from "@/data/presets";
 import { calculate, toDurationSeconds } from "@/lib/calculate";
 
@@ -54,7 +55,7 @@ export default function SizeIndexPage() {
         ))}
       </section>
 
-      {/* === AD SLOT === */}
+      <AdSlot />
 
       {/* Link matrix with preview data */}
       <section>
@@ -93,7 +94,7 @@ export default function SizeIndexPage() {
         ))}
       </section>
 
-      {/* === AD SLOT === */}
+      <AdSlot format="native" />
     </div>
   );
 }

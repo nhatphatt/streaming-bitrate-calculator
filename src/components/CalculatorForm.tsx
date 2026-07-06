@@ -135,7 +135,6 @@ export default function CalculatorForm({
     if (params.has("h")) setHours(clampInt(params.get("h")!, 0, 99));
     if (params.has("m")) setMinutes(clampInt(params.get("m")!, 0, 59));
     if (params.has("s")) setSeconds(clampInt(params.get("s")!, 0, 59));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const durationSeconds = useMemo(

@@ -4,7 +4,7 @@
  */
 
 import { getAllSlugs } from "../src/lib/seo-matrix";
-import { getAllBlogSlugs } from "../src/lib/blog-content";
+import { getAllBlogPosts } from "../src/lib/blog-content";
 import { PRIORITY_SIZE_SLUGS, PRIORITY_MATRIX_SLUGS, SIZE_HUBS } from "../src/lib/strategic-pages";
 import { getAllPlatformSlugs } from "../src/lib/platform-content";
 import { getAllGlossarySlugs } from "../src/data/glossary-terms";
@@ -13,12 +13,19 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 
 const SITE_URL = "https://streamersize.com";
-const today = new Date().toISOString().split("T")[0];
+const DEFAULT_LASTMOD = "2026-06-15";
 
-const staticUrls = [
+type SitemapUrl = {
+  loc: string;
+  priority: string;
+  lastmod?: string;
+};
+
+const staticUrls: SitemapUrl[] = [
   { loc: "/", priority: "1.0" },
   { loc: "/size/", priority: "0.9" },
   { loc: "/compare/", priority: "0.9" },
+  { loc: "/obs/", priority: "0.9" },
   { loc: "/tools/bandwidth-calculator/", priority: "0.9" },
   { loc: "/tools/upload-time-calculator/", priority: "0.9" },
   { loc: "/tools/recording-time-calculator/", priority: "0.9" },
@@ -37,27 +44,28 @@ const staticUrls = [
   { loc: "/privacy-policy/", priority: "0.3" },
 ];
 
-const prioritySizeUrls = [...PRIORITY_SIZE_SLUGS, ...PRIORITY_MATRIX_SLUGS, ...Object.keys(SIZE_HUBS)].map((slug) => ({
+const prioritySizeUrls: SitemapUrl[] = [...PRIORITY_SIZE_SLUGS, ...PRIORITY_MATRIX_SLUGS, ...Object.keys(SIZE_HUBS)].map((slug) => ({
   loc: `/size/${slug}/`,
   priority: "0.8",
 }));
 
-const blogUrls = getAllBlogSlugs().map((slug) => ({
-  loc: `/blog/${slug}/`,
+const blogUrls: SitemapUrl[] = getAllBlogPosts().map((post) => ({
+  loc: `/blog/${post.slug}/`,
   priority: "0.7",
+  lastmod: post.updatedAt || post.publishedAt || DEFAULT_LASTMOD,
 }));
 
-const platformUrls = getAllPlatformSlugs().map((slug) => ({
+const platformUrls: SitemapUrl[] = getAllPlatformSlugs().map((slug) => ({
   loc: `/platforms/${slug}/`,
   priority: "0.8",
 }));
 
-const glossaryUrls = getAllGlossarySlugs().map((slug) => ({
+const glossaryUrls: SitemapUrl[] = getAllGlossarySlugs().map((slug) => ({
   loc: `/glossary/${slug}/`,
   priority: "0.6",
 }));
 
-const uploadUrls = [
+const uploadUrls: SitemapUrl[] = [
   { loc: "/upload/", priority: "0.8" },
   ...getAllUploadSlugs().map((slug) => ({
     loc: `/upload/${slug}/`,
@@ -73,7 +81,7 @@ ${allUrls
   .map(
     (u) => `  <url>
     <loc>${SITE_URL}${u.loc}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${u.lastmod ?? DEFAULT_LASTMOD}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>${u.priority}</priority>
   </url>`

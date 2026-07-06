@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import FpsCalculator from "@/components/FpsCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title: "FPS Calculator — Frame Rate, Frame Count & Slow Motion Tool",
@@ -89,9 +92,9 @@ export default function FpsCalcPage() {
         <section>
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--muted-foreground)] mb-4">
             <ol className="flex items-center gap-1.5">
-              <li><a href="/" className="hover:text-[var(--primary)] transition-colors">Home</a></li>
+              <li><Link href="/" className="hover:text-[var(--primary)] transition-colors">Home</Link></li>
               <li>/</li>
-              <li><a href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</a></li>
+              <li><Link href="/tools/" className="hover:text-[var(--primary)] transition-colors">Tools</Link></li>
               <li>/</li>
               <li className="text-[var(--foreground)] font-medium">FPS Calculator</li>
             </ol>
@@ -110,6 +113,10 @@ export default function FpsCalcPage() {
           </div>
         </section>
 
+        <SponsoredButton />
+
+        <AdSlot />
+
         <section>
           <h2 className="text-2xl font-bold mb-4">Understanding Frame Rates</h2>
           <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
@@ -117,7 +124,7 @@ export default function FpsCalcPage() {
           </p>
           <p className="text-[var(--muted-foreground)] leading-relaxed">
             For streaming, your choice of frame rate directly impacts your required bitrate. Use our{" "}
-            <a href="/" className="text-[var(--primary)] underline underline-offset-2">Bitrate Calculator</a>{" "}
+            <Link href="/" className="text-[var(--primary)] underline underline-offset-2">Bitrate Calculator</Link>{" "}
             to see exactly how FPS affects file size and bandwidth needs.
           </p>
         </section>

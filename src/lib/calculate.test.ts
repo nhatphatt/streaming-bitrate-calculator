@@ -38,16 +38,16 @@ describe("calculateVideoBitrateKbps", () => {
     expect(result).toBe(8000);
   });
 
-  it("scales linearly with fps for 1080p 60fps H.264", () => {
-    // baseBitrate=8000, fps_mul=60/30=2.0, factor=1.0
+  it("scales sub-linearly with fps for 1080p 60fps H.264", () => {
+    // baseBitrate=8000, fps_mul=1+0.5*log2(2)=1.5, factor=1.0
     const result = calculateVideoBitrateKbps("1080p", 60, "h264");
-    expect(result).toBe(16000);
+    expect(result).toBe(12000);
   });
 
   it("applies HEVC efficiency factor correctly for 4K 60fps", () => {
-    // baseBitrate=35000, fps_mul=60/30=2.0, factor=0.6
+    // baseBitrate=35000, fps_mul=1.5, factor=0.6
     const result = calculateVideoBitrateKbps("4k", 60, "hevc");
-    expect(result).toBe(35000 * 2.0 * 0.6);
+    expect(result).toBe(35000 * 1.5 * 0.6);
   });
 
   it("applies AV1 efficiency factor correctly", () => {
@@ -85,9 +85,9 @@ describe("calculateVideoBitrateKbps", () => {
   });
 
   it("scales correctly for 24fps", () => {
-    // baseBitrate=8000, fps_mul=24/30=0.8
+    // baseBitrate=8000, fps_mul=1+0.5*log2(24/30)=0.8390...
     const result = calculateVideoBitrateKbps("1080p", 24, "h264");
-    expect(result).toBeCloseTo(6400, 0);
+    expect(result).toBeCloseTo(6712, 0);
   });
 
   it("handles 8K resolution", () => {
@@ -102,9 +102,9 @@ describe("calculateVideoBitrateKbps", () => {
   });
 
   it("handles 120fps scaling", () => {
-    // baseBitrate=8000, fps_mul=120/30=4.0, factor=1.0
+    // baseBitrate=8000, fps_mul=1+0.5*log2(120/30)=1+0.5*2=2.0, factor=1.0
     const result = calculateVideoBitrateKbps("1080p", 120, "h264");
-    expect(result).toBe(32000);
+    expect(result).toBe(16000);
   });
 });
 

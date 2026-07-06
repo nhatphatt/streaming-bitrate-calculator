@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CalculatorForm from "@/components/CalculatorForm";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
+import AdUnit from "@/components/AdUnit";
 import { RESOLUTIONS, FPS_OPTIONS } from "@/data/presets";
 
 export const metadata: Metadata = {
@@ -42,7 +45,7 @@ export default function HomePage() {
                 name: "How much storage does 1 hour of 4K video take?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "A 1-hour 4K video at 30fps using H.264 takes approximately 22–33 GB depending on bitrate settings. HEVC can reduce this by ~40%.",
+                  text: "A 1-hour 4K video at 30fps using H.264 takes about 15 GB at a 35 Mbps bitrate. HEVC (H.265) cuts that to around 9 GB — roughly 40% smaller. Higher bitrates (50+ Mbps for pro-grade footage) scale the size up proportionally.",
                 },
               },
               {
@@ -113,6 +116,12 @@ export default function HomePage() {
           </div>
         </section>
 
+        <SponsoredButton />
+
+        <AdSlot />
+
+        <AdUnit format="horizontal" />
+
         {/* SEO Content + FAQ + Links */}
         <div className="flex flex-col gap-10">
           <section>
@@ -160,6 +169,31 @@ export default function HomePage() {
             </ul>
           </section>
 
+          <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
+            <h2 className="text-2xl font-bold mb-4">OBS Bitrate Calculator</h2>
+            <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
+              For OBS streaming, choose your resolution, frame rate, codec, and
+              stream length above to estimate the bitrate, file size, and upload
+              speed you need. As a quick starting point, use <strong>6,000 Kbps</strong> for
+              Twitch 1080p 60fps, <strong>9,000–12,000 Kbps</strong> for YouTube 1080p 60fps,
+              and keep your stream bitrate below about <strong>75%</strong> of your real
+              upload speed.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                ["/blog/best-obs-bitrate-settings/", "Best OBS bitrate settings"],
+                ["/obs/", "OBS settings hub"],
+                ["/blog/obs-bitrate-for-1080p-60fps/", "OBS 1080p 60fps bitrate"],
+                ["/blog/cbr-vs-vbr-bitrate-explained/", "CBR vs VBR for OBS"],
+                ["/tools/bandwidth-calculator/", "Check upload speed"],
+              ].map(([href, label]) => (
+                <Link key={href} href={href} className="rounded-lg border border-[var(--border)] px-4 py-3 text-sm font-medium hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </section>
+
           {/* FAQ */}
           <section>
             <h2 className="text-2xl font-bold mb-6">
@@ -169,7 +203,7 @@ export default function HomePage() {
               {[
                 {
                   q: "How much storage does 1 hour of 4K video take?",
-                  a: "A 1-hour 4K video at 30fps using H.264 takes approximately 22–33 GB depending on bitrate settings. HEVC can reduce this by ~40%.",
+                  a: "A 1-hour 4K video at 30fps using H.264 takes about 15 GB at a 35 Mbps bitrate. HEVC (H.265) cuts that to around 9 GB — roughly 40% smaller. Higher bitrates (50+ Mbps for pro-grade footage) scale the size up proportionally.",
                 },
                 {
                   q: "What bitrate do I need for 1080p streaming?",

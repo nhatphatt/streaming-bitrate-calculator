@@ -1,8 +1,9 @@
 User-agent: *
 Allow: /
+Allow: /_next/static/
 
-# Block internal Next.js routes from being crawled
-Disallow: /_next/
+# Block non-content/internal routes from being crawled
+Disallow: /_next/data/
 Disallow: /api/
 Disallow: /embed/
 

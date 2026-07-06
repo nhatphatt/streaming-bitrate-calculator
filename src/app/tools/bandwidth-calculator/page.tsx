@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import BandwidthCalculator from "@/components/BandwidthCalculator";
 import RelatedTools from "@/components/RelatedTools";
+import AdSlot from "@/components/AdSlot";
+import SponsoredButton from "@/components/SponsoredButton";
 
 export const metadata: Metadata = {
   title:
@@ -88,12 +91,12 @@ export default function BandwidthCalcPage() {
           >
             <ol className="flex items-center gap-1.5">
               <li>
-                <a
+                <Link
                   href="/"
                   className="hover:text-[var(--primary)] transition-colors"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>/</li>
               <li className="text-[var(--foreground)] font-medium">
@@ -116,6 +119,10 @@ export default function BandwidthCalcPage() {
           </div>
         </section>
 
+        <SponsoredButton />
+
+        <AdSlot />
+
         <div className="flex flex-col gap-12">
           <section>
             <h2 className="text-2xl font-bold mb-4">
@@ -132,12 +139,12 @@ export default function BandwidthCalcPage() {
               is sufficient for 1080p 60fps. YouTube streamers targeting 4K need
               at least <strong>50 Mbps upload</strong>. For exact file size
               calculations, use our{" "}
-              <a
+              <Link
                 href="/"
                 className="text-[var(--primary)] underline underline-offset-2"
               >
                 Bitrate &amp; Storage Calculator
-              </a>
+              </Link>
               .
             </p>
           </section>
