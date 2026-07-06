@@ -1,0 +1,126 @@
+---
+slug: hdr-streaming-guide-2026
+title: "HDR Streaming Guide 2026: HDR10, Platforms & Tone-Mapping"
+description: "Complete HDR streaming guide for 2026. Learn HDR10 workflows, which platforms support it, bitrate requirements, and how to avoid tone-mapping pitfalls."
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+readTime: "9 min read"
+---
+
+HDR streaming in 2026 is finally accessible to creators without a broadcast background — but only if you get the capture-to-encode pipeline right. HDR10 is the dominant open standard: no royalties, supported natively by YouTube and Amazon Prime Video, and compatible with virtually every HDR-capable display. Getting it wrong means your stream looks washed out on SDR screens, clipped on HDR screens, or both.
+
+This guide walks through the complete HDR10 workflow, platform-by-platform support, concrete bitrate numbers, and the tone-mapping mistakes that quietly ruin HDR streams.
+
+## What HDR10 Actually Means for Streamers
+
+HDR10 is a static HDR format: it embeds a single set of **MaxCLL** (Maximum Content Light Level) and **MaxFALL** (Maximum Frame-Average Light Level) metadata values in the stream header. Unlike Dolby Vision or HDR10+, those values don't change scene by scene. For live streaming, static metadata is actually an advantage — you write it once in your encoder settings and forget it.
+
+HDR10 requires:
+- **10-bit color depth** (not 8-bit — this is the most common mistake)
+- **BT.2020 color space** (wide color gamut, covers about 75% of the DCI-P3 gamut)
+- **ST.2084 (PQ) transfer function** (perceptual quantizer, maps 0–10,000 nits)
+- Peak brightness metadata: MaxCLL and MaxFALL values
+
+The typical consumer HDR monitor peaks at 400–1,000 nits. Gaming HDR content is typically mastered at 1,000 nits peak with MaxCLL values around 800–1,000 and MaxFALL around 200–400.
+
+## HDR10 Bitrate Requirements
+
+HDR10 requires more bitrate than equivalent SDR content. The wider color gamut and 10-bit depth add encoding complexity, and banding artifacts appear much more visibly on HDR displays when bitrate is starved.
+
+Use these as your floor values — go higher if your upload allows:
+
+| Resolution | FPS | SDR Bitrate (kbps) | HDR10 Minimum (kbps) | HDR10 Recommended (kbps) |
+|---|---|---|---|---|
+| 1080p | 30 | 5,000 | 7,000 | 9,000 |
+| 1080p | 60 | 6,000 | 9,000 | 12,000 |
+| 1440p | 60 | 9,000 | 14,000 | 18,000 |
+| 4K | 30 | 15,000 | 22,000 | 30,000 |
+| 4K | 60 | 20,000 | 30,000 | 40,000–50,000 |
+
+For live streaming to Twitch or YouTube, 1080p60 HDR at 9,000–12,000 kbps is the practical sweet spot. Verify you have the upload headroom first — use the [bandwidth calculator](/tools/bandwidth-calculator/) to check your connection can sustain that bitrate with overhead.
+
+## Which Platforms Actually Support HDR10 in 2026
+
+Platform support is fragmented. Here is the honest breakdown:
+
+| Platform | HDR10 Live | HDR10 VOD | Notes |
+|---|---|---|---|
+| YouTube | Yes | Yes | HDR live requires 4K or 1080p HDR ingest; VOD is fully supported |
+| Twitch | No | No | SDR only as of mid-2026; HDR roadmap unconfirmed |
+| Kick | No | No | SDR pipeline only |
+| Facebook Gaming | No | No | SDR only |
+| Amazon IVS | Partial | Yes | HDR10 VOD via MediaConvert; live HDR in private beta |
+| Vimeo | No | Yes | HDR10/HLG via upload only |
+
+**YouTube is the only mainstream live platform with confirmed HDR10 support.** For VOD workflows — recording locally and uploading — the picture is better, with YouTube and Vimeo both passing HDR10 metadata intact. See the full [YouTube streaming settings](/platforms/youtube/) for the ingest URL and encoder recommendations.
+
+For Twitch and Kick, you are stuck with SDR pipelines. This is where tone-mapping becomes critical: you need to convert HDR game output to SDR before encoding, or your stream will look faded and grey.
+
+## The Complete HDR10 OBS Workflow
+
+OBS 31+ on Windows handles HDR natively when configured correctly. Here is the exact path:
+
+**Step 1 — Set Windows HDR mode.** Enable 'Use HDR' in Windows display settings. OBS will detect the HDR desktop and expose 10-bit output options.
+
+**Step 2 — OBS Video Settings.**
+- Color Format: **P010** (10-bit 4:2:0, best compatibility) or I010 (10-bit 4:2:0 planar)
+- Color Space: **BT.2020**
+- Color Range: **Limited** (matches broadcast standards; use Full only for offline archival)
+- SDI/HDR Nominal Peak Level: **1000 nits** (matches most consumer HDR gaming monitors)
+
+**Step 3 — Encoder Selection.** Use hardware encoders for HDR10 — x264 technically supports 10-bit but the CPU overhead at high bitrates is severe. NVENC (RTX 20-series and newer) and AMD AMF (RX 6000 and newer) both support 10-bit H.265/HEVC and AV1 natively. For codec choice at these bitrates, the [H.264 vs H.265 vs AV1 comparison](/blog/h264-vs-h265-vs-av1/) covers the tradeoffs in detail.
+
+**Step 4 — HEVC or AV1 encoding settings.**
+- Profile: **Main 10** (not Main — Main is 8-bit only)
+- Rate Control: **CBR** for live, **CQP** (quality 18–22) for local recording
+- Keyframe Interval: 2 seconds for live, 0 (auto) for recording
+- For YouTube HDR live: use H.265 at 9,000–12,000 kbps, not AV1 (AV1 live ingest is still being rolled out)
+
+**Step 5 — MaxCLL / MaxFALL Metadata.** OBS 31+ injects these automatically when color space is set to BT.2020. For manual control via FFmpeg: `-color_primaries bt2020 -color_trc smpte2084 -colorspace bt2020nc -max_cll "1000,400" -master_display "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,50)"`.
+
+For a full walkthrough of OBS settings and the [OBS settings hub](/obs/), see the broader configuration guide.
+
+## Tone-Mapping Pitfalls and How to Avoid Them
+
+Tone-mapping is the process of converting HDR (wide brightness range, BT.2020 gamut) to SDR (narrower range, BT.709 gamut). Get it wrong and the result looks one of two ways: **crushed blacks with blown highlights** (aggressive clipping), or **faded, grey, low-contrast** (incorrect gamma assumption).
+
+**Pitfall 1 — Encoding HDR content through an SDR OBS profile.** If your game outputs HDR (which most modern titles do by default on an HDR display) and your OBS color space is still set to BT.709/sRGB, OBS converts via a naive gamma remap. The result is washed-out video. Fix: either set OBS to the full HDR10 pipeline above, or disable Windows HDR mode when streaming to SDR-only platforms like Twitch.
+
+**Pitfall 2 — Wrong tone-mapping operator.** OBS uses Reinhard tone-mapping by default for HDR-to-SDR conversion. Reinhard is fast but compresses highlights heavily, making bright scenes look muddy. For better results, use the **Hable (Filmic)** tone-mapping option in OBS Advanced settings — it preserves highlight detail and keeps contrast punchy.
+
+**Pitfall 3 — MaxCLL set too high.** If you set MaxCLL to 10,000 nits (the ST.2084 maximum) but your actual content peaks at 1,000 nits, the display will apply aggressive tone-mapping and the image will look dark and desaturated. Set MaxCLL to match your actual monitor peak brightness — 600, 1000, or 1400 nits depending on your panel.
+
+**Pitfall 4 — Capture card SDR conversion.** Most capture cards (Elgato 4K60 Pro Mk.2, AVerMedia Live Gamer 4K) output HDR signals in pass-through mode, but their software defaults to SDR capture. You must explicitly enable 10-bit HDR capture in the card's driver settings. If the card passes 8-bit SDR to OBS, no amount of OBS color space config will recover the HDR data.
+
+**Pitfall 5 — Mismatched gamut.** Streaming in BT.2020 gamut to a platform that expects BT.709 (like Twitch) causes oversaturated, neon-looking colors on most displays. Twitch transcodes to SDR and makes assumptions about input gamut — if you feed it BT.2020, the gamut conversion is wrong. Confirm the platform's expected color space before going live.
+
+## HDR for Local Recording vs. Live Streaming
+
+Local HDR10 recording is significantly easier than live HDR10 streaming — you have no bitrate cap and can use lossless or near-lossless settings. Recommended local recording settings for HDR10 archival:
+
+- Container: **MKV** (preserves HDR metadata most reliably; MP4 can strip it)
+- Codec: **HEVC Main 10** or **AV1 10-bit**
+- Rate Control: **CQP 16–18** for near-lossless; CQP 20–22 for high-quality archival
+- Color Format: **P010**
+
+At CQP 18, 4K60 HDR10 HEVC generates roughly 25–45 GB per hour depending on scene complexity. Use the [recording time calculator](/tools/recording-time-calculator/) to estimate how long your storage will last, and the [file size calculator](/size/) to plan drive space before long sessions.
+
+When uploading HDR10 recordings to YouTube, the platform will detect the HDR metadata and display the HDR badge automatically — no re-encoding needed if the container is MP4 or MKV with correct metadata. Upload times at these file sizes are significant; the [upload time calculator](/tools/upload-time-calculator/) will give you a realistic estimate before you start.
+
+## Frequently Asked Questions
+
+### Does Twitch support HDR streaming in 2026?
+
+No. As of mid-2026, Twitch's ingest and transcoding pipeline is SDR-only. If you stream HDR content to Twitch, it will either look washed out or be automatically tone-mapped incorrectly by the platform. Disable Windows HDR mode or use OBS tone-mapping to convert to SDR before encoding for Twitch. See the [Twitch streaming settings](/platforms/twitch/) for the current recommended SDR configuration.
+
+### What encoder should I use for HDR10 streaming?
+
+Use a hardware encoder with native 10-bit support: NVIDIA NVENC on RTX 20-series or newer (H.265 Main 10 or AV1 10-bit), or AMD AMF on RX 6000 series or newer. Software encoding via x264 10-bit works but requires a very powerful CPU — at 1080p60 with 12,000 kbps you will need at least a Ryzen 9 or i9 to maintain a stable encode. The [NVENC vs x264 comparison](/blog/nvenc-vs-x264-streaming/) covers performance benchmarks in detail.
+
+### Why does my HDR stream look faded and grey?
+
+This is almost always a color space mismatch. Either OBS is receiving HDR data but outputting in an SDR color space profile, or you are streaming BT.2020 content to a platform that processes it as BT.709. Check that your OBS color format is P010 (not NV12), color space is BT.2020, and the platform you are streaming to actually supports HDR ingest. For SDR platforms, switch to Hable tone-mapping in OBS settings.
+
+### Should I use CBR or VBR for HDR live streaming?
+
+Use **CBR** for all live streaming, including HDR. Variable bitrate causes buffer issues with platform ingest servers and can cause audio/video desync. The higher bitrate floor that HDR10 requires (9,000+ kbps for 1080p60) makes CBR even more important — you want a predictable, constant stream at a bitrate above the encoding complexity threshold. For more context, see the [CBR vs VBR for streaming](/blog/cbr-vs-vbr-for-streaming/) breakdown.

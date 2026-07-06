@@ -1,0 +1,156 @@
+---
+slug: best-obs-settings-diablo-4
+title: "Best OBS Settings for Diablo 4 Streaming (2026)"
+description: "Optimal OBS settings for Diablo 4: bitrate, encoder, and dark-scene banding fixes for silky-smooth ARPG streams at 1080p and 1440p."
+publishedAt: "2026-06-30"
+updatedAt: "2026-06-30"
+readTime: "9 min read"
+---
+
+For Diablo 4, use a minimum of **6,000 Kbps** on Twitch or **8,000–10,000 Kbps** on YouTube at 1080p 60fps to avoid dark-scene banding and particle artifact crushing. The game's desaturated blacks, dense particle effects, and heavy shadow work demand more bitrate than most games at the same resolution — roughly 20–30% more than a bright FPS like Valorant. The recommended encoder is NVENC H.264 (RTX) or x264 Medium on a dedicated streaming PC.
+
+## Why Diablo 4 Is Hard to Encode
+
+Diablo 4 is among the most demanding games to stream cleanly. Three specific visual characteristics punish low-bitrate encoding:
+
+- **Near-black scenes:** Dungeons, cutscenes, and boss arenas spend long stretches at the dark end of the luminance range. H.264 and HEVC allocate bits poorly across near-identical dark regions, causing visible banding — horizontal bands of slightly different shades across shadow areas.
+- **Dense particle effects:** Skill explosions, ground effects, and crowd density generate massive, fast-moving pixel changes that force the encoder to work harder in every single frame.
+- **Fine detail in motion:** The game's cloth physics, fur rendering, and environment debris create high-frequency detail that blurs or blocks at insufficient bitrate.
+
+The result is that 4,000–5,000 Kbps streams of Diablo 4 look significantly worse than the same settings for a bright arena shooter. Budget your bitrate accordingly.
+
+## Recommended OBS Settings Table
+
+| Platform | Resolution | FPS | Video Bitrate | Encoder |
+|---|---|---|---|---|
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC H.264 or x264 |
+| YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC H.264 |
+| YouTube | 1440p | 60 | 14,000–18,000 Kbps | NVENC H.264 or HEVC |
+| Kick | 1080p | 60 | 7,000–8,000 Kbps | NVENC H.264 |
+| Recording only | 1440p | 60 | CQP 18 HEVC | NVENC HEVC |
+| Recording only | 1080p | 60 | CQP 20 HEVC | NVENC HEVC |
+
+For upload speed requirements, use the [bandwidth calculator](/tools/bandwidth-calculator/) to confirm your connection can sustain the bitrate with headroom. The 75% rule applies: a 10,000 Kbps stream needs at least 13–14 Mbps upload.
+
+## Streaming Settings (Step by Step)
+
+### Output Settings
+
+Go to **Settings → Output → Output Mode: Advanced**.
+
+Under the Streaming tab:
+
+- **Encoder:** NVENC H.264 (if NVIDIA RTX) or x264
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
+- **Keyframe Interval:** 2 seconds (required by most platforms)
+- **Preset:** P5 (Quality) for NVENC, or Medium for x264
+- **Profile:** High
+- **B-frames:** 2 (NVENC) — improves dark-scene quality with minimal overhead
+
+CBR is non-negotiable for streaming. VBR may save bits on easy scenes, but platforms expect a consistent bitrate and Diablo 4's fast scene transitions make VBR unpredictable. Read the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) if you want to understand why.
+
+### Video Settings
+
+Go to **Settings → Video**:
+
+- **Base (Canvas) Resolution:** Match your monitor (1920x1080 or 2560x1440)
+- **Output (Scaled) Resolution:** 1920x1080 for streaming
+- **Downscale Filter:** Lanczos (sharpest for high-detail scenes)
+- **FPS:** 60 (use 30 only if bitrate is severely constrained)
+
+Playing at 1440p or 4K and streaming at 1080p? Lanczos downscaling makes a visible difference in Diablo 4 specifically — the fine textures, runes, and particle effects all preserve more detail than bilinear scaling.
+
+### Dark-Scene Banding Fix: The Most Important Setting for Diablo 4
+
+Standard H.264 encodes color in 8-bit by default, which produces only 256 steps between pure black and pure white. In a game that lives in the shadows, this causes banding.
+
+The fix: enable **10-bit color encoding** in OBS if your encoder supports it.
+
+- NVENC on RTX 2000-series and newer: go to encoder settings, set **Profile: Main10**
+- x264: add `--output-depth 10` to the custom encoder string
+- In OBS Video settings, set **Color Format: NV12** for standard streams, or **P010** if your encoder chain supports 10-bit end-to-end
+
+For Twitch, 10-bit HEVC is not yet widely supported — stick to 10-bit H.264 (Main10 profile). YouTube handles 10-bit streams well across all major encoders. See the [platform comparison](/compare/) for codec support details across streaming services.
+
+**Second banding fix:** In Diablo 4 graphics settings, enable **HDR** if your display supports it, but disable it for streaming — HDR content tone-mapped to SDR by OBS introduces additional banding. Keep the game in SDR mode for streaming.
+
+## Encoder Choice: NVENC vs x264 for Diablo 4
+
+Both work well, but the choice matters for dark-scene quality.
+
+**NVENC H.264 (RTX 20/30/40-series)** is the right pick for most single-PC setups:
+- Uses the dedicated NVENC hardware block, leaving your GPU cores free for rendering Diablo 4
+- P5 (Quality) preset on RTX 30/40-series produces quality close to x264 Medium
+- RTX 40-series NVENC is genuinely excellent — at 6,000 Kbps it handles dark dungeon scenes without noticeable banding
+
+**NVENC AV1 (RTX 40-series only)** is worth considering for YouTube:
+- ~30% better quality per bit vs H.264 — meaningful at Twitch's 6,000 Kbps cap
+- Diablo 4's dark scenes compress much more cleanly in AV1 than H.264
+- YouTube and Kick support AV1 streams; Twitch added AV1 support in 2024
+
+**x264 Medium** on a dedicated streaming PC (dual-PC setup or powerful CPU with headroom):
+- Best quality per bitrate of any encoder
+- Handles banding much better than GPU encoders at the same bitrate
+- At 6,000 Kbps with Medium preset, x264 produces cleaner shadow detail than NVENC at equivalent settings
+
+Compare encoder quality per bitrate in detail with our [H.264 vs H.265 vs AV1 guide](/blog/h264-vs-h265-vs-av1/).
+
+## Game Capture Settings in OBS
+
+Use **Game Capture** source, not Window Capture or Display Capture:
+- Game Capture uses shared memory (lowest latency, no extra GPU copies)
+- For Diablo 4 running fullscreen: enable "Capture any fullscreen application" or select the executable directly
+- **Allow Transparency:** off
+- **Capture Cursor:** your preference
+
+If the Game Capture source shows black screen, switch Diablo 4 to Borderless Windowed mode. The game's anti-cheat (XBOX App / Battle.net) occasionally interferes with full-screen Game Capture. Borderless Windowed resolves this without any meaningful quality difference.
+
+## Audio Settings
+
+| Setting | Recommended Value |
+|---|---|
+| Sample Rate | 48 kHz |
+| Audio Bitrate | 160 Kbps |
+| Audio Encoder | AAC |
+| Channels | Stereo |
+
+Diablo 4's soundtrack is atmospheric and detailed — 128 Kbps AAC is audible degradation on its low-frequency ambient layers. Use 160 Kbps minimum; 192 Kbps if bandwidth allows. The audio bitrate comes out of your total bandwidth budget: a 6,000 Kbps video + 160 Kbps audio stream needs 6,160 Kbps of upload.
+
+## Recording Diablo 4 Locally
+
+If you want a high-quality local recording alongside your stream, use OBS's Advanced output mode to set a separate recording profile:
+
+- **Encoder:** NVENC HEVC
+- **Rate Control:** CQP
+- **CQP Value:** 18 (dungeon content, dark scenes) or 20 (outdoor zones)
+- **Container:** MKV (remux to MP4 after, never record directly to MP4)
+- **Resolution:** 1440p or native
+
+At CQP 18 HEVC, a 1-hour Diablo 4 session at 1440p 60fps generates roughly 6–10 GB. Use the [recording time calculator](/tools/recording-time-calculator/) to estimate storage needs before a long session. File sizes for the same content at 1080p HEVC CQP 20 run 3–5 GB/hour.
+
+## Platform-Specific Notes
+
+**Twitch:** Capped at 6,000 Kbps for most streamers. This is the tightest constraint for Diablo 4. Use NVENC P5/P6 or x264 Medium, and strongly consider the Main10 profile for 10-bit encoding to reduce banding. Full platform settings at [Twitch streaming guide](/platforms/twitch/).
+
+**YouTube:** 8,000–10,000 Kbps is the sweet spot. YouTube re-encodes your stream server-side, so a higher source bitrate improves every quality tier viewers see. AV1 streaming is a real advantage here for Diablo 4's dark content. Full guide at [YouTube settings](/platforms/youtube/).
+
+**Kick:** 8,000 Kbps cap, no transcoding tiers — every viewer receives your source stream. This makes your encoder and bitrate choices more impactful than on Twitch. More at [Kick settings](/platforms/kick/).
+
+## Frequently Asked Questions
+
+### Why does my Diablo 4 stream look banded in dark dungeon scenes?
+
+Banding in dark scenes is caused by insufficient bitrate and 8-bit color encoding. The fix is two-part: raise your bitrate to at least 6,000 Kbps (Twitch) or 8,000 Kbps (YouTube), and enable 10-bit encoding by setting NVENC Profile to Main10 or using the x264 10-bit output option. Also confirm Diablo 4 is running in SDR mode, not HDR, since HDR-to-SDR tone mapping in OBS makes banding worse.
+
+### Should I stream Diablo 4 at 1080p 60fps or 1440p 60fps?
+
+At Twitch's 6,000 Kbps cap, stream at 1080p 60fps — trying to push 1440p at 6,000 Kbps will look worse, not better, because the encoder has to discard too much pixel data. On YouTube where you can use 12,000–18,000 Kbps, 1440p 60fps is a meaningful upgrade and makes Diablo 4's environment detail visibly sharper.
+
+### Does Diablo 4 need a higher bitrate than other games?
+
+Yes. Compared to bright competitive shooters (Valorant, CS2), Diablo 4 needs roughly 20–30% more bitrate at the same resolution and framerate to achieve equivalent perceived quality. The combination of dark scenes, particle density, and fine texture detail is particularly taxing on H.264 and HEVC encoders. Budget at minimum 6,000 Kbps for 1080p 60fps, versus 4,500–5,000 Kbps for a simpler game.
+
+### What OBS scene collection setup is best for Diablo 4 streams?
+
+Keep it simple: one Game Capture source for Diablo 4, one Browser source for overlays (alerts, chat box), and a separate scene for a Starting Soon or BRB screen. Avoid stacking multiple capture sources — each additional capture adds GPU copy overhead. Diablo 4 is GPU-intensive, so preserving render headroom matters. Check overall bitrate and bandwidth requirements with the [streaming calculator](/).

@@ -1,0 +1,135 @@
+---
+slug: amd-amf-vs-nvenc-encoding
+title: "AMD AMF vs NVENC for Streaming: Full Comparison (2026)"
+description: "AMD AMF vs NVENC encoding compared for streaming quality, performance, and GPU support. Which hardware encoder wins for Twitch, YouTube, and Kick in 2026?"
+publishedAt: "2026-06-30"
+updatedAt: "2026-06-30"
+readTime: "9 min read"
+---
+
+For most streamers in 2026, NVENC on a mid-range NVIDIA RTX GPU beats AMD AMF in raw quality at the same bitrate — but the gap has narrowed significantly on RX 7000 series cards. At 6,000 Kbps / 1080p 60fps, NVENC (Ada Lovelace, RTX 40-series) produces visibly cleaner output than AMF H.264 on an RX 7900 XT, but AMF H.265 on RDNA 3 cards is competitive enough that AMD users no longer need to fall back to x264 by default.
+
+## What Are AMF and NVENC?
+
+**NVENC** (NVIDIA Video Encoder) is the dedicated hardware encoding block built into NVIDIA GPUs. It runs independently of the CUDA cores and shader processors, so encoding a stream has near-zero impact on your game's frame rate. Every GPU from GTX 600 series onward includes NVENC, though the quality jumped dramatically with the Turing generation (RTX 20 series) and again with Ada Lovelace (RTX 40 series).
+
+**AMF** (Advanced Media Framework) is AMD's hardware encoding solution, sometimes also called VCE (Video Coding Engine). Like NVENC, AMF runs on a dedicated block inside the GPU die and imposes minimal load on the compute units rendering your game. AMF is available on GCN-era cards and newer, but practical streaming quality only became competitive starting with RDNA 2 (RX 6000 series).
+
+Both encoders support H.264 and H.265 (HEVC). NVENC on RTX 40 series additionally supports AV1 hardware encoding. AMD added AV1 encoding with RDNA 3 (RX 7000 series) as well.
+
+## Head-to-Head Quality Comparison
+
+The most reliable way to compare hardware encoders is to hold bitrate constant and measure SSIM/VMAF scores or do a direct visual comparison on fast-motion gaming content. Here is how the current GPU generations stack up at the bitrates most streamers actually use:
+
+| Encoder | GPU Generation | H.264 Quality | H.265 Quality | AV1 Quality |
+|---|---|---|---|---|
+| NVENC (Ada) | RTX 40 series | Excellent | Excellent | Excellent |
+| NVENC (Ampere) | RTX 30 series | Very Good | Very Good | Not supported |
+| NVENC (Turing) | RTX 20 series | Good-Very Good | Good | Not supported |
+| AMF | RX 7000 (RDNA 3) | Good | Very Good | Good |
+| AMF | RX 6000 (RDNA 2) | Decent | Good | Not supported |
+| AMF | RX 5000 (RDNA 1) | Below average | Below average | Not supported |
+| NVENC (Pascal) | GTX 10 series | Below average | N/A | Not supported |
+
+**Practical takeaway:** If you are on an RTX 30 or 40 series card, NVENC gives you noticeably better H.264 quality than AMF on a same-tier AMD GPU. But if you compare AMF H.265 on an RX 7900 XT against NVENC H.264 on an RTX 4070, the quality gap almost disappears — the codec advantage compensates for the encoder-quality gap.
+
+## Recommended Streaming Settings by Encoder
+
+### NVENC Settings (OBS / Streamlabs)
+
+- **Encoder:** NVENC H.264 (New) — RTX 20 series and newer
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps for Twitch, 8,000–12,000 Kbps for YouTube, 6,000–8,000 Kbps for Kick
+- **Preset:** P5 (Slow) for best quality; drop to P4 (Medium) if you see any GPU thermal issues
+- **Profile:** High
+- **B-frames:** 2
+- **Look-ahead:** Off for live streaming (adds latency)
+- **Psycho Visual Tuning:** On (RTX cards only)
+
+If you have an RTX 4070 or better, try **NVENC AV1** at the same bitrate on YouTube — the quality improvement over H.264 is immediately visible.
+
+### AMF Settings (OBS / Streamlabs)
+
+- **Encoder:** AMD HW H.265 (if platform supports it) or AMD HW H.264
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps for Twitch, 8,000–12,000 Kbps for YouTube
+- **Quality Preset:** Quality (not Balanced or Speed)
+- **Profile:** High (H.264) / Main (H.265)
+- **B-frames:** 1 (AMF B-frame support varies by driver — test before your first stream)
+- **Pre-analysis:** On (RX 6000 and newer — improves bit allocation)
+
+H.265 on Twitch: Twitch still requires H.264 delivery from the broadcaster. Use H.265 only for YouTube, Kick (which accepts RTMP with H.265 on supported ingest endpoints), or local recording.
+
+Check our [OBS settings hub](/obs/) for encoder selection walkthroughs in OBS 31 and newer.
+
+## Platform Bitrate Recommendations
+
+Use these targets regardless of which hardware encoder you are running. The encoder changes quality efficiency, not the platform's ingest limit.
+
+| Platform | Resolution | FPS | Target Bitrate | Notes |
+|---|---|---|---|---|
+| Twitch | 1080p | 60 | 6,000 Kbps | Hard cap for most streamers |
+| Twitch | 720p | 60 | 4,500–5,000 Kbps | Good for slower uploads |
+| YouTube Live | 1080p | 60 | 8,000–12,000 Kbps | Server-side transcoding |
+| YouTube Live | 1440p | 60 | 12,000–20,000 Kbps | Use AV1 if RTX 40+ |
+| Kick | 1080p | 60 | 6,000–8,000 Kbps | 8,000 Kbps cap |
+
+For platform-specific guidance see [Twitch streaming settings](/platforms/twitch/), [YouTube streaming settings](/platforms/youtube/), and [Kick streaming settings](/platforms/kick/).
+
+## CPU Impact: How Much Does Each Encoder Actually Use?
+
+One of the core reasons to use hardware encoding is to keep CPU headroom for your game and other processes. Both AMF and NVENC perform well here, but there are differences worth knowing.
+
+| Scenario | CPU Usage | GPU Encoding Load | Notes |
+|---|---|---|---|
+| NVENC H.264 (P5 preset) | ~1–3% | Dedicated NVENC block | Essentially free |
+| NVENC AV1 (P5 preset) | ~1–3% | Dedicated NVENC block | Slightly higher power draw |
+| AMF H.264 (Quality preset) | ~3–6% | Dedicated VCE block | AMD driver overhead slightly higher |
+| AMF H.265 (Quality preset) | ~3–7% | Dedicated VCE block | More complex encode path |
+| x264 (Medium preset, 1080p60) | 35–65% | 0% | CPU-bound |
+
+The practical difference between NVENC and AMF CPU usage is small enough that it will not affect your gameplay. Both are far better than x264 for single-PC streaming setups. For a detailed breakdown of CPU-side encoding, see our comparison of [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
+
+## Which GPU Generations Are Worth Using for Streaming?
+
+Not all hardware encoders are equal even within the same brand. Here is a quick GPU guide:
+
+**NVIDIA — worth using NVENC:**
+- RTX 40 series (Ada Lovelace): Best NVENC generation. Dual encoders on 4070 Ti and above. AV1 support. Use for any serious streaming setup.
+- RTX 30 series (Ampere): Excellent quality. Very close to Ada in H.264. Good for 1080p and 1440p streaming.
+- RTX 20 series (Turing): Solid quality. This is where NVENC became genuinely competitive with x264 Medium.
+- GTX 10 series and older: Use x264 instead. Old NVENC quality is visibly poor on fast-motion content.
+
+**AMD — worth using AMF:**
+- RX 7000 series (RDNA 3): AMF is finally a viable primary encoder. H.265 and AV1 quality is competitive. Use H.265 for YouTube or recordings.
+- RX 6000 series (RDNA 2): AMF H.264 is decent at 6,000+ Kbps. H.265 is noticeably better. Worth using over x264 on a single-PC setup.
+- RX 5000 series (RDNA 1): Marginal AMF quality. Use x264 if your CPU can handle it, especially for fast-paced games.
+- Older AMD GPUs (Polaris, Vega): Skip AMF. Use x264.
+
+For codec-level comparisons beyond just encoders, our [H.264 vs H.265 vs AV1 guide](/blog/h264-vs-h265-vs-av1/) and the [video codec comparison tool](/compare/) explain the underlying format tradeoffs.
+
+## CBR vs VBR with Hardware Encoders
+
+Both AMF and NVENC support CBR (Constant Bitrate) and VBR (Variable Bitrate) modes. For live streaming, always use **CBR**. Live streaming platforms buffer based on expected data rate — VBR causes unpredictable spikes that result in dropped frames or ingest disconnections.
+
+The one exception: if you are using your GPU encoder only for local recording (not streaming), VBR with a high quality target gives significantly better file efficiency. Read more in the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) for the full tradeoff breakdown.
+
+Use the [Streaming Bitrate Calculator](/) to verify your bitrate fits within your upload speed budget, or check your connection with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+
+## Frequently Asked Questions
+
+### Is AMD AMF good enough for streaming in 2026?
+
+On RX 7000 series (RDNA 3) GPUs, yes — AMF H.265 quality at 6,000–8,000 Kbps is competitive with NVENC on mid-range NVIDIA cards. On RX 6000 series the quality is acceptable but noticeably below NVENC Ampere at identical bitrates. Older AMD GPUs should use x264 instead.
+
+### Can I use NVENC AV1 on Twitch?
+
+As of mid-2026, Twitch does not accept AV1 ingest from streamers. NVENC AV1 is only useful for YouTube Live (which does support AV1 streams) and local recordings. If you stream exclusively on Twitch, stick to NVENC H.264 or H.265.
+
+### Does using NVENC or AMF hurt game performance?
+
+No. Both encoders use a dedicated block on the GPU die that is physically separate from the shader cores and VRAM bandwidth used for rendering. In practice the FPS impact is under 1% on modern GPUs. This is the primary reason hardware encoding is recommended over x264 for single-PC streaming setups.
+
+### At the same bitrate, which encoder produces better quality?
+
+NVENC on RTX 30 and 40 series produces better H.264 quality than AMF on equivalent AMD GPUs at the same bitrate. However, AMF H.265 on RDNA 3 cards narrows or eliminates that gap compared to NVENC H.264 — a more efficient codec can offset a less efficient encoder. Use H.265 wherever the platform allows it and compare the results with your own game content using OBS's built-in stream preview.

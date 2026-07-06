@@ -1,0 +1,107 @@
+---
+slug: how-much-data-does-twitch-use-per-hour
+title: "How Much Data Does Twitch Use Per Hour? (2026)"
+description: "Twitch uses 270 MB to 5.4 GB per hour depending on quality. See exact data usage for every quality setting from 160p to 1080p60 and what it means for mobile."
+publishedAt: "2026-07-01"
+updatedAt: "2026-07-01"
+readTime: "7 min read"
+---
+
+Twitch uses between **270 MB and 5.4 GB per hour** depending on the stream quality you select. At 160p you burn through roughly 270 MB/hr; at 1080p 60fps that figure jumps to around 5.4 GB/hr. If you are watching on a mobile data plan, quality selection is the single biggest lever you have over your bill.
+
+The numbers below are based on Twitch's actual bitrate tiers, not guesses. Twitch delivers video over HTTP adaptive bitrate (HLS), and each quality option has a well-documented target bitrate range. Multiplying that bitrate by time gives you the exact data cost.
+
+## Twitch Data Usage Per Hour by Quality
+
+| Quality | Resolution | Target Bitrate | Data Per Hour | Data Per 30 Min |
+|---------|-----------|---------------|---------------|-----------------|
+| 160p | 284x160 | ~300 Kbps | ~135 MB | ~67 MB |
+| 360p | 640x360 | ~500–700 Kbps | ~225–315 MB | ~112–158 MB |
+| 480p | 854x480 | ~1,000–1,500 Kbps | ~450–675 MB | ~225–338 MB |
+| 720p 30fps | 1280x720 | ~2,500–3,000 Kbps | ~1.1–1.35 GB | ~562–675 MB |
+| 720p 60fps | 1280x720 | ~3,500–4,500 Kbps | ~1.6–2.0 GB | ~788 MB–1.0 GB |
+| 1080p 60fps | 1920x1080 | ~5,000–6,000 Kbps | ~2.25–2.7 GB | ~1.1–1.35 GB |
+
+**Note:** Bitrate is measured in kilobits per second (Kbps). To convert to megabytes per hour: `(Kbps × 3600) ÷ 8 ÷ 1024 = GB/hr`. Actual usage can vary ±10–15% depending on scene complexity and stream-to-stream differences.
+
+## Why Twitch Data Usage Varies
+
+Twitch uses H.264 video compression delivered via HLS segments, typically in 2-second chunks. Partners and Affiliates with transcoding enabled offer multiple quality tiers; channels without transcoding serve source quality only.
+
+**Scene complexity matters.** A dark, low-motion Just Chatting stream compresses more efficiently than a fast-paced shooter at the same nominal bitrate. The encoder holds the target bitrate constant (CBR) at the streaming end, but the actual bytes transferred per second depend on what the CDN delivers, which can dip below target during motion-heavy scenes.
+
+**Audio adds roughly 3–5% to total usage.** Twitch audio is typically encoded at 128–160 Kbps AAC. At 160 Kbps audio, that is an extra ~72 MB/hr on top of the video figure — included in the table above.
+
+**Source quality streams can exceed 6,000 Kbps.** Some Twitch Partners stream at 8,000–12,000 Kbps source quality. Watching "Source" on those channels can push data usage to 3.6–5.4 GB/hr or higher.
+
+## Watching Twitch on Mobile Data
+
+Mobile data caps make quality selection critical. Here is how long you can watch Twitch at each quality tier before hitting common data cap thresholds:
+
+| Data Cap | 160p | 480p | 720p 60fps | 1080p 60fps |
+|----------|------|------|-----------|-------------|
+| 1 GB | ~7 hrs | ~1.5–2 hrs | ~30–37 min | ~22–27 min |
+| 5 GB | ~37 hrs | ~7–11 hrs | ~2.5–3 hrs | ~1.9–2.2 hrs |
+| 10 GB | ~74 hrs | ~15–22 hrs | ~5–6 hrs | ~3.7–4.4 hrs |
+| 25 GB | ~185 hrs | ~37–55 hrs | ~12–15 hrs | ~9–11 hrs |
+
+**Practical mobile recommendations:**
+
+- **On 5G with an unlimited plan:** 720p 60fps is perfectly watchable and uses about 2 GB/hr
+- **On a 5 GB monthly plan:** Stick to 480p (~600 MB/hr) for the best balance of quality and data efficiency
+- **On a throttled plan (1–3 Mbps):** 360p or 480p streams uninterrupted; 720p 60fps may buffer
+- **On a 3G/HSPA connection (~7 Mbps):** 720p is technically possible but 480p is more stable
+
+The Twitch mobile app selects quality automatically by default. Set it manually in the player settings (gear icon) to take control of your data usage.
+
+## How to Reduce Twitch Data Usage
+
+**Lower the quality manually.** The single most effective step. Dropping from 720p 60fps to 480p cuts data use by roughly 65%. Use the gear icon in the Twitch player on both desktop and mobile.
+
+**Use the Twitch mobile app instead of a browser.** The app is more efficient because it does not run JavaScript-heavy browser overhead alongside the video stream. The video data itself is identical, but total device data load is lower.
+
+**Close background tabs and apps.** On mobile, other apps streaming data (social feeds, cloud sync) compete for bandwidth and can push you onto a lower-quality tier.
+
+**Enable Low Latency mode only when you need interaction.** Low Latency mode on Twitch uses smaller HLS segments (0.5–2 seconds vs 4–8 seconds for normal latency), which slightly increases overhead. If you are just watching a VOD or a stream where chat interaction is not critical, disable it.
+
+**Use Wi-Fi whenever possible.** This is the obvious answer, but worth stating: switching from LTE to Wi-Fi before a long session saves your mobile data budget entirely.
+
+## Twitch vs YouTube vs Kick: Data Comparison
+
+All three platforms deliver video over similar HLS pipelines, so data usage is primarily a function of resolution and bitrate rather than the platform itself. That said, their default and maximum quality tiers differ:
+
+- **Twitch:** Source quality typically 4,000–6,000 Kbps; Partners may go higher. [See Twitch platform settings](/platforms/twitch/)
+- **YouTube Live:** Supports up to 51,000 Kbps for 4K; standard 1080p streams run ~4,000–8,000 Kbps. [See YouTube settings](/platforms/youtube/)
+- **Kick:** Similar cap structure to Twitch, typically 4,000–8,000 Kbps source. [See Kick settings](/platforms/kick/)
+
+If you are watching 1080p 60fps on any of these platforms, budget 2.5–3 GB/hr.
+
+## Data Usage for Twitch VODs
+
+Twitch VODs (Video on Demand) use the same quality tiers and bitrates as live streams. A 3-hour VOD watched at 720p 60fps will consume approximately **4.8–6 GB** of data. Quality is selected the same way — gear icon in the player — so the same advice applies. VODs additionally support playback at up to 2× speed, which proportionally increases data use since more video is delivered per wall-clock hour.
+
+## Checking Your Usage with a Calculator
+
+If you want to calculate exact data requirements for your own situation — for example, estimating storage for a recorded stream rather than a watched one — the [Streaming Bitrate and Storage Calculator](/) handles both. For upload/download bandwidth needs from the streamer's side, the [Bandwidth Calculator](/tools/bandwidth-calculator/) shows the minimum connection speed required at any bitrate. Streamers choosing their own output quality can also use the [recording time calculator](/tools/recording-time-calculator/) to plan local storage.
+
+For more context on how bitrate choices affect quality and file size at each resolution, the [file size calculator by resolution](/size/) breaks down the math for any combination of resolution, frame rate, and bitrate.
+
+---
+
+## Frequently Asked Questions
+
+### How much data does Twitch use in 1 hour at 1080p?
+
+At 1080p 60fps, Twitch uses approximately **2.25–2.7 GB per hour**, based on a target bitrate of 5,000–6,000 Kbps. If you are watching a Partner channel that streams at Source quality above 6,000 Kbps, you can see 3–5 GB/hr. At 1080p 30fps the figure is somewhat lower, typically 1.5–2 GB/hr.
+
+### Does watching Twitch on mobile use more data than on a computer?
+
+No — the video data is identical regardless of device. The difference is that a desktop browser running the full Twitch website loads additional JavaScript, ads, and chat assets that add a small overhead (typically 50–100 MB/hr extra). The Twitch mobile app is slightly more data-efficient as a result.
+
+### What Twitch quality should I use on a limited data plan?
+
+**480p** is the sweet spot for limited plans. It uses roughly 450–675 MB/hr, looks reasonable on phone screens up to 6 inches, and leaves enough bandwidth headroom to avoid buffering on most LTE connections. If your plan is extremely limited (1 GB or less per day), drop to 360p (~270 MB/hr).
+
+### Does Twitch use data in the background when the app is minimized?
+
+Yes, by default the Twitch app continues playing audio (and buffering video) when minimized on both iOS and Android. To stop data use entirely, close the stream before minimizing. Some Android versions allow restricting background data per app in system settings, which will pause Twitch when it is not in the foreground.

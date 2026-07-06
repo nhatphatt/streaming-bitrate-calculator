@@ -1,0 +1,150 @@
+---
+slug: best-obs-settings-path-of-exile-2
+title: "Best OBS Settings for Path of Exile 2 (2026)"
+description: "Optimal OBS bitrate, encoder, and resolution settings for streaming Path of Exile 2. Handles heavy particle effects and endgame chaos without pixelation."
+publishedAt: "2026-06-18"
+updatedAt: "2026-06-18"
+readTime: "9 min read"
+---
+
+For Path of Exile 2 streaming, use **6,000–8,000 Kbps** at 1080p 60fps with NVENC H.264 or HEVC — the game's dense particle effects and screen-filling skill explosions demand more bitrate than most ARPGs. On Twitch, target 6,000 Kbps CBR; on YouTube or Kick you can push 8,000 Kbps to keep endgame maps looking sharp. Anything below 5,000 Kbps at 1080p will visibly block up during high-mob-density encounters.
+
+## Why PoE 2 Destroys Low Bitrate Streams
+
+Path of Exile 2 is arguably the most encoder-hostile mainstream game available. A single Elemental Proliferation build can fill 80% of the screen with overlapping fire, ice, and lightning animations simultaneously. Each of these effects is a semi-transparent, constantly changing region that H.264 and HEVC have to re-encode every single frame.
+
+Compare this to a game like Minecraft or a first-person shooter: most of the frame stays the same between frames, so the encoder banks information and coasts. In a PoE 2 endgame map, almost nothing stays the same. The encoder has to work at near-maximum capacity for the entire map clear.
+
+The practical result: a bitrate that looks fine in a city hub will produce chunky macroblocking the moment a Juggernaut slams into a pack of monsters. You need to spec your bitrate settings for the worst case, not the average case. Use the [Streaming Bitrate Calculator](/) to see how your upload speed holds up against these numbers.
+
+## Recommended OBS Settings for PoE 2
+
+### Complete Settings Table
+
+| Setting | Twitch | YouTube Live | Kick |
+|---|---|---|---|
+| Resolution | 1080p | 1080p or 1440p | 1080p |
+| FPS | 60 | 60 | 60 |
+| Video Bitrate | 6,000 Kbps | 8,000–12,000 Kbps | 6,000–8,000 Kbps |
+| Audio Bitrate | 160 Kbps | 192 Kbps | 160 Kbps |
+| Encoder | NVENC H.264 or AV1 | NVENC H.264 or AV1 | NVENC H.264 |
+| Rate Control | CBR | CBR | CBR |
+| Keyframe Interval | 2 seconds | 2 seconds | 2 seconds |
+| Preset | P5 (Slow) | P5 or P6 | P5 |
+| Profile | High | High | High |
+| Downscale Filter | Lanczos | Lanczos | Lanczos |
+
+### Encoder Recommendations for PoE 2
+
+**NVIDIA RTX 30-series or 40-series:** Use NVENC H.264 at P5 (Slow) preset for Twitch. If you are on an RTX 40-series and streaming to YouTube or Kick, switch to NVENC AV1 — it handles particle-dense scenes roughly 30% more efficiently than H.264 at the same bitrate, which makes a visible difference in PoE 2 endgame. See the [codec comparison](/compare/) for a full breakdown.
+
+**AMD RX 6000 / 7000 series:** Use AMF H.264 at Quality preset. AMD's AV1 encoder (RX 7000+) is also a strong option for YouTube.
+
+**CPU (x264):** If you stream from a dedicated streaming PC and your gaming PC sends the feed via NDI or Capture Card, x264 Medium or Slow at 6,000 Kbps beats NVENC quality noticeably. The extra quality overhead makes a real difference in chaotic PoE 2 screens. Not practical for single-PC setups due to CPU overhead.
+
+**Intel Arc:** HEVC or AV1 via QSV. Intel's AV1 encoder is competitive with NVENC AV1 and works well for PoE 2 on YouTube.
+
+For a full comparison of NVENC vs x264, check the [NVENC vs x264 streaming guide](/blog/nvenc-vs-x264-streaming/).
+
+## Output Settings Step-by-Step
+
+Open OBS and go to **Settings → Output → Output Mode: Advanced**.
+
+Under the **Streaming** tab:
+
+- **Encoder:** NVIDIA NVENC H.264 (or AV1 if targeting YouTube/Kick)
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps for Twitch; 8,000 Kbps for YouTube/Kick
+- **Keyframe Interval:** 2 (seconds) — required by Twitch; best practice everywhere
+- **Preset:** P5 (Slow)
+- **Profile:** High
+- **Look-ahead:** Enabled (helps smooth bitrate distribution across particle bursts)
+- **Psycho Visual Tuning:** Enabled
+- **Max B-frames:** 2
+
+The **Look-ahead** option is especially valuable for PoE 2. It allows the encoder to peek a few frames ahead and pre-allocate more bits to the chaotic frames before a skill explosion, rather than reacting after the fact when the frame is already ruined.
+
+## Video Settings
+
+In **Settings → Video**:
+
+- **Base (Canvas) Resolution:** Match your monitor. 1920x1080 for 1080p monitors, 2560x1440 for 1440p.
+- **Output (Scaled) Resolution:** 1920x1080 for Twitch. For YouTube at 1440p, keep at 2560x1440.
+- **Downscale Filter:** Lanczos (3 samples) — sharpest result
+- **Common FPS:** 60
+
+**Why not 1440p on Twitch?** Twitch's 6,000 Kbps cap combined with 1440p at 60fps actually looks *worse* than 1080p at the same bitrate for PoE 2. More pixels means less bitrate per pixel, which makes particle effects muddy. Stick to 1080p on Twitch until you have partner-level transcoding enabled. Check [Twitch platform settings](/platforms/twitch/) for the full picture.
+
+YouTube handles 1440p well at 10,000–12,000 Kbps — particle effects hold up cleanly at that budget. See [YouTube platform settings](/platforms/youtube/) for more.
+
+## Audio Settings
+
+PoE 2 has a rich soundscape — the crack of lightning, the thud of melee hits, the ambient hum of unique areas. Don't cheap out on audio bitrate:
+
+- **Sample Rate:** 48 kHz
+- **Channels:** Stereo
+- **Audio Bitrate:** 160 Kbps minimum, 192 Kbps preferred on YouTube
+- **Encoder:** AAC
+
+Add a noise suppression filter to your microphone source if you use mechanical switches — PoE 2 sessions can run long and keyboard noise accumulates.
+
+## Recording Settings While Streaming PoE 2
+
+If you record locally while streaming, set the Recording tab (in Advanced Output mode) independently:
+
+- **Encoder:** NVENC HEVC
+- **Rate Control:** CQP
+- **CQP Value:** 18–20
+- **Format:** MKV (remux to MP4 after session)
+
+A 3-hour PoE 2 endgame session at CQP 20 HEVC produces roughly **8–14 GB** depending on how many maps and bosses you run. Dense map clears compress poorly even with HEVC because of particle complexity. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to make sure your drive has enough headroom before a long session.
+
+## Bitrate vs Storage vs Upload: The PoE 2 Math
+
+| Stream Quality | Bitrate | Upload Needed | File Size/Hour (local) |
+|---|---|---|---|
+| 720p 30fps (minimum) | 4,000 Kbps | 6 Mbps | 4–6 GB (HEVC CQP 20) |
+| 1080p 60fps (Twitch max) | 6,000 Kbps | 8.5 Mbps | 8–12 GB (HEVC CQP 20) |
+| 1080p 60fps (Kick/YouTube) | 8,000 Kbps | 11 Mbps | 8–12 GB (HEVC CQP 20) |
+| 1440p 60fps (YouTube) | 12,000 Kbps | 17 Mbps | 15–22 GB (HEVC CQP 20) |
+
+Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify your upload speed can sustain your target bitrate with headroom to spare. A 6,000 Kbps stream requires consistent upload above 8 Mbps — factor in overhead and other household devices.
+
+## Game-Side Optimizations
+
+OBS settings only control what you send — the game itself needs to be set up so OBS captures it cleanly:
+
+**In-game graphics settings that affect stream quality:**
+- Reduce **Particle Density** to "High" instead of "Ultra" if you are on a single-PC setup. Ultra particles hit CPU harder and leave less headroom for x264 encoding.
+- **Motion Blur:** Turn it off. It adds visual noise that drives up encoding cost with no benefit to viewers.
+- **Bloom/Glow effects:** Leave these on — they're part of the game's visual identity — but know they increase encoder workload in boss fights.
+- **Disable V-sync** in PoE 2 and use OBS's frame rate cap instead, or cap via RTSS at 62fps (giving OBS clean 60fps capture without tearing).
+
+**Capture method:**
+Use **Game Capture** in OBS over Window Capture or Display Capture. Game Capture hooks directly into DirectX, giving lower CPU overhead and cleaner frames with no desktop compositor latency.
+
+## Single PC vs Dual PC Setup
+
+PoE 2 is CPU-intensive during large pack clears due to physics and AI simulation. On a single PC, NVENC is essential — do not attempt x264 medium or slow while playing PoE 2 at high settings unless you have a 12-core or better CPU.
+
+A dual-PC setup (gaming PC → elgato/AVerMedia capture card → dedicated streaming PC) unlocks x264 slow or medium encoding without affecting game performance. This is the setup many high-follower PoE 2 streamers use because x264 handles complex particle frames more gracefully than NVENC at the same bitrate.
+
+For CBR vs VBR considerations in this context, the [CBR vs VBR for streaming guide](/blog/cbr-vs-vbr-for-streaming/) explains why CBR is almost always the right call for live streaming regardless of game.
+
+## Frequently Asked Questions
+
+### What bitrate does Path of Exile 2 need to not look pixelated?
+
+At 1080p 60fps, you need at least **6,000 Kbps** for the stream to hold together during chaotic endgame encounters. Below that threshold, large skill explosions and dense mob packs will produce visible macroblocking. If you are limited to 4,000–5,000 Kbps by your upload speed, drop to 720p 60fps rather than trying to compress 1080p at that budget.
+
+### Should I use NVENC H.264 or AV1 for PoE 2 streaming?
+
+Use AV1 if you have an RTX 40-series GPU and your target platform supports it (YouTube and Kick do as of 2026; Twitch support is rolling out). AV1 is materially better than H.264 for particle-heavy games because its transform coding handles semi-transparent overlapping effects more efficiently. At 8,000 Kbps, AV1 on an RTX 4070 matches the visual quality of H.264 at roughly 11,000–12,000 Kbps for PoE 2 content. See the full [codec comparison](/compare/) to understand the tradeoffs.
+
+### Why does my stream look fine in town but terrible in maps?
+
+This is the defining characteristic of PoE 2 streaming. Town and camp areas have minimal animation complexity — the encoder can coast. Endgame maps with Delirium, Beyond, or Legion mechanics can spike to 5–10x the encoding complexity within a single second. If you set your bitrate based on how the stream looks in town, you have tuned it for the easy case. Test your stream quality mid-map during a dense pack clear, not in a quiet area.
+
+### How much upload speed do I need to stream PoE 2 on Twitch?
+
+For Twitch at 6,000 Kbps video + 160 Kbps audio, you need a sustained upload speed of at least **8–9 Mbps**. The standard rule is to never exceed 75% of your available upload bandwidth with stream data, so a 10 Mbps upload is a comfortable minimum. Check your actual sustained upload (not peak) with a speed test and verify with the [Bandwidth Calculator](/tools/bandwidth-calculator/) before going live during a league start.

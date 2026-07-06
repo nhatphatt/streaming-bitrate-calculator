@@ -1,0 +1,157 @@
+---
+slug: how-to-fix-dropped-frames-in-obs
+title: "How to Fix Dropped Frames in OBS (2026 Guide)"
+description: "Step-by-step fixes for dropped frames in OBS: lower bitrate, switch servers, ditch Wi-Fi, tweak encoder settings. Stop frame drops for good."
+publishedAt: "2026-07-05"
+updatedAt: "2026-07-05"
+readTime: "9 min read"
+---
+
+Dropped frames in OBS almost always mean one thing: you are sending more data than your network can handle. The core fix is to reduce your stream bitrate below 75% of your upload speed — for a 10 Mbps upload that means staying under 7,500 Kbps — or to eliminate the bottleneck causing the congestion. Most streamers can eliminate drops entirely in under 10 minutes by following the steps below.
+
+## What 'Dropped Frames' Actually Means
+
+OBS shows two frame-related stats at the bottom of the screen: **Dropped Frames** (network) and **Skipped Frames** (encoding). They look similar but have completely different causes.
+
+- **Dropped frames (network):** OBS encoded the frame but could not send it fast enough. The frame was discarded to keep the stream live. This is almost always a bandwidth or network path problem.
+- **Skipped frames (encoding):** Your CPU or GPU could not encode frames fast enough. The encoder dropped them before they even hit the network. This is a hardware/settings problem, not a network problem.
+
+This guide focuses on **network dropped frames** — the most common complaint. If your dropped frames counter is red in OBS stats, that is a network issue. If your skipped/lagged frames counter is red, scroll down to the encoder section.
+
+## Step 1: Check Your Real Upload Speed
+
+Before changing anything in OBS, verify your actual upload speed with a speed test at a server near your streaming region. Use [fast.com](https://fast.com) or Speedtest by Ookla and run it 3 times. Take the lowest result — that worst case is what matters.
+
+Then use the [bandwidth calculator](/tools/bandwidth-calculator/) to confirm your bitrate budget. The rule: **stream bitrate + 20% headroom ≤ upload speed.**
+
+| Upload Speed | Safe Max Stream Bitrate |
+|---|---|
+| 5 Mbps (5,000 Kbps) | 3,750 Kbps |
+| 10 Mbps (10,000 Kbps) | 7,500 Kbps |
+| 20 Mbps (20,000 Kbps) | 15,000 Kbps |
+| 50 Mbps (50,000 Kbps) | 37,500 Kbps |
+| 100 Mbps+ | Platform limit (e.g. 8,000 Kbps for Twitch) |
+
+If your stream bitrate is already below 75% of your upload but you still get drops, the problem is not raw speed — it is packet loss or routing. Move to Step 3.
+
+## Step 2: Lower Your Stream Bitrate
+
+Open OBS → **Settings → Output**. In Simple mode, lower the video bitrate. In Advanced mode (recommended), adjust the bitrate field under the Streaming tab.
+
+Practical starting points:
+
+| Resolution + FPS | Minimum Bitrate | Recommended | Platform Cap |
+|---|---|---|---|
+| 720p 30fps | 2,000 Kbps | 3,000 Kbps | Twitch: 6,000 |
+| 720p 60fps | 2,500 Kbps | 4,500 Kbps | Twitch: 6,000 |
+| 1080p 30fps | 3,500 Kbps | 5,000 Kbps | Twitch: 6,000 |
+| 1080p 60fps | 4,500 Kbps | 6,000 Kbps | Twitch: 6,000 |
+| 1080p 60fps | 6,000 Kbps | 9,000 Kbps | YouTube: no hard cap |
+
+Drop in 500–1,000 Kbps increments and re-test. If drops stop, your bitrate was simply too high for your connection. See [best OBS bitrate settings](/blog/best-obs-bitrate-settings/) for platform-specific targets.
+
+Always use **CBR (Constant Bitrate)** for streaming, not VBR. CBR keeps your upload load predictable, which prevents sudden traffic spikes that cause drops. Read why in our [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/).
+
+## Step 3: Switch to a Wired Ethernet Connection
+
+Wi-Fi is the single most underappreciated cause of streaming dropped frames. Even a strong Wi-Fi signal introduces **variable latency and packet loss** that a speed test will not reveal. A speed test measures throughput, not consistency.
+
+Symptoms of Wi-Fi-related drops:
+- Frame drops come and go in waves, not constantly
+- Drops get worse when other devices use the network
+- Your router is one or two rooms away
+- You are on the 2.4 GHz band
+
+The fix is simple: run an Ethernet cable from your router to your PC. If that is not practical, use a **MoCA 2.5 adapter** (coax cable) or a **powerline adapter** as an intermediate solution. Wi-Fi 6E and Wi-Fi 7 reduce but do not eliminate the consistency problem — a cable is always better for streaming.
+
+## Step 4: Change Your Ingest Server
+
+The default "Auto" server selection in OBS is good but not perfect. A server that is geographically close may still have poor routing. Try these steps:
+
+**For Twitch:**
+1. Settings → Stream → Server → change from "Auto" to a specific regional server
+2. Try 2-3 servers in your region (e.g. "US East: New York", "US East: Ashburn")
+3. Use the Twitch bandwidth test tool at stream.twitch.tv/bandwidth-test to score servers objectively
+
+**For YouTube:**
+1. Settings → Stream → Server → select a specific data center near you
+2. YouTube's "Primary" server is almost always optimal, but "Backup" sometimes routes better depending on your ISP
+
+**For Kick:**
+1. Kick uses an RTMP ingest similar to Twitch
+2. Check the [Kick settings guide](/platforms/kick/) for current ingest URLs by region
+
+See full platform-specific settings at [Twitch settings](/platforms/twitch/) and [YouTube settings](/platforms/youtube/).
+
+## Step 5: Enable Dynamic Bitrate (OBS 27+)
+
+OBS 27 introduced **Dynamic Bitrate**, which automatically lowers your bitrate when congestion is detected and raises it again when the network clears. This does not fix a chronic dropped-frame problem but smooths out brief spikes.
+
+To enable it: **Settings → Advanced → Network → Enable dynamic bitrate** (checkbox). This is a safety net, not a substitute for a properly set bitrate.
+
+Also check: **Settings → Advanced → Network → "Bind to IP"** should be set to "Default" unless you have a multi-NIC setup. A wrong bind-to-IP setting can cause persistent drops on multi-interface machines.
+
+## Step 6: Fix Encoder Overload (Skipped Frames)
+
+If your problem is skipped/lagged frames rather than dropped frames, your encoder is the bottleneck. Switch from CPU (x264) to a GPU encoder:
+
+- **NVIDIA GPU:** Use **NVENC H.264 (new)** or **NVENC HEVC** — RTX 20-series and newer produce quality very close to x264 Medium with near-zero CPU cost
+- **AMD GPU:** Use **AMF H.264**
+- **Intel GPU:** Use **QSV H.264**
+
+If you must use x264, lower the preset from "medium" to "veryfast" or "superfast." Quality drops slightly but encoder load drops dramatically. For a full encoder comparison, see [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
+
+Also reduce your **canvas resolution** in OBS (Settings → Video → Output Scaled Resolution). Going from 1080p to 720p cuts encoder work by roughly 56%.
+
+## Step 7: Reduce Background Network Usage
+
+Other devices and apps on your network compete for the same upload bandwidth:
+
+- Cloud backup services (Backblaze, Google Drive, OneDrive) upload constantly
+- Windows Update can use upload bandwidth during peer-assisted delivery
+- Other PCs on the network streaming or gaming
+- Smart home devices sending video to the cloud
+
+On Windows, open Task Manager → Performance → Ethernet/Wi-Fi and watch the upload graph while OBS is running but not streaming. If something else is eating bandwidth, find and pause it. On your router, enable **QoS (Quality of Service)** and prioritize your streaming PC's traffic.
+
+## Step 8: Check for ISP-Level Throttling
+
+Some ISPs throttle RTMP traffic (TCP port 1935) used by Twitch, YouTube, and most streaming platforms. If you have tried everything above and still see drops, test with a VPN:
+
+1. Enable a VPN (Mullvad, ExpressVPN, or any fast provider)
+2. Re-run a stream test
+3. If drops disappear entirely with the VPN on, your ISP is throttling RTMP
+
+Solutions: contact your ISP, switch providers, or use a service that supports RTMP over port 443 (which most ISPs cannot selectively block). YouTube Live accepts RTMP on port 443 natively.
+
+## Quick Diagnostic Checklist
+
+Run through this list in order before making multiple changes at once:
+
+- Upload speed tested ✓ — bitrate is under 75% of upload ✓
+- Using CBR, not VBR ✓
+- Wired connection (not Wi-Fi) ✓
+- Ingest server manually selected and tested ✓
+- Dynamic Bitrate enabled in OBS Advanced settings ✓
+- No background uploads or cloud sync running ✓
+- GPU encoder in use (not x264 on a weak CPU) ✓
+
+For a full settings audit, visit the [OBS settings hub](/obs/) or use the [Streaming Bitrate Calculator](/) to sanity-check your numbers before you go live.
+
+## Frequently Asked Questions
+
+### Why do I get dropped frames even with fast internet?
+
+Raw speed is not the only factor — consistency and latency matter more for streaming. You can have 100 Mbps down and 20 Mbps up but still drop frames if your Wi-Fi introduces packet loss or your ISP's route to the ingest server is congested. Run a wired connection and manually select an ingest server to rule out both issues.
+
+### What percentage of dropped frames is acceptable in OBS?
+
+Aim for 0% dropped frames. Even 0.1% dropped frames is noticeable to viewers as brief video freezes and audio pops. OBS's stats panel turns yellow around 0.5% and red above 1% — treat yellow as a warning to investigate, not as 'good enough.'
+
+### Does lowering bitrate fix dropped frames?
+
+Yes, in most cases. Dropped frames are caused by sending more data than the network path can absorb. Reducing bitrate to stay comfortably below your upload speed — and below any bottleneck in the routing path — eliminates the overflow that causes drops. Use the [bandwidth calculator](/tools/bandwidth-calculator/) to find a safe target.
+
+### Should I use 'Connect Automatically' or pick a server manually in OBS?
+
+The auto setting works well most of the time, but manually testing 3-4 nearby servers and picking the one with the lowest latency and packet loss often produces better results, especially if you stream daily. Twitch's bandwidth test tool scores servers more accurately than OBS's auto selection because it tests under real streaming load.

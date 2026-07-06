@@ -1,0 +1,143 @@
+---
+slug: best-obs-settings-genshin-impact
+title: "Best OBS Settings for Genshin Impact (2026 Guide)"
+description: "Optimal OBS settings for streaming and recording Genshin Impact. Bitrate, encoder, resolution, and platform-specific tips to get clean quality at low file sizes."
+publishedAt: "2026-07-05"
+updatedAt: "2026-07-05"
+readTime: "8 min read"
+---
+
+For streaming Genshin Impact, **4,500–6,000 Kbps at 1080p 60fps** is the sweet spot on most platforms, and you can often drop to **3,500–4,500 Kbps** without noticeable quality loss. Genshin's anime-style art direction — wide flat color fields, clean cel-shading, minimal film grain — is one of the most encoder-friendly visual styles in gaming. That means you get better-looking streams at lower bitrates compared to hyper-realistic titles like Cyberpunk 2077 or Call of Duty. For recording locally, CQP 20 with NVENC HEVC will give you near-perfect quality at around 2–3 GB per hour.
+
+## Why Genshin Impact Compresses So Well
+
+Most video encoders work by finding redundancy between frames and within flat regions of color. Genshin gives the encoder an enormous amount to work with:
+
+- **Large flat color zones** — character skin, sky gradients, Teyvat's stylized terrain
+- **Consistent cel-shaded outlines** — sharp, predictable edges that don't introduce noise
+- **No film grain or post-processing noise** — unlike shooters, there's nothing randomizing the frame
+- **Predictable camera movement** — exploration and combat follow smooth arcs, not chaotic micro-strafes
+
+The practical result: Genshin at 4,500 Kbps on x264 Medium looks roughly as clean as a fast-paced FPS game at 6,000 Kbps. You have real headroom to lower your bitrate, reduce CPU load, or improve quality at the same bandwidth budget. Compare codec efficiency in depth on the [video codec comparison page](/compare/).
+
+## Recommended OBS Streaming Settings for Genshin Impact
+
+### The Core Settings Table
+
+| Setting | Recommended Value | Notes |
+|---|---|---|
+| Resolution | 1920x1080 (1080p) | Match in-game render resolution |
+| FPS | 60 | Genshin supports 60fps natively |
+| Encoder | NVENC H.264 or x264 | See encoder section below |
+| Rate Control | CBR | Required for stable streaming |
+| Bitrate (Twitch) | 4,500–6,000 Kbps | 5,000 is the sweet spot |
+| Bitrate (YouTube) | 6,000–9,000 Kbps | Higher ceiling available |
+| Bitrate (Kick) | 5,000–7,000 Kbps | Good quality margin |
+| Keyframe Interval | 2 seconds | Required by most platforms |
+| Audio Bitrate | 160 Kbps | AAC, 48 kHz |
+| B-frames (NVENC) | 2 | Improves efficiency slightly |
+
+### Encoder Choice: NVENC vs x264
+
+**NVENC H.264 (recommended for most Genshin streamers):** If you have an NVIDIA GTX 1650, RTX 20/30/40-series GPU, use NVENC. Set quality preset to P5 (or "Quality" in Simple mode) and bitrate to 5,000–6,000 Kbps. Your CPU stays free for Genshin's open-world loading and particle effects, which can be surprisingly demanding.
+
+**x264 (recommended if you have a powerful CPU or a dedicated streaming PC):** x264 Medium at 4,500–5,500 Kbps will edge out NVENC H.264 at the same bitrate on Genshin specifically — because flat color content benefits more from x264's superior motion estimation. Use "Medium" or "Fast" preset, never "Veryfast" unless your CPU is genuinely struggling.
+
+**NVENC AV1 (RTX 40-series only):** If your GPU supports it and you're streaming to YouTube or Kick, AV1 at 3,500–4,500 Kbps matches or beats standard H.264 at 6,000 Kbps for Genshin. The efficiency gain is dramatic on flat-color anime content. Read more in the [CBR vs VBR for streaming guide](/blog/cbr-vs-vbr-for-streaming/).
+
+## Platform-Specific Bitrate Settings
+
+### Twitch
+
+Twitch's practical cap for most streamers is **6,000 Kbps**. For Genshin, you rarely need that ceiling:
+
+- **Comfortable quality:** 5,000–6,000 Kbps at 1080p 60fps
+- **Budget-friendly quality:** 3,500–4,500 Kbps at 1080p 60fps (still looks excellent for Genshin)
+- **720p 60fps:** 2,500–3,500 Kbps (genuinely usable, especially for Twitch mobile viewers)
+
+See the full Twitch settings breakdown at [Twitch streaming settings](/platforms/twitch/).
+
+### YouTube Live
+
+YouTube re-encodes your stream server-side, so higher source bitrates pay off:
+
+- **1080p 60fps:** 6,000–9,000 Kbps (recommended)
+- **1440p 60fps:** 9,000–15,000 Kbps (if your GPU renders at 1440p)
+- **4K 30fps:** 20,000–30,000 Kbps (Genshin's art style looks phenomenal at 4K)
+
+For YouTube-specific encoder and audio settings, check [YouTube streaming settings](/platforms/youtube/).
+
+### Kick
+
+Kick allows up to 8,000 Kbps and serves a growing gaming audience:
+
+- **1080p 60fps:** 5,000–8,000 Kbps
+- **1440p 60fps:** 8,000 Kbps (max allowed for most accounts)
+
+More details at [Kick streaming settings](/platforms/kick/).
+
+## OBS Recording Settings for Genshin Impact
+
+If you're recording gameplay for YouTube uploads, short clips, or archiving boss fights, local recording gives you far more flexibility than streaming constraints allow.
+
+### Recommended Recording Table
+
+| Setting | Value |
+|---|---|
+| Encoder | NVENC HEVC (H.265) |
+| Rate Control | CQP |
+| CQP Value | 18–20 |
+| Container | MKV (remux to MP4 after) |
+| Resolution | Native (match your display) |
+| FPS | 60 |
+| Audio | 48 kHz, 160–320 Kbps AAC |
+
+Genshin at CQP 20 with NVENC HEVC produces roughly **2–3 GB per hour at 1080p 60fps**. That's exceptionally compact because the encoder barely has to work on those flat color fields. For comparison, a fast-paced shooter at the same settings might be 4–6 GB/hour.
+
+At CQP 18 (higher quality, slightly larger), expect **3–5 GB per hour at 1080p 60fps**, or **5–8 GB/hour at 1440p 60fps**. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to see how many hours of Genshin fit on your drive before a session.
+
+**CQP 20 vs CQP 18 for Genshin:** The visual difference is minimal on Genshin specifically because the content is already highly compressible. CQP 20 is the practical sweet spot unless you need archival-grade source files.
+
+## In-Game Genshin Settings That Affect OBS Quality
+
+Your in-game settings directly influence what OBS has to capture and encode. A few settings matter more than others:
+
+- **Render Resolution:** Set to 1.0 (100%) and match your OBS canvas resolution. Upscaling from a lower render resolution inside Genshin creates artifacts OBS then has to encode.
+- **Anti-Aliasing:** SMAA or FSR at Quality look clean in recordings; TAA with sharpening can introduce temporal flickering that increases bitrate demands slightly.
+- **Motion Blur:** Turn it off for streaming. Motion blur is already encoded into the video signal by the encoder — adding in-game blur on top creates more encoder work with no viewer benefit.
+- **VSync / FPS Limit:** Cap at 60fps in-game. An uncapped framerate wastes GPU cycles and can cause OBS frame timing issues. Match your OBS FPS target exactly.
+- **Shadow Quality:** Has minimal effect on streaming quality but impacts GPU load. If you're on a single-PC setup and see frame drops during Dragonspine or Inazuma area loads, drop shadows to Medium.
+
+## Upload Speed and Bandwidth
+
+Before going live, verify your upload speed handles the bitrate comfortably. A 5,000 Kbps video stream plus 160 Kbps audio needs roughly **8–9 Mbps sustained upload** using the 1.5x safety margin. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to check your connection headroom, or the [Upload Time Calculator](/tools/upload-time-calculator/) if you're planning to upload recorded sessions to YouTube instead of streaming live.
+
+Check the full streaming bitrate reference for every resolution and platform at [best OBS bitrate settings](/blog/best-obs-bitrate-settings/).
+
+## Quick Troubleshooting
+
+**Stream looks pixelated during Dragonspine / snowstorm effects:** Particle systems and environmental effects (snow, rain, Electro storms) temporarily spike encoding complexity. Either raise your bitrate by 500–1,000 Kbps, or switch from NVENC H.264 to x264 Medium which handles sudden complexity spikes more gracefully.
+
+**CPU spikes in Inazuma or Fontaine:** These regions have dense environmental geometry. Use NVENC instead of x264 to free CPU headroom. In OBS, go to Settings → Output → Encoder and switch to NVENC H.264.
+
+**OBS shows "High Encoding" warning:** Lower the x264 preset from Medium to Fast, or drop resolution from 1080p to 900p (1600x900). Genshin's art style still looks excellent at 900p because clean lines scale down gracefully.
+
+**Dropped frames (network):** Lower bitrate in 500 Kbps increments. Because Genshin compresses so well, even 3,500 Kbps at 1080p 60fps is watchable — you have more flexibility here than with other games.
+
+## Frequently Asked Questions
+
+### What bitrate should I use for Genshin Impact on Twitch?
+
+For Twitch at 1080p 60fps, use **5,000–6,000 Kbps**. Because Genshin's flat anime colors compress very efficiently, 5,000 Kbps looks nearly identical to 6,000 Kbps in practice. If your upload speed is limited, you can go as low as 3,500–4,000 Kbps at 1080p and the stream will still look clean during most gameplay.
+
+### Does Genshin Impact run well on a single-PC streaming setup?
+
+Yes, better than most open-world games. Genshin's GPU requirements are moderate compared to AAA titles, which leaves headroom for NVENC encoding without frame drops. On a mid-range single-PC setup (RTX 3060 or better, Ryzen 5 5600 or better), you can stream at 1080p 60fps with NVENC H.264 at 5,000–6,000 Kbps without impacting in-game performance. Avoid x264 on a single-PC setup unless you have a high-core-count CPU.
+
+### What resolution should I record Genshin at for YouTube uploads?
+
+Record at your native monitor resolution — 1080p, 1440p, or 4K. Genshin's art style genuinely benefits from higher resolutions because the clean lines and vibrant color work don't lose detail the way photorealistic games do. A 1440p 60fps recording at CQP 20 takes up roughly 5–8 GB per hour and looks exceptional on YouTube. Check storage needs with the [Recording Time Calculator](/tools/recording-time-calculator/).
+
+### Should I use H.264, HEVC, or AV1 for Genshin streaming?
+
+For **streaming:** H.264 (NVENC or x264) is the safe default since all platforms support it. If you have an RTX 40-series GPU and stream to YouTube, try AV1 — Genshin's flat colors benefit enormously from AV1's efficiency, letting you match H.264 quality at nearly half the bitrate. For **recording:** HEVC (H.265) via NVENC is the best choice for most users — roughly 40% smaller files than H.264 at the same visual quality. See the full breakdown on the [codec comparison page](/compare/).

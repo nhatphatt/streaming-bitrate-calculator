@@ -1,0 +1,148 @@
+---
+slug: how-to-fix-audio-sync-issues-obs
+title: "How to Fix Audio Sync Issues in OBS (2026 Guide)"
+description: "Step-by-step guide to fixing OBS audio sync problems. Covers sync offset, sample rate mismatches, monitoring delay, and buffer settings for streams and recordings."
+publishedAt: "2026-06-16"
+updatedAt: "2026-06-16"
+readTime: "8 min read"
+---
+
+Audio sync issues in OBS almost always come down to one of three root causes: a mismatched sample rate between your device and OBS (44.1 kHz vs 48 kHz is the most common culprit), a sync offset that needs to be dialed in per-source, or monitoring latency creating feedback between what you hear and what gets recorded. Fix the sample rate first, then apply a sync offset if the audio still drifts — most setups are corrected in under five minutes using these steps.
+
+## Why Audio Goes Out of Sync in OBS
+
+OBS mixes audio and video in real time. When any audio device runs at a different clock rate than OBS expects, the encoder slowly drifts — a 1-second gap after 10 minutes of streaming is a classic symptom. Video-heavy pipelines (Elgato capture cards, NDI feeds, virtual cameras) introduce their own frame-buffer latency. Bluetooth headsets add 40–200 ms of wireless delay. Each of these requires a different fix.
+
+The most common causes, in rough order of frequency:
+
+- **Sample rate mismatch** — Windows device set to 44,100 Hz while OBS expects 48,000 Hz
+- **Sync offset not set** — webcam or capture card with hardware buffer delay
+- **Monitoring latency** — audio monitoring through desktop speakers re-enters the mic
+- **Bluetooth audio device** — inherent 80–200 ms wireless codec delay
+- **Rendering lag** — OBS can't keep up with the encoder, causing A/V drift
+
+## Step 1: Match Your Sample Rate Everywhere
+
+This one setting resolves the majority of OBS audio sync complaints.
+
+**In Windows:**
+1. Right-click the speaker icon → **Sound settings** → **More sound settings**
+2. Open the **Recording** tab, select your microphone, click **Properties**
+3. Go to **Advanced** → set **Default Format** to **2 channel, 48000 Hz (Studio Quality)**
+4. Repeat for every audio device: speakers, headset, capture card, USB audio interface
+
+**In OBS:**
+1. **Settings → Audio**
+2. Set **Sample Rate** to **48 kHz**
+3. Set **Channels** to **Stereo** (unless you have a specific reason for mono)
+4. Click OK and **restart OBS completely** — changes don't take full effect until restart
+
+If your audio interface (Focusrite, GoXLR, M-Audio) has its own control panel, set the clock rate there to 48 kHz too. Mismatched hardware clocks are the single biggest driver of gradual drift over a long stream.
+
+## Step 2: Set a Sync Offset Per Audio Source
+
+Once sample rates match, any remaining offset is usually fixed and predictable — set it once per source and forget it.
+
+**Where to find it:**
+1. In the OBS **Audio Mixer**, click the gear icon next to any source
+2. Select **Advanced Audio Properties**
+3. Find the **Sync Offset (ms)** column
+
+**How to measure your offset:**
+- Record a short clip while clapping in front of your webcam — the waveform spike should line up with the video frame where your hands meet
+- Use a free tool like Audacity or DaVinci Resolve to scrub through and measure the gap in milliseconds
+- Enter that value as a positive number in Sync Offset
+
+| Source Type | Typical Sync Offset Needed |
+|---|---|
+| USB microphone | 0–20 ms |
+| XLR mic via USB interface | 0–30 ms |
+| Webcam (built-in mic) | 0–80 ms |
+| Elgato HD60 X capture card | 50–100 ms |
+| AVerMedia capture card | 40–90 ms |
+| NDI source over network | 100–300 ms |
+| Bluetooth headset mic | 80–200 ms |
+| Virtual Audio Cable (VAC) | 20–60 ms |
+
+A positive offset delays the audio source relative to video. If your audio arrives early (voice before lip movement), increase the offset. If it arrives late (lips move first), you may need to delay the video instead — see Step 4.
+
+## Step 3: Fix Monitoring Delay and Echo
+
+Audio monitoring in OBS lets you hear your sources through your headphones or speakers while recording or streaming. The latency of monitoring through OBS itself is typically 20–100 ms depending on your buffer size — this does not affect the recorded/streamed audio, but it can cause you to unconsciously compensate your speech timing, making your delivery feel off.
+
+**To reduce monitoring latency:**
+
+1. **Settings → Audio → General Audio Settings**
+2. **Audio Monitoring Device** — set this to your headphones directly, not a virtual device
+3. In **Advanced Audio Properties**, set monitoring to **Monitor and Output** only for sources that need it (mic), not for desktop audio (causes echo)
+
+**Buffer size:** OBS uses a fixed 20 ms audio buffer internally. You cannot reduce this in the UI, but if you're using ASIO drivers via obs-asio plugin, you can set 64–128 sample buffers (~1.3–2.7 ms at 48 kHz) for near-zero monitoring delay.
+
+**Bluetooth fix:** Set your Bluetooth headset to use **A2DP mode** (stereo audio, output only) instead of HFP/HSP (headset mode with microphone). A2DP delay is still 40–100 ms, but it's consistent. Better yet, plug in a wired USB mic and use the Bluetooth headset just for playback — this eliminates the variable wireless delay from your recording chain entirely.
+
+## Step 4: Delay the Video When Audio Arrives Early
+
+If your audio is consistently early — you hear sound before the video catches up — the fix is to delay the video track, not add latency to audio. This happens most often with webcams that buffer fewer frames than a capture card.
+
+**In OBS:**
+1. Right-click the video source (webcam) in the **Sources** panel
+2. Select **Filters**
+3. Click **+** and add a **Video Delay (Async)** filter
+4. Set the delay in milliseconds to match the gap you measured
+
+Typical webcam video lead is 0–60 ms. Adding a 40–50 ms video delay to a Logitech C920 or C922 often achieves perfect lip sync without touching audio at all.
+
+## Step 5: Check for Rendering Lag and Dropped Frames
+
+Audio drift that gets progressively worse over a session (not a fixed offset) is almost always caused by OBS struggling to render. When OBS drops video frames to keep up with the encoder, the audio continues uninterrupted — widening the gap over time.
+
+**Check it:** View → Stats in OBS. Watch for:
+- **Rendering lag** above 0.1% — lower your canvas resolution or FPS
+- **Encoding overload** above 0.1% — switch to a GPU encoder (NVENC) or lower x264 preset
+- **Dropped frames (network)** — unrelated to sync, but signals other issues
+
+Fixing rendering lag eliminates progressive audio drift permanently. Switch from x264 to NVENC H.264 at the same bitrate, or drop from 1080p 60fps to 1080p 30fps canvas if your CPU is maxed out. See the [OBS settings hub](/obs/) for a full performance optimization walkthrough.
+
+## Quick-Reference: OBS Audio Settings for Zero Sync Issues
+
+| Setting | Recommended Value |
+|---|---|
+| OBS Sample Rate | 48 kHz |
+| OBS Channels | Stereo |
+| Windows mic sample rate | 48,000 Hz |
+| Windows speaker sample rate | 48,000 Hz |
+| Audio interface clock | 48 kHz |
+| Audio bitrate (streaming) | 160 Kbps |
+| Audio encoder | AAC |
+| Monitoring device | Wired headphones |
+| Audio buffer (default) | 20 ms |
+
+For streaming, always use **CBR audio at 160 Kbps AAC**. Variable bitrate audio can cause sync issues on some ingest servers. For recording, 320 Kbps is fine. The [best OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) covers how audio bitrate factors into your total bandwidth budget.
+
+## Diagnosing Sync by Source Type
+
+**Capture card audio out of sync:** Capture cards encode video with a hardware buffer (50–150 ms typical). Set the sync offset for your capture card's audio source to match the video latency. Elgato cards often report their delay in their companion software — use that number directly.
+
+**Desktop audio ahead of game video:** If you're capturing a game via Game Capture and using desktop audio, the game's audio output may arrive before its rendered frames. Add a small sync offset (20–40 ms) to the Desktop Audio source in Advanced Audio Properties.
+
+**Mic behind voice in recorded video:** Your microphone audio is slightly ahead in the timeline but sounds like it lags because the visual cue (mouth movement) is what viewers anchor on. If the audio waveform peak precedes the matching video frame, delay the audio by 0 ms — it's correct. The perceived lag is a video issue; use a Video Delay filter on the webcam source instead.
+
+For platform-specific audio encoding requirements, check the [Twitch settings page](/platforms/twitch/) and [YouTube settings page](/platforms/youtube/) — both platforms have slightly different audio bitrate tolerances that affect how sync errors manifest for viewers.
+
+## Frequently Asked Questions
+
+### Why does my OBS audio go out of sync after 10-20 minutes?
+
+Gradual drift over a long stream is almost always a sample rate mismatch. When OBS expects 48,000 samples per second but your device delivers 44,100, the audio clock runs slightly slower than real time — after 20 minutes, the gap becomes noticeable. Set every audio device to 48 kHz in Windows Sound settings and in OBS Settings → Audio, then restart OBS completely.
+
+### My audio and video are perfectly synced in OBS preview but out of sync in the recording — why?
+
+This usually means your recording encoder is causing buffer delay that the preview monitor bypasses. Switch your recording to a faster encoder preset (NVENC instead of x264 Slow, or lower x264 to veryfast/superfast) and check if the issue disappears. Also verify you are not accidentally recording with a different audio track assignment than your monitoring output. See the [recording time calculator](/tools/recording-time-calculator/) to budget disk space when testing different encoder settings.
+
+### How do I fix audio sync for an Elgato or AVerMedia capture card specifically?
+
+Capture cards add 1-3 frames of video latency as part of their hardware encoding pipeline. In OBS Advanced Audio Properties, set a positive sync offset on the capture card's audio source — start with 67 ms for 30fps content or 50 ms for 60fps content and adjust from there. Alternatively, use the capture card's dedicated audio output and feed it into a separate audio interface rather than relying on the card's internal audio routing.
+
+### Does audio sync work differently for live streaming vs local recording?
+
+The fix process is identical, but the symptoms can differ. In a live stream, network jitter can cause intermittent sync gaps on top of any base offset — these are separate issues. For live streaming, also use the [bandwidth calculator](/tools/bandwidth-calculator/) to confirm your connection has enough headroom so OBS never has to buffer, which can introduce its own timing irregularities. For recording, pure encoder speed is the variable; rendering lag is the most common drift cause.

@@ -1,0 +1,138 @@
+---
+slug: best-obs-settings-escape-from-tarkov
+title: "Best OBS Settings for Escape from Tarkov (2026)"
+description: "Optimal OBS settings for streaming Escape from Tarkov: NVENC bitrate, encoder, resolution, and shadow/dark-map tips to get clean footage without killing your CPU."
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+readTime: "9 min read"
+---
+
+For Escape from Tarkov, use **NVENC H.264 or NVENC HEVC** at **6,000–8,000 Kbps CBR** for streaming, or **CQP 18–20** for local recording. Tarkov is uniquely demanding — its Unity engine hammers your CPU even on a clean 6-core system, so handing encoding to the GPU via NVENC is not optional for most players. Dark indoor maps like Labs and night raids need higher bitrate than the numbers printed on platform FAQ pages; shadow gradients crush into ugly blocking artifacts at anything below 5,500 Kbps.
+
+## Why Tarkov Is Different from Most FPS Games
+
+Most shooter streamers can set OBS to 6,000 Kbps and call it done. Tarkov punishes that assumption for three reasons.
+
+**CPU contention is severe.** The game's persistent loot simulation, AI pathfinding, and audio raycast system routinely push a Ryzen 7 5800X or i7-12700K to 70–90% utilization at medium-to-high settings. Running x264 encoder on top of that budget eats frames — sometimes 10–20 fps — which defeats the entire point of streaming a hardcore raid.
+
+**Dark scenes require more bits, not fewer.** Shadow compression works by encoding adjacent dark pixels as a single color block. When those dark pixels are actually subtle shades of black-grey (cave lighting, night vision, the interior of Interchange) any bitrate under 5,500 Kbps will smear the detail into chunky macroblocks. Your viewers will not be able to read the environment at all.
+
+**The frame pacing is irregular.** Tarkov hitches. Doors opening, loot spawning, player movement in heavily-contested areas — all of it causes frame-time spikes. Constant Bitrate mode (CBR) handles those spikes better than VBR for streaming because the encoder does not suddenly need extra budget to encode a spike frame. For more on this, see the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/).
+
+## Recommended OBS Settings at a Glance
+
+| Setting | Streaming (Twitch/Kick) | Streaming (YouTube) | Recording |
+|---|---|---|---|
+| Encoder | NVENC H.264 (new) | NVENC H.264 or HEVC | NVENC HEVC |
+| Rate Control | CBR | CBR | CQP |
+| Bitrate / CQP | 6,000–8,000 Kbps | 8,000–12,000 Kbps | CQP 18–20 |
+| Keyframe Interval | 2 s | 2 s | Auto |
+| Preset | P5 (Slow) | P5 (Slow) | P5 (Slow) |
+| Profile | High | High | Main |
+| Output Resolution | 1920x1080 | 1920x1080 | 1920x1080 |
+| Downscale Filter | Lanczos | Lanczos | Lanczos |
+| FPS | 60 | 60 | 60 |
+| Audio Bitrate | 160 Kbps | 160 Kbps | 192 Kbps |
+
+## Step-by-Step OBS Configuration
+
+### Output Mode: Always Advanced
+
+Open OBS → Settings → Output. Set Output Mode to **Advanced**. Simple mode locks you out of the NVENC preset slider and the separate recording tab. Every Tarkov streamer should be in Advanced mode.
+
+### Streaming Tab
+
+Set your encoder to **NVENC H.264 (new)** — not the old legacy NVENC. On an RTX 30- or 40-series card the 'new' encoder is noticeably sharper at the same bitrate. Set Rate Control to **CBR**. Bitrate: **6,000 Kbps** for Twitch (platform cap is 6,000 for most streamers), **8,000 Kbps** for Kick, or **8,000–12,000 Kbps** for YouTube where higher bitrate is genuinely useful.
+
+Set the NVENC Preset to **P5 (Slow)**. Tarkov's frame pacing issues mean P4/P5 gives better shadow quality than P3 without the GPU overhead of P6/P7. The difference between P5 and P7 in shadow quality is marginal; the GPU time difference is not.
+
+Keyframe interval: **2 seconds**. This is required by Twitch and Kick and strongly recommended everywhere else. Never use 0 (auto) for live streaming.
+
+### Video Settings
+
+Settings → Video:
+
+- Base (Canvas) Resolution: **1920x1080** — match your monitor. If you play at 1440p, downscale to 1080 for output.
+- Output (Scaled) Resolution: **1920x1080**
+- Downscale Filter: **Lanczos (Sharpened Scaling, 36 Samples)** — this preserves fine detail that Tarkov's textures need. Bilinear will make walls and foliage look soft.
+- Common FPS Values: **60**
+
+If you play at 1440p or 4K and want to stream at 1080p60, the Lanczos downscale from a higher resolution actually helps your stream look sharper than native 1080p capture would.
+
+### Process Priority and Game Mode
+
+OBS Settings → Advanced → Process Priority: set to **Above Normal** (not High — High can actually cause Windows scheduling conflicts with Tarkov which also competes for CPU cycles). Also make sure Windows Game Mode is **off**; it can throttle background processes including OBS in unpredictable ways.
+
+### Recording Tab (Separate from Streaming)
+
+For recording while streaming, use a separate encoder in the Recording tab:
+
+- Encoder: **NVENC HEVC**
+- Rate Control: **CQP**
+- CQP Level: **18** (for shadow-heavy content — CQP 20 starts losing Lab dark corridor detail)
+- Container: **MKV** (remux to MP4 after the raid)
+- Recording Path: a **separate SSD** from your Windows drive and game install
+
+HEVC at CQP 18 produces roughly 4–7 GB per hour for a typical Tarkov raid. The file size varies a lot because loot-room scenes are visually complex while outdoor bush-camping has high temporal redundancy and compresses efficiently. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to plan how many raids fit on your drive before you need to offload clips.
+
+## Tarkov-Specific Bitrate Guide by Map Type
+
+Dark maps and night raids genuinely require more bitrate for acceptable shadow quality. Here is a practical breakdown:
+
+| Scenario | Min Bitrate (Twitch) | Recommended Bitrate | Notes |
+|---|---|---|---|
+| Daylight outdoor (Woods, Shoreline) | 5,000 Kbps | 6,000 Kbps | Natural light compresses well |
+| Mixed indoor/outdoor (Customs, Reserve) | 5,500 Kbps | 6,000 Kbps | Doorframes cause shadow blocks |
+| Underground / indoor (Labs, Factory) | 6,000 Kbps | 6,000–8,000 Kbps | Nearly all dark gradients |
+| Night raid (any map) | 6,000 Kbps | 8,000+ Kbps (YouTube/Kick) | NVG green noise is brutal |
+| Thermal scope POV | 6,000 Kbps | 8,000 Kbps | High contrast edges plus grain |
+
+Night raids with thermal scopes are probably the hardest streaming scenario in any game — high-contrast white-hot blobs against pitch black with random grain patterns. If you stream these regularly, consider YouTube or Kick where you can push 8,000+ Kbps without hitting a wall.
+
+## NVENC vs x264 for Tarkov
+
+The short answer: **use NVENC**. The longer answer is on the [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/), but for Tarkov specifically, x264 Medium is only worth it if you have a dedicated streaming PC — meaning a second machine that touches zero Tarkov processes. On a single-PC setup, x264 Medium/Slow at 6,000 Kbps will reclaim CPU frames that Tarkov needs, and you will feel it.
+
+If you have an RTX 40-series card (4070 and above), NVENC H.264 at P5 in 2026 produces quality that genuinely rivals x264 Medium. The gap from prior generations has closed significantly. RTX 30-series cards are still very close — the main difference shows up in complex shadow scenes, exactly what Tarkov generates constantly.
+
+For the AV1 encoder on RTX 40-series: Twitch now accepts AV1 streams and YouTube has supported it since 2024. At 6,000 Kbps, NVENC AV1 will handle Tarkov's dark maps noticeably better than H.264 at the same bitrate — roughly equivalent to H.264 at 8,000–9,000 Kbps in perceived shadow quality. If your GPU supports it and your platform accepts it, enable it. Check the [H.264 vs H.265 vs AV1 comparison](/blog/h264-vs-h265-vs-av1/) for a full breakdown of the tradeoffs.
+
+## Upload Speed Requirements
+
+Tarkov raids typically run 20–40 minutes. You need consistent upload, not just peak upload — ISP upload is often shared with neighbors during peak hours and can vary 30–40%.
+
+| Target Bitrate | Minimum Upload Speed | Recommended Upload Speed |
+|---|---|---|
+| 6,000 Kbps | 8 Mbps | 10 Mbps |
+| 8,000 Kbps | 10.7 Mbps | 14 Mbps |
+| 12,000 Kbps | 16 Mbps | 20 Mbps |
+
+Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify your connection has headroom. If you are dropping frames in OBS stats (View → Stats), and your GPU and CPU are both under 80%, the problem is almost always network — not settings.
+
+## Platform-Specific Notes
+
+**Twitch:** 6,000 Kbps hard cap for most streamers without partner negotiated limits. NVENC H.264 P5. Enable Low-Latency or Ultra-Low-Latency mode only if your audience needs it — it slightly reduces encoder efficiency. Full [Twitch settings reference](/platforms/twitch/).
+
+**YouTube:** No practical bitrate cap for live streaming. Push 10,000–12,000 Kbps with NVENC H.264 or HEVC if your upload allows it. YouTube's server-side transcoding means viewers get the quality tier their connection can handle. Full [YouTube settings reference](/platforms/youtube/).
+
+**Kick:** 8,000 Kbps maximum. Very similar to Twitch but with that extra 2,000 Kbps headroom that materially helps dark-map streams. Full [Kick settings reference](/platforms/kick/).
+
+For a full multi-platform comparison of settings, the [OBS settings hub](/obs/) covers every platform and use-case combination.
+
+## Frequently Asked Questions
+
+### What bitrate should I use for Escape from Tarkov on Twitch?
+
+Use **6,000 Kbps CBR** with NVENC H.264 at preset P5. This is the Twitch maximum for most streamers and is sufficient for 1080p60 on outdoor and mixed maps. For Labs or night raids where dark gradients are constant, consider streaming to YouTube or Kick where you can push 8,000–10,000 Kbps.
+
+### Should I use NVENC or x264 for Tarkov?
+
+Use **NVENC** on any single-PC setup without exception. Tarkov's CPU usage is high enough that x264 Medium will cost you 10–20 fps in-game. NVENC runs on the GPU's dedicated encode block and adds near-zero game-frame overhead. Only switch to x264 if you have a dedicated streaming PC that does not run Tarkov.
+
+### Why does my Tarkov stream look blurry in dark areas?
+
+Dark gradient scenes (Labs, night raids, Factory) require more bitrate than bright outdoor scenes because the encoder has to represent subtle shadow detail rather than large uniform-color blocks. At 5,000 Kbps or below this crushes to obvious macroblocking. Raise your bitrate to 6,000–8,000 Kbps, make sure you are using NVENC preset P5 or better, and verify your downscale filter is set to Lanczos.
+
+### How large are Tarkov recording files per hour?
+
+At NVENC HEVC CQP 18, expect **4–8 GB per hour** depending on the map. Labs and Factory (mostly dark, indoor) compress to around 4–5 GB/hour. Outdoor maps with foliage and weather effects run 6–8 GB/hour due to more visual complexity. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to match your recording settings to your available storage before a long session.

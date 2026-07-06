@@ -1,0 +1,109 @@
+---
+slug: how-much-data-does-youtube-use-per-hour
+title: "How Much Data Does YouTube Use Per Hour? (2026)"
+description: "YouTube uses 0.3 GB/hr at 144p up to 15.6 GB/hr at 4K 60fps. Full breakdown by resolution with data-saving tips for every connection type."
+publishedAt: "2026-07-02"
+updatedAt: "2026-07-02"
+readTime: "7 min read"
+---
+
+Watching YouTube at **1080p 60fps** consumes roughly **3.0–4.5 GB per hour**. Drop to 480p and you're looking at about **0.7 GB/hr**; step up to 4K 60fps and that figure jumps to **12–15.6 GB/hr**. The exact number depends on the resolution, frame rate, codec YouTube serves you, and how much motion is in the video itself.
+
+This guide breaks down every quality tier with real bitrate figures, shows you which codecs YouTube uses at each resolution, and offers practical advice for managing data on limited or metered connections.
+
+## How YouTube Determines Your Bitrate
+
+YouTube is not a fixed-bitrate platform. It uses **adaptive bitrate streaming (ABR)** via DASH (Dynamic Adaptive Streaming over HTTP), so the server constantly adjusts the stream to match your connection speed and buffer state. Every quality tier has a target bitrate range, and YouTube will ride the upper end when bandwidth allows.
+
+The codec matters just as much as the resolution. YouTube defaults to **VP9** on desktop Chrome and Firefox, and increasingly serves **AV1** to modern hardware. Safari users on iOS and macOS typically get **H.264**. AV1 and VP9 deliver roughly 30–50% better compression than H.264 at the same visual quality, which means lower data usage for the same resolution — though the difference is most visible at 1080p and above.
+
+For a deeper look at how these codecs compare, see the [H.264 vs H.265 vs AV1 codec comparison](/blog/h264-vs-h265-vs-av1/) and the [video codec comparison tool](/compare/).
+
+## YouTube Data Usage Per Hour by Resolution
+
+The table below uses YouTube's documented and observed bitrate ranges as of 2026. "Typical" is the average for mixed content; "peak" reflects high-motion content like sports or gaming.
+
+| Resolution | FPS | Codec | Typical Bitrate | Typical GB/hr | Peak GB/hr |
+|---|---|---|---|---|---|
+| 144p | 30 | VP9 | ~80 Kbps | 0.04 GB | 0.07 GB |
+| 240p | 30 | VP9 | ~300 Kbps | 0.13 GB | 0.20 GB |
+| 360p | 30 | VP9 | ~400 Kbps | 0.18 GB | 0.30 GB |
+| 480p | 30 | VP9 | ~1,000 Kbps | 0.45 GB | 0.70 GB |
+| 720p | 30 | VP9 | ~1,500 Kbps | 0.68 GB | 1.00 GB |
+| 720p | 60 | VP9 | ~2,500 Kbps | 1.13 GB | 1.60 GB |
+| 1080p | 30 | VP9 | ~3,000 Kbps | 1.35 GB | 2.00 GB |
+| 1080p | 60 | VP9/AV1 | ~4,500–6,000 Kbps | 2.50–3.38 GB | 4.50 GB |
+| 1440p | 30 | VP9 | ~6,000 Kbps | 2.70 GB | 4.00 GB |
+| 1440p | 60 | VP9/AV1 | ~9,000–12,000 Kbps | 4.50–5.40 GB | 7.50 GB |
+| 4K (2160p) | 30 | VP9/AV1 | ~15,000–20,000 Kbps | 6.75–9.00 GB | 11.00 GB |
+| 4K (2160p) | 60 | VP9/AV1 | ~20,000–35,000 Kbps | 9.00–15.60 GB | 15.60 GB |
+
+**How to read this table:** Multiply the typical bitrate in Kbps by 3,600 (seconds/hour), divide by 8 (bits to bytes), then divide by 1,073,741,824 (bytes to GB) to get the exact figure. A 4,500 Kbps stream works out to (4500 × 3600) / 8 / 1,073,741,824 ≈ **1.89 GB/hr**.
+
+## H.264 vs VP9 vs AV1: The Codec Tax on Your Data Plan
+
+If your browser or device falls back to **H.264** (common on older Android phones, Safari prior to 2024, and some smart TVs), expect data consumption to be **30–50% higher** than the VP9 figures in the table above. H.264 at 1080p 60fps can hit 8,000–10,000 Kbps versus VP9's 4,500–6,000 Kbps for similar quality.
+
+**AV1** is YouTube's long-term codec strategy. Where served — currently on Chrome/Edge with hardware AV1 decode (most Intel 11th-gen+, AMD RDNA 2+, NVIDIA RTX 3000+) — it can cut data 15–25% below VP9 figures at 1080p and above. At 4K 60fps, AV1 can hold equivalent quality at ~18,000 Kbps versus VP9's ~28,000 Kbps.
+
+You can check which codec YouTube is serving by right-clicking the video player, selecting "Stats for nerds," and reading the "Codecs" row.
+
+## YouTube on Mobile vs Desktop
+
+Mobile data consumption follows the same resolution tiers but has one important difference: YouTube's mobile apps on Android and iOS default to **"Auto"** quality, which typically resolves to **720p or lower** on cellular connections to protect your data plan. On Wi-Fi, the same Auto setting will climb to 1080p or higher if your connection allows.
+
+**Practical mobile data estimates per hour:**
+
+- Auto on cellular (effective ~480p–720p): **0.5–1.1 GB/hr**
+- Auto on Wi-Fi (effective ~1080p): **2.0–3.5 GB/hr**
+- Manual 1080p on cellular: **2.5–4.5 GB/hr**
+- Manual 4K on Wi-Fi: **9–15 GB/hr**
+
+YouTube Premium subscribers can download videos for offline viewing. A 1-hour 1080p video downloaded at ~3,000 Kbps VP9 will occupy roughly **1.35–2.0 GB** on your device.
+
+## Data-Saving Strategies for Limited Connections
+
+**Lock the quality manually.** The YouTube player's gear icon lets you select a fixed resolution. Setting it to 480p on a 15 GB/month mobile plan instead of Auto-1080p saves roughly **1.5–2.0 GB per hour** of watching.
+
+**Use YouTube's Data Saver mode.** The YouTube mobile app (Settings → Video quality preferences → Data saver) caps streams at roughly 480p equivalent and reduces bitrate further, cutting consumption to as low as **0.3–0.5 GB/hr**.
+
+**Monitor your required bandwidth.** 4K 60fps YouTube needs a sustained **20–35 Mbps** downstream connection for smooth playback. 1080p 60fps needs **5–8 Mbps**. Use the [bandwidth calculator](/tools/bandwidth-calculator/) to verify your connection can handle your target quality without buffering.
+
+**Consider the audio bitrate.** YouTube serves audio at 128–256 Kbps AAC or Opus depending on the content and app. For a 1-hour video, audio alone adds **55–115 MB** on top of the video track — worth noting on very tight plans but negligible compared to video.
+
+## YouTube vs Streaming Platforms: Data Comparison
+
+For context, here is how YouTube's consumption compares to other video sources at similar quality levels:
+
+| Service | 1080p 60fps (GB/hr) | 4K (GB/hr) |
+|---|---|---|
+| YouTube (VP9) | 2.5–3.4 | 9.0–15.6 |
+| Netflix (H.264) | 3.0–7.0 | 7.0 (HDR) |
+| Twitch (live, H.264) | 2.0–2.7 | N/A (max 1080p) |
+| Disney+ (H.265) | 2.0–3.5 | 5.0–8.0 |
+
+Twitch's live streams are capped at 1080p 60fps with a maximum of ~8,000 Kbps H.264 for partners, which works out to about **3.4 GB/hr** at the ceiling. Most Twitch streams run at 6,000 Kbps or lower, landing at **2.0–2.7 GB/hr** — similar to YouTube at the same resolution. See the full [YouTube settings guide](/platforms/youtube/) for upload-side bitrate recommendations if you are a creator, or the [Twitch settings page](/platforms/twitch/) for streaming comparisons.
+
+## Estimating Storage for Downloaded or Recorded Content
+
+If you record gameplay or screencasts for YouTube at the same bitrates the platform would serve, the [recording time calculator](/tools/recording-time-calculator/) lets you find exactly how long you can record before filling a drive. For existing files you are planning to upload, the [upload time calculator](/tools/upload-time-calculator/) estimates transfer duration based on your connection speed.
+
+A 1-hour video encoded for YouTube at 1080p 60fps with a 10,000 Kbps target bitrate (typical for H.264 recording pre-upload) will produce a file around **4.5 GB**. After YouTube re-encodes it to VP9 at ~4,500–6,000 Kbps, stream viewers see roughly **2.0–3.4 GB/hr**. The [file size calculator](/size/) helps with this math for any resolution.
+
+## Frequently Asked Questions
+
+### How much data does YouTube use on 4K per hour?
+
+At 4K 30fps with VP9 or AV1, expect **6.75–9 GB/hr** under typical conditions. At 4K 60fps with high-motion content like gaming or sports, the figure can reach **12–15.6 GB/hr**. Actual consumption depends heavily on the codec your device supports and the amount of motion in the video.
+
+### Does YouTube use less data with AV1 than VP9?
+
+Yes, meaningfully so at 1080p and above. AV1 typically reduces bitrate by 15–25% versus VP9 at equivalent quality settings. For a 1-hour 4K 60fps session, switching from VP9 to AV1 might save 2–4 GB. Hardware AV1 decode is required for smooth playback, available on most GPUs and SoCs released after 2020.
+
+### How do I stop YouTube from using so much data on my phone?
+
+Open the YouTube app, go to Settings → Video quality preferences, and set "On mobile networks" to 480p or Data saver mode. Data saver can cut per-hour consumption from roughly 2–3 GB (Auto on Wi-Fi) down to 0.3–0.5 GB. You can also download videos over Wi-Fi for offline playback to avoid streaming altogether on cellular.
+
+### What internet speed do I need to watch YouTube without buffering?
+
+For 1080p 30fps you need a sustained **3–5 Mbps** downstream. For 1080p 60fps, plan on **5–8 Mbps**. For 4K 60fps, you need a reliable **25–35 Mbps** — the peak bitrate spikes above the averages during high-motion scenes. Check your actual available bandwidth with the [bandwidth calculator](/tools/bandwidth-calculator/) rather than relying on your plan's advertised speed.

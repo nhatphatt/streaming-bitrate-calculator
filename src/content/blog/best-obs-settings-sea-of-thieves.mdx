@@ -1,0 +1,127 @@
+---
+slug: best-obs-settings-sea-of-thieves
+title: "Best OBS Settings for Sea of Thieves (2026 Guide)"
+description: "Optimal OBS settings for Sea of Thieves at 60fps — bitrate, encoder, color, and scene setup to handle ocean reflections and bright sky without washed-out streams."
+publishedAt: "2026-06-25"
+updatedAt: "2026-06-25"
+readTime: "8 min read"
+---
+
+For Sea of Thieves at 1080p 60fps, use **6,000 Kbps CBR on Twitch** or **8,000–10,000 Kbps on YouTube**, NVENC H.264 (or AV1 on RTX 40-series), with HDR disabled in-game and OBS color space set to Rec. 709. The game's dynamic ocean reflections, sun glare, and bright open skies are genuinely hard to encode — standard settings cause visible banding and blown highlights. The tweaks below are specific to Sea of Thieves and will make a clear difference.
+
+## Why Sea of Thieves Is Harder to Encode Than Most Games
+
+Most games have dark corridors, controlled lighting, and high-contrast textures that compress efficiently. Sea of Thieves is the opposite. You spend most of your time looking at:
+
+- **Shimmering ocean surfaces** — thousands of micro-detail changes per frame that encoders interpret as motion
+- **Bright, near-white skies** during midday and sunsets — subtle gradients that turn into banding at low bitrates
+- **Bloom effects and lens flare** — wide areas of similar color that shift constantly
+- **Underwater sections** — caustic light patterns that create the same compression stress as ocean surfaces
+
+The result: the same 6,000 Kbps settings that look fine in a dark RPG will visibly degrade in a Sea of Thieves stream. You need either more bitrate, a better encoder, or both.
+
+## Recommended OBS Settings for Sea of Thieves
+
+Use **Advanced Output Mode** in OBS (Settings → Output → Output Mode: Advanced). These are the streaming settings; recording settings are covered separately below.
+
+| Setting | Twitch / Kick | YouTube Live |
+|---|---|---|
+| Encoder | NVENC H.264 (RTX) or x264 | NVENC H.264 or AV1 (RTX 40) |
+| Rate Control | CBR | CBR |
+| Bitrate (1080p 60fps) | 6,000 Kbps | 8,000–10,000 Kbps |
+| Keyframe Interval | 2 seconds | 2 seconds |
+| Preset (NVENC) | P5 (Slow) | P5 or P6 |
+| Profile | High | High |
+| Look-ahead | Enabled | Enabled |
+| Psycho Visual Tuning | Enabled | Enabled |
+| Max B-frames | 2 | 2 |
+| Resolution | 1920x1080 | 1920x1080 |
+| Downscale Filter | Lanczos | Lanczos |
+| FPS | 60 | 60 |
+
+**If you have an RTX 40-series GPU**, switch to NVENC AV1 on YouTube — AV1 handles the ocean gradients significantly better than H.264 at the same bitrate. Twitch and Kick support AV1 as well. See [H.264 vs H.265 vs AV1](/blog/h264-vs-h265-vs-av1/) for a full codec comparison.
+
+## Encoder Deep Dive: NVENC vs x264 for This Game
+
+**NVENC (GPU) is the right call for most Sea of Thieves streamers.** The game is CPU-intensive — it runs a large open world simulation, NPC AI, and physics simultaneously. Offloading encoding to your GPU means the CPU can focus entirely on the game.
+
+NVENC with the settings above (P5, look-ahead on, psycho visual tuning on) produces quality very close to x264 Medium. The key settings for water scenes:
+
+- **Look-ahead:** Lets NVENC scan upcoming frames and allocate more bits to complex water frames before they arrive. This is the single most impactful toggle for ocean scenes.
+- **Psycho Visual Tuning:** Improves perceived sharpness in gradients — exactly what you need for sky and water.
+- **Max B-frames: 2:** Gives the encoder flexibility to reference non-adjacent frames, which helps with repetitive patterns like wave cycles.
+
+If you run a **dedicated streaming PC** with ample CPU headroom, x264 Medium at 6,000 Kbps will edge out NVENC on quality for water scenes. Use x264 with `tune=animation` disabled and `me=umh` for best gradient handling.
+
+## Critical: Color Settings in OBS
+
+Sea of Thieves supports HDR output on PC. If you play with HDR enabled in Windows and do not configure OBS correctly, your stream will look washed out and overexposed — the most common complaint from new Sea of Thieves streamers.
+
+**Recommended OBS color settings** (Settings → Advanced → Video):
+
+- **Color Format:** NV12
+- **Color Space:** Rec. 709
+- **Color Range:** Limited
+- **SDR White Level:** 300 nits (default)
+
+**Disable Windows HDR** before streaming, or use OBS's HDR tonemapping if you insist on keeping it on (Settings → Advanced → HDR tonemapping: enabled, set peak luminance to 400 nits). The simpler fix is to turn HDR off in Windows display settings for your streaming session — the game still looks excellent in SDR at high settings.
+
+## In-Game Settings That Affect Encoding
+
+Your in-game graphics settings directly impact how hard the encoder has to work:
+
+- **Render Scale:** Keep at 100%. Supersampling makes water detail even denser, increasing encoding load without visible benefit to viewers at 1080p.
+- **Anti-Aliasing:** TAA is fine. MSAA at high levels adds micro-detail that burns bitrate.
+- **Dynamic Resolution:** Turn this **off**. When the game scales resolution mid-frame, OBS encodes the resolution change as motion, wasting bits.
+- **Motion Blur:** Turn **off** for streaming. Motion blur on water surfaces creates a blurred mess that the encoder has to reconstruct every frame.
+- **V-Sync / Frame Cap:** Cap your FPS at 60 in-game or via RTSS. Uncapped framerates cause microstutters that appear as encoding artifacts.
+
+## Recording Settings for Sea of Thieves
+
+If you want a local high-quality recording alongside your stream, use these settings in OBS's Recording tab (Advanced Output Mode):
+
+| Setting | Value |
+|---|---|
+| Container | MKV (remux to MP4 after) |
+| Encoder | NVENC HEVC or NVENC AV1 |
+| Rate Control | CQP |
+| CQP Level | 18 (water detail) or 20 (standard) |
+| Preset | P5 |
+| Resolution | 1920x1080 or 2560x1440 |
+| FPS | 60 |
+
+CQP 18 is recommended for Sea of Thieves specifically because the variable bitrate will automatically allocate extra bits to complex ocean frames — something fixed CBR cannot do. A 1-hour Sea of Thieves recording at 1080p 60fps HEVC CQP 18 runs roughly 6–9 GB depending on how much open water is on screen. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to check how many hours fit on your drive.
+
+## Upload Speed Requirements
+
+Before going live, verify your upload speed handles the bitrate. For a 6,000 Kbps video stream plus 160 Kbps audio, you need at minimum **8–9 Mbps upload** with headroom — the rule is your stream bitrate should be no more than 75% of your usable upload speed.
+
+Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm your connection can sustain the bitrate without dropped frames. If you are borderline, drop to 5,500 Kbps on Twitch — the quality difference from 500 Kbps is smaller than the quality loss from dropped frames.
+
+For platform-specific bitrate caps and recommendations, see the [Twitch settings guide](/platforms/twitch/) and [YouTube settings guide](/platforms/youtube/).
+
+## Optimal Scene Setup for Sea of Thieves
+
+A few OBS scene tips specific to this game:
+
+- **Add a color correction filter to your game capture source:** Increase Saturation slightly (+5 to +10) and reduce Gamma by a small amount (-0.05). Sea of Thieves streams often look slightly desaturated compared to the actual game because of codec color compression. This compensates.
+- **Do not use Desktop Capture for this game.** Use a dedicated **Game Capture** source. Desktop capture captures the entire compositor, including the Windows taskbar and any popups, and adds a small latency overhead that can desync audio.
+- **HDR Capture toggle in Game Capture source:** If you play with HDR on, enable 'Capture HDR' in the Game Capture properties and let OBS do the tone-mapping. If you play SDR, leave this off.
+
+## Frequently Asked Questions
+
+### Why does my Sea of Thieves stream look washed out or overexposed?
+
+This is almost always an HDR mismatch. If your Windows display is in HDR mode and OBS is not configured for HDR tonemapping, OBS captures the HDR signal and outputs it as SDR without proper conversion. The fix is either to disable Windows HDR before streaming or enable OBS HDR tonemapping in Settings → Advanced. See the color settings section above for exact values.
+
+### Should I stream Sea of Thieves at 720p 60fps or 1080p 60fps?
+
+1080p 60fps is the right target if your upload speed supports 6,000 Kbps. The ocean and sky gradients that make this game visually unique are completely lost at 720p — the reduced resolution smears the water detail that 60fps was meant to preserve. If your connection cannot sustain 6,000 Kbps reliably, drop to 5,000 Kbps at 1080p 60fps before dropping resolution.
+
+### Does NVENC AV1 make a noticeable difference for this game?
+
+Yes, more than for most games. AV1's improved handling of gradients and texturally complex surfaces directly addresses Sea of Thieves' encoding challenges. If you stream to YouTube and have an RTX 40-series GPU, AV1 at 8,000 Kbps will look cleaner than H.264 at 10,000 Kbps on water scenes. The [codec comparison tool](/compare/) lets you see the tradeoffs in detail.
+
+### Why is my stream fine in port but bad at sea?
+
+Port scenes have lots of static geometry and controlled lighting — they compress easily at any bitrate. Open ocean scenes have constant motion, reflective surfaces, and wide gradient skies all simultaneously, which can triple the encoding complexity. This is normal behavior, not a settings problem. The solution is to target your bitrate for the worst-case sea scenario, not the easiest port scenario. The settings in this guide are calibrated for open-water streaming.

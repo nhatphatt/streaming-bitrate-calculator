@@ -1,0 +1,142 @@
+---
+slug: how-to-reduce-stream-latency
+title: "How to Reduce Stream Latency in 2026 (Low-Latency Guide)"
+description: "Cut your stream delay from 10-30s down to 2-4s. Learn low-latency mode, keyframe intervals, encoder tuning, and platform-specific settings for Twitch, YouTube, and Kick."
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+readTime: "9 min read"
+---
+
+Stream latency on a default OBS setup typically runs **10–30 seconds** from your camera to your viewers' screens. With the right combination of low-latency mode, a 1-second keyframe interval, and encoder tuning, you can push that delay down to **2–4 seconds** on Twitch and YouTube. The tradeoff is real: lower latency means less compression efficiency, so you may need slightly higher bitrate to maintain the same visual quality.
+
+This guide covers every layer of the latency stack — from encoder settings and network configuration to platform-specific switches — so you can dial in exactly the delay that makes sense for your content.
+
+## Why Stream Latency Exists
+
+Latency in a live stream is not a single problem; it is a pipeline. Each stage adds delay:
+
+- **Encoding** — OBS captures frames, compresses them into keyframe groups (GOPs), and packages them as RTMP data. Longer GOPs = more buffering before a packet can be sent.
+- **Network transit** — data travels from your machine to the ingest server. Distance, jitter, and packet loss all add unpredictable delay.
+- **Ingest buffering** — the platform's CDN buffers several seconds of data before it starts delivering to viewers to absorb upstream jitter.
+- **Playback buffering** — the viewer's player buffers 2–5 seconds to protect against their own connection variance.
+- **Player startup latency** — when a new viewer opens your stream, their player seeks to a keyframe to begin decoding. The further apart your keyframes, the longer this startup takes.
+
+Reducing latency means attacking each stage. Keyframe interval and low-latency mode tackle the first and last stages. Network tuning and platform settings handle the middle.
+
+## The Keyframe Interval: The Single Biggest Lever
+
+The **keyframe interval** (also called GOP size) is the most impactful setting for latency. A keyframe is a full reference frame; all frames between two keyframes depend on the previous keyframe to decode. Viewers and CDNs cannot start playback mid-GOP.
+
+**The rule:** set keyframe interval to **1 second** (or 2 seconds maximum) for any low-latency stream.
+
+Default OBS uses 0 (auto), which often produces 4–8 second GOPs on fast-paced scenes. That alone adds 4–8 seconds of unavoidable startup latency for every new viewer.
+
+In OBS, find this under Output > Streaming > Keyframe Interval. Set it to **1** for the lowest latency, or **2** if you notice quality degradation at your target bitrate. Most platforms require 2 seconds or less; Twitch and YouTube will both reject or warn on longer intervals.
+
+| Keyframe Interval | GOP Type | Startup Latency | Quality Impact |
+|---|---|---|---|
+| 0 (auto) | Variable | 4–10s | None (most efficient) |
+| 2s | Fixed | 2–4s | Minimal (~3% more bitrate) |
+| 1s | Fixed | 1–2s | Moderate (~8–12% more bitrate) |
+| 0.5s | Fixed | Under 1s | High (~20%+ more bitrate) |
+
+The bitrate penalty for forcing 1-second GOPs is real. If your stream at auto-interval looks great at 5,500 Kbps, you may need 6,000–6,200 Kbps at 1-second keyframes to preserve the same quality. Use the [Streaming Bitrate Calculator](/) to check whether your upload headroom allows this, or the [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify your connection can sustain the extra load.
+
+## Platform Low-Latency Modes
+
+Every major platform now offers an explicit low-latency toggle. These work independently of your encoder settings — they reduce the platform's ingest-to-playback buffer on the CDN side.
+
+### Twitch Low Latency Mode
+
+Twitch defaults to **Normal Latency** (around 10–15 seconds). Switching to **Low Latency** mode in your Twitch Dashboard under Stream Settings cuts this to **4–6 seconds**. There is also **Ultra Low Latency** mode, which targets **~1.5–3 seconds**, but it disables viewer-side DVR and increases the chance of viewer buffering on slower connections.
+
+For interactive streams where chat engagement matters — games with viewer input, IRL streams, Just Chatting — Low Latency mode is almost always worth enabling. Ultra Low Latency makes sense for competitive games like chess or fighting game exhibitions where 1–2 seconds matters. For passive viewing content (music, ambient streams), keep Normal Latency for better viewer stability. See the full [Twitch settings guide](/platforms/twitch/) for where to find this toggle.
+
+### YouTube Live Low-Latency Mode
+
+YouTube offers three latency tiers in YouTube Studio > Go Live > Stream Settings:
+
+- **Normal** — 20–30 second delay, best transcoding efficiency
+- **Low Latency** — 8–12 seconds, still available to all streamers
+- **Ultra Low Latency** — 4–8 seconds, disables some transcoding quality levels
+
+For YouTube, keep in mind that most viewers arrive via the algorithm and do not interact in real time, so Normal Latency is fine for VOD-like live content. If you are running a live event that needs chat interaction, select Low Latency. Check [YouTube platform settings](/platforms/youtube/) for the full configuration checklist.
+
+### Kick Low-Latency Behavior
+
+Kick's infrastructure defaults to roughly **5–8 seconds** of end-to-end latency and does not currently expose a separate latency toggle like Twitch. However, Kick responds well to the 1-second keyframe interval setting — it lets viewers seek to a keyframe faster on initial load. See [Kick settings](/platforms/kick/) for the current recommended configuration.
+
+## OBS Encoder Settings That Affect Latency
+
+Beyond keyframe interval, these OBS settings directly influence how quickly frames make it from your scene to the RTMP packet:
+
+### Encoder Preset (x264 / NVENC)
+
+For x264, the **tune** option matters: setting `tune=zerolatency` in Advanced Output > x264 Options tells the encoder to avoid B-frames and reduce internal buffering at the cost of ~5–10% efficiency. This is worth it for latency-critical streams.
+
+For NVENC (NVIDIA), set the **Preset** to **P4** or **P5** (Performance) rather than P6/P7 (Quality). Quality presets add 2–4 frames of encoding buffer. The difference in output quality at streaming bitrates (4,000–8,000 Kbps) is minimal, and the latency reduction is measurable.
+
+For **x264** low-latency configuration in OBS Advanced Output:
+- Rate control: CBR (required for stable RTMP — see [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/))
+- Keyframe interval: 1 or 2
+- CPU Usage Preset: veryfast or faster (slower presets add more encoding buffer)
+- x264 options: `bframes=0 tune=zerolatency`
+
+### B-Frames
+
+B-frames (bidirectional frames) reference both past and future frames. They are very efficient for compression but add encoding latency because the encoder must look ahead to future frames before it can output the current one. Set **B-frames to 0** when targeting low latency. This is automatically handled by `tune=zerolatency` in x264, but NVENC users should verify it is set to **0** explicitly in OBS's Advanced Output settings.
+
+### Buffer Size
+
+In OBS Output settings, if you see a **Buffer Size** field (visible in some configurations), set it **equal to your bitrate** (e.g., 6,000 for a 6,000 Kbps stream). A larger buffer lets the encoder smooth out peaks at the cost of added latency. Setting buffer = bitrate keeps the encoder honest about real-time delivery. This aligns with CBR's design goal — learn more in [CBR vs VBR explained](/blog/cbr-vs-vbr-bitrate-explained/).
+
+## Network Configuration
+
+Your network is often the silent latency killer. A few practical steps:
+
+- **Wired over Wi-Fi** — even Wi-Fi 6 adds 5–15ms of jitter per packet compared to Ethernet. Jitter forces the platform's ingest buffer to grow to compensate.
+- **Upload headroom** — leave at least 25–30% of your upload capacity unused by the stream. If your connection is 20 Mbps, cap your stream at 14–15 Mbps max (video + audio). This headroom prevents TCP retransmissions from spiking latency. Verify your upload headroom with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+- **Ingest server selection** — OBS's auto-select picks the lowest ping server. Manually verify this by running a ping test to the closest regional ingest. On Twitch, the difference between the right and wrong ingest server can be 30–100ms of round-trip time, which compounds into viewer latency.
+- **QoS (Quality of Service)** — if your router supports it, prioritize your streaming PC's traffic. This prevents a large download on another device from causing packet loss mid-stream.
+
+## The Tune-In vs Delay Tradeoff
+
+Lower latency is not always better. Here is how to think about the tradeoff:
+
+**Interactive content (Just Chatting, IRL, viewer-controlled games):** Every second of delay makes chat interaction feel more disjointed. Target 2–4 second latency; accept the bitrate cost.
+
+**Competitive esports viewing or commentary:** Viewers and casters need near-real-time awareness of in-game events. Low latency (4–8 seconds) is important here.
+
+**Gaming / passive entertainment content:** Viewers watching you play a game solo do not need near-real-time interaction. Normal latency (10–15 seconds) is fine and gives you better quality per bitrate. Check the [best OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) for optimal quality settings when latency is not a concern.
+
+**Synchronized multi-platform streams:** If you stream to Twitch and YouTube simultaneously, be aware that each platform will have different effective latency even with identical encoder settings. Managing chat across platforms with mismatched latency can feel awkward — something to account for in how you read and respond to chat.
+
+## Recommended Low-Latency Settings Table
+
+| Platform | Keyframe Interval | Platform Mode | Encoder Tune | Expected Latency |
+|---|---|---|---|---|
+| Twitch (Low Latency) | 1s | Low Latency ON | zerolatency/P4 | 4–6s |
+| Twitch (Ultra Low Latency) | 1s | Ultra Low Latency ON | zerolatency/P4 | 1.5–3s |
+| YouTube Low Latency | 2s | Low Latency ON | zerolatency/P4 | 8–12s |
+| YouTube Ultra Low Latency | 1s | Ultra Low Latency ON | zerolatency/P4 | 4–8s |
+| Kick | 1s | N/A | zerolatency/P4 | 5–8s |
+
+For a full OBS walkthrough covering these settings alongside bitrate and encoder selection, see the [OBS settings hub](/obs/).
+
+## Frequently Asked Questions
+
+### What is the lowest stream latency I can realistically achieve on Twitch?
+
+With Twitch Ultra Low Latency mode enabled, a 1-second keyframe interval, and NVENC P4 preset with B-frames disabled, you can reach **1.5–2.5 seconds** of end-to-end latency on a wired connection with low jitter. Viewer latency will still vary based on their player's local buffer, which most browsers set to 2–3 seconds minimum.
+
+### Does low-latency mode hurt stream quality?
+
+Enabling low-latency mode forces shorter keyframe intervals and more frequent reference frames, which reduces encoder efficiency. At the same bitrate, expect a modest quality reduction — typically noticeable only in fast-motion scenes. The fix is to increase your bitrate by 500–1,000 Kbps when switching from normal to low-latency mode. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify your upload can handle the bump.
+
+### Why does my stream still feel delayed even after enabling low-latency mode?
+
+The most common cause is a **keyframe interval that is too long**. If OBS is set to auto (0) or a large fixed value like 4 seconds, the platform's low-latency mode cannot overcome the GOP-size buffer. Set keyframe interval to 1–2 seconds explicitly. The second most common cause is viewer-side buffering in their browser or app — most platforms let viewers manually adjust their latency in the player settings if the option is exposed.
+
+### Should I use low-latency mode for recording or just for streaming?
+
+Low-latency mode settings — short keyframe intervals, no B-frames, zerolatency tune — are **streaming-only optimizations**. For local recordings, you want the opposite: long GOPs, B-frames enabled, and quality-targeted encoding (CQP/CRF). OBS lets you configure stream and recording outputs independently, so there is no reason to compromise your recording quality for streaming latency. See the [recording time calculator](/tools/recording-time-calculator/) to plan your recording storage.

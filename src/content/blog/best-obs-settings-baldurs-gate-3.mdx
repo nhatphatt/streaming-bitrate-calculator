@@ -1,0 +1,128 @@
+---
+slug: best-obs-settings-baldurs-gate-3
+title: "Best OBS Settings for Baldur's Gate 3 (2026)"
+description: "Optimal OBS settings for streaming and recording Baldur's Gate 3. Bitrate, resolution, encoder, and FPS recommendations for crisp text and smooth turn-based gameplay."
+publishedAt: "2026-06-28"
+updatedAt: "2026-06-28"
+readTime: "8 min read"
+---
+
+For streaming Baldur's Gate 3, use **4,500–6,000 Kbps at 1080p 30fps** with CBR and NVENC H.264 or x264 Medium — the game's turn-based pacing means 30fps is completely fine and lets you spend that bitrate budget on image quality instead. For local recording, NVENC HEVC at CQP 20 produces pristine files at roughly 2–4 GB per hour at 1080p 30fps. The biggest priority for BG3 is crisp text rendering: high contrast, no aggressive downscaling, and enough bitrate to keep the UI readable at a glance.
+
+## Why BG3 Is Different From Action Games
+
+Baldur's Gate 3 is a turn-based RPG. Outside of combat cutscenes and environmental exploration, most of the screen is static or slow-moving: spell icons, dialogue trees, character sheets, inventory menus, and map views. This changes the optimal OBS settings in two important ways.
+
+First, you can drop to 30fps without any perceptible quality loss. Turn-based gameplay does not demand 60fps, and the bitrate you would have spent on extra frames is better spent keeping static UI elements sharp. A 1080p stream at 6,000 Kbps 30fps looks noticeably cleaner than the same bitrate at 60fps.
+
+Second, text legibility is critical. Viewers need to read spell names, item descriptions, dialogue choices, and tooltip text. This means avoiding aggressive downscaling that blurs fine details. If your monitor is 1440p, scale down to 1080p using Lanczos in OBS — never scale from 1440p to 720p for BG3 content.
+
+For a full overview of how encoder and bitrate choices interact, see the [OBS settings hub](/obs/).
+
+## Recommended OBS Streaming Settings for BG3
+
+| Setting | Recommended Value |
+|---|---|
+| Output Resolution | 1080p (1920x1080) |
+| Frame Rate | 30 fps |
+| Encoder | NVENC H.264 (New) or x264 |
+| Rate Control | CBR |
+| Video Bitrate | 5,000–6,000 Kbps (Twitch/Kick), 6,000–9,000 Kbps (YouTube) |
+| Audio Bitrate | 160 Kbps |
+| Audio Codec | AAC 48 kHz |
+| Preset (NVENC) | P5 Quality or P6 |
+| Preset (x264) | Medium or Slow |
+| Keyframe Interval | 2 seconds |
+| Profile | High |
+| Tune | None (do not use 'Film' or 'Animation') |
+
+**Why CBR?** Streaming platforms — Twitch, YouTube Live, Kick — all prefer a constant bitrate for stable ingest. The slow motion in BG3 means CBR barely wastes any headroom anyway; scenes with minimal movement encode cleanly well below the ceiling. Read the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) for a deeper breakdown of when each mode makes sense.
+
+**Why no 'Animation' tune?** The x264 Animation tune increases reference frames, which helps smooth 2D animation but can over-smooth BG3's detailed textures, environment art, and fine UI text. Leave Tune set to None.
+
+## Recommended OBS Recording Settings for BG3
+
+Recording locally removes all the streaming constraints. You can push quality much higher without worrying about your upload speed.
+
+| Setting | Recommended Value |
+|---|---|
+| Container | MKV (remux to MP4 after) |
+| Encoder | NVENC HEVC or NVENC AV1 (RTX 40-series) |
+| Rate Control | CQP |
+| CQP Value | 18–20 |
+| Preset | P5 or P6 |
+| Resolution | Match your display (1080p or 1440p) |
+| Frame Rate | 30 fps |
+| Audio Bitrate | 192–320 Kbps |
+
+At CQP 18, NVENC HEVC on a 1080p 30fps BG3 recording produces roughly 1.5–3 GB per hour. Scenes heavy in dialogue menus will land on the lower end; outdoor environments with particle effects and lighting will push toward the top. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to figure out how many sessions fit on your drive before you start a long campaign.
+
+If you have an RTX 4070 or newer, **NVENC AV1** is worth enabling — it cuts file size by an additional 20–30% compared to HEVC at the same visual quality, perfect for long BG3 sessions that run 4–6 hours.
+
+## Bitrate by Platform and Quality Tier
+
+| Platform | Resolution | FPS | Bitrate | Notes |
+|---|---|---|---|---|
+| Twitch | 1080p | 30 | 5,000–6,000 Kbps | Near max for non-partners |
+| Twitch | 720p | 30 | 3,000–4,500 Kbps | Good if upload is limited |
+| YouTube Live | 1080p | 30 | 6,000–9,000 Kbps | More generous limits |
+| YouTube Live | 1440p | 30 | 9,000–13,000 Kbps | For high-res monitors |
+| Kick | 1080p | 30 | 5,000–8,000 Kbps | Up to 8,000 Kbps allowed |
+
+Before going live, verify you have enough upload headroom. Your actual stream bitrate should not exceed 75–80% of your upload speed. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm your connection can sustain the bitrate without dropped frames.
+
+For platform-specific settings pages, see [Twitch streaming settings](/platforms/twitch/) or [YouTube streaming settings](/platforms/youtube/).
+
+## Encoder Choice: NVENC vs x264 for BG3
+
+For most streamers running a single PC, **NVENC H.264 (New)** is the right choice. It uses your GPU's dedicated encode engine, leaving your CPU free to run BG3 without performance spikes. BG3 is CPU-heavy during combat (AI calculations, physics), so keeping CPU encoder load off the table helps stability.
+
+If you run a two-PC streaming setup — a dedicated stream PC handling OBS while your gaming PC runs BG3 — x264 Medium or Slow will squeeze out better quality at the same bitrate. The two-PC approach also lets you capture at a higher internal bitrate before re-encoding for the stream.
+
+**x264 Medium vs Slow:** At 6,000 Kbps, the quality difference between Medium and Slow is minor for slow-paced content like BG3. Stick with Medium unless your CPU has significant headroom to spare. Slow starts to matter more for fast-paced games with lots of motion.
+
+For a head-to-head encoder comparison, see the [NVENC vs x264 streaming guide](/blog/nvenc-vs-x264-streaming/).
+
+## Video Settings Inside OBS
+
+Beyond bitrate and encoder, a few OBS video settings specifically affect BG3 quality:
+
+**Downscale Filter:** Set to **Lanczos** if you are scaling down resolution. For BG3, Lanczos preserves edge sharpness in UI text better than Bilinear or Bicubic. If you are already outputting at your native game resolution, this setting has no effect.
+
+**Color Format:** Use **NV12** for H.264 streams to Twitch, Kick, or YouTube. Use **P010** (10-bit) if you are recording locally with HEVC or AV1 — BG3 has rich lighting and HDR-like contrast that benefits from the extra color depth in recordings.
+
+**Color Space:** Set to **sRGB** unless you are on an HDR monitor and encoding in 10-bit. BG3 does support HDR, but most viewers watch on SDR displays, so sRGB ensures consistent color reproduction.
+
+**Canvas Resolution:** Match your game resolution exactly. Avoid setting the canvas higher than your game output — there is no quality benefit, and it wastes encode resources.
+
+## Storage Planning for Long BG3 Sessions
+
+BG3 playthroughs run long. Act 1 alone can take 20–30 hours, and a full playthrough easily passes 100 hours. If you are recording your entire campaign, storage planning matters.
+
+| Encoder | Resolution | FPS | CQP | ~GB/Hour |
+|---|---|---|---|---|
+| NVENC HEVC | 1080p | 30 | 20 | 1.5–3 GB |
+| NVENC HEVC | 1080p | 30 | 18 | 2.5–4 GB |
+| NVENC HEVC | 1440p | 30 | 20 | 3–5 GB |
+| NVENC AV1 | 1080p | 30 | 20 | 1–2 GB |
+| x264 | 1080p | 30 | CRF 18 | 4–7 GB |
+
+A 2 TB drive comfortably holds a full 100-hour BG3 campaign at HEVC CQP 20 in 1080p with room to spare. The [file size calculator](/size/) lets you cross-check specific settings if you want exact estimates before committing to a long session.
+
+## Frequently Asked Questions
+
+### Should I stream BG3 at 60fps or 30fps?
+
+30fps is the right choice for Baldur's Gate 3 streaming. The game is turn-based, so there is no fluid motion that demands 60fps. Using 30fps means your entire bitrate budget goes toward image quality and crisp text rather than duplicating near-identical frames. Your viewers will not notice the difference, and the UI will look significantly sharper.
+
+### What bitrate do I need to stream BG3 at 1080p on Twitch?
+
+5,000–6,000 Kbps at 1080p 30fps is the sweet spot for Twitch. Twitch caps non-partnered streamers at 6,000 Kbps video bitrate. At 30fps with a slow-paced RPG, 5,000 Kbps already looks excellent — you can use the extra 1,000 Kbps headroom as a safety buffer for scenes with complex lighting or spell effects.
+
+### Why does the BG3 UI look blurry in my stream?
+
+Blurry UI is almost always caused by one of three things: downscaling from a high-resolution source too aggressively (for example, 1440p game to 720p stream), using Bilinear instead of Lanczos as the downscale filter, or using a bitrate that is too low to render fine text clearly. Check your OBS Video settings, confirm the downscale filter is Lanczos, and make sure your output resolution is at least 1080p. The [OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) has a full breakdown of minimum bitrates by resolution.
+
+### Can I stream and record BG3 simultaneously in OBS?
+
+Yes, and it is recommended. In OBS, go to Settings → Output → Output Mode: Advanced. This gives you separate tabs for Streaming and Recording. Stream at CBR 6,000 Kbps H.264 for Twitch, and simultaneously record at NVENC HEVC CQP 20 for a high-quality local archive. The recording will look far better than your stream and gives you clean footage for YouTube uploads or highlight edits afterward.

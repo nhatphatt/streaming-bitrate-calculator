@@ -1,0 +1,167 @@
+---
+slug: intel-quicksync-for-streaming
+title: "Intel Quick Sync for Streaming: QSV Guide (2026)"
+description: "Intel Quick Sync Video (QSV) delivers hardware-accelerated H.264, HEVC, and AV1 encoding on Arc GPUs and iGPUs. Learn when to use it and the best settings."
+publishedAt: "2026-07-01"
+updatedAt: "2026-07-01"
+readTime: "9 min read"
+---
+
+Intel Quick Sync Video (QSV) is Intel's hardware encoder built into every modern Intel CPU with integrated graphics and all Intel Arc discrete GPUs. For live streaming, QSV H.264 sits quality-wise between NVENC Pascal and NVENC Turing — perfectly usable for Twitch at 6,000 Kbps or YouTube at up to 12,000 Kbps. On Arc GPUs (A380, A750, A770, B580, B770), QSV has improved dramatically and now rivals NVENC in both H.264 and HEVC quality, while Arc's AV1 encoder is the best hardware AV1 implementation available for live streaming as of 2026.
+
+## What Is Intel Quick Sync Video?
+
+Quick Sync Video is a fixed-function media engine embedded in Intel silicon. Unlike x264 (which runs on CPU cores) or software encoders that compete with your game for resources, QSV uses a dedicated Media Engine block that runs independently. This means encoding a 1080p 60fps stream consumes almost no CPU or GPU compute budget — typically under 3% CPU and a negligible slice of the iGPU or Arc GPU.
+
+Every Intel CPU from Sandy Bridge (2011) onward includes Quick Sync, but quality varies significantly by generation:
+
+- **Sandy Bridge to Ivy Bridge (2011–2013):** Functional but low quality. Avoid for streaming.
+- **Haswell to Kaby Lake (2013–2017):** Adequate for 720p/1080p at higher bitrates. Noticeable blocking on fast motion.
+- **Coffee Lake to Comet Lake (2018–2020):** Solid H.264 quality. Acceptable for Twitch 6,000 Kbps.
+- **Tiger Lake and newer (2020–2022):** Good H.264 and HEVC. Usable as a primary streaming encoder.
+- **Alder Lake / Raptor Lake / Meteor Lake (12th–14th gen, 2021–2024):** Excellent H.264, solid HEVC, AV1 supported. Quality gap vs NVENC Turing narrows significantly.
+- **Arrow Lake / Lunar Lake (15th gen, 2024+):** Full AV1 encoding support with improved media engine. Arc Xe2 iGPUs approach Arc A-series quality.
+- **Intel Arc A-series (A380/A750/A770):** Best iGPU-adjacent QSV. HEVC quality matches NVENC. AV1 is exceptional.
+- **Intel Arc B-series (B580/B770):** Improved Xe2 media engine, excellent AV1 bitrate efficiency.
+
+## QSV Codec Support by Generation
+
+| Intel Generation / Product | H.264 | HEVC (H.265) | AV1 | VP9 |
+|---------------------------|-------|--------------|-----|-----|
+| Haswell – Kaby Lake (4th–7th gen) | Yes | Decode only | No | No |
+| Coffee Lake – Comet Lake (8th–10th gen) | Yes | Encode + Decode | No | No |
+| Tiger Lake – Ice Lake (11th gen) | Yes | Yes | No | Yes |
+| Alder Lake / Raptor Lake (12th–13th gen) | Yes | Yes | Yes | Yes |
+| Meteor Lake (14th gen iGPU) | Yes | Yes | Yes | Yes |
+| Arc A-series (A380/A750/A770) | Yes | Yes | Yes | Yes |
+| Arc B-series (B580/B770) | Yes | Yes | Yes | Yes |
+
+For any system older than 12th gen, stick with QSV H.264 or HEVC. AV1 via Quick Sync requires 12th gen or newer — or any Arc discrete GPU.
+
+## QSV vs NVENC vs AMD AMF: Quality Comparison
+
+At a fixed 6,000 Kbps, 1080p 60fps — the standard Twitch ceiling:
+
+| Encoder | H.264 Quality | HEVC Quality | AV1 Quality | CPU Impact | Notes |
+|---------|---------------|--------------|-------------|------------|-------|
+| NVENC (RTX 40 series) | Excellent | Excellent | Excellent | ~2% | Best overall quality |
+| NVENC (RTX 20/30 series) | Excellent | Very Good | N/A RTX 20, Good RTX 30 | ~2% | Strong choice |
+| QSV Arc B-series | Very Good | Very Good | Excellent | ~2% | Best AV1 hardware encoder |
+| QSV Arc A-series | Very Good | Very Good | Very Good | ~2% | Close to NVENC Turing |
+| QSV 12th–14th gen iGPU | Good | Good | Good | ~3% | Solid for iGPU-only builds |
+| AMD AMF (RX 7000) | Good | Good | Good | ~2% | Competitive but trails NVENC |
+| QSV 8th–10th gen iGPU | Fair | Fair | N/A | ~3% | Acceptable at higher bitrates |
+| x264 Medium | Excellent+ | N/A | N/A | 30–60% | Best H.264 quality, high CPU cost |
+
+The key takeaway: Arc B580/B770 AV1 consistently beats NVENC RTX 40 AV1 in controlled encode tests at the same bitrate — a significant claim that Arc has earned by 2025. For Twitch (H.264 only), a modern iGPU QSV is perfectly viable; for YouTube AV1, Arc is the best hardware option available.
+
+See the full codec comparison at [H.264 vs H.265 vs AV1](/compare/) to understand the bitrate efficiency gains between codecs.
+
+## Recommended QSV Settings for OBS
+
+### OBS Quick Sync H.264 (Intel QSV H.264)
+
+Use this for Twitch, Kick, and any platform that requires H.264. Check the [OBS settings hub](/obs/) for the full workflow.
+
+- **Encoder:** Intel QSV H.264
+- **Rate Control:** CBR
+- **Target Bitrate:** 6,000 Kbps (Twitch/Kick), 8,000–12,000 Kbps (YouTube)
+- **ICQ Quality:** 23 (only relevant when using ICQ mode, not CBR)
+- **Preset:** Slower (best quality at the cost of a tiny latency increase, still hardware-accelerated)
+- **Profile:** High
+- **B-frames:** 3 (modern iGPU and Arc support this; set to 2 for older hardware)
+
+### OBS Quick Sync HEVC (Intel QSV HEVC)
+
+HEVC via QSV is supported on Coffee Lake and newer. Use it for YouTube Live or local recordings where the platform accepts HEVC. HEVC delivers roughly 40% better efficiency than H.264 — meaning 6,000 Kbps QSV HEVC looks close to 10,000 Kbps QSV H.264.
+
+- **Encoder:** Intel QSV HEVC
+- **Rate Control:** CBR
+- **Target Bitrate:** 6,000–8,000 Kbps (YouTube Live), 20,000–40,000 Kbps (local recording)
+- **Preset:** Slower
+- **Profile:** Main or Main10 (Main10 for HDR, Main otherwise)
+- **B-frames:** 2
+
+### OBS Quick Sync AV1 (Intel QSV AV1)
+
+Available only on 12th gen+ CPUs or Arc GPUs. AV1 gives approximately 50% better efficiency than H.264. As of 2026, YouTube supports AV1 live streaming natively. Learn more about AV1 codec efficiency in the [codec comparison](/compare/).
+
+- **Encoder:** Intel QSV AV1
+- **Rate Control:** CBR
+- **Target Bitrate:** 4,500–8,000 Kbps (YouTube AV1 live — quality equivalent to H.264 at 9,000–16,000 Kbps)
+- **Preset:** Slower
+- **Profile:** Main
+
+## Recommended Bitrate Table for Quick Sync
+
+| Resolution | FPS | Codec | Platform | QSV Target Bitrate |
+|-----------|-----|-------|----------|--------------------|
+| 720p | 30 | H.264 | Twitch/Kick | 2,500–3,500 Kbps |
+| 720p | 60 | H.264 | Twitch/Kick | 3,500–5,000 Kbps |
+| 1080p | 30 | H.264 | Twitch/Kick | 4,500–6,000 Kbps |
+| 1080p | 60 | H.264 | Twitch/Kick | 6,000 Kbps |
+| 1080p | 60 | HEVC | YouTube Live | 6,000–8,000 Kbps |
+| 1080p | 60 | AV1 | YouTube Live | 4,500–6,000 Kbps |
+| 1440p | 60 | AV1 | YouTube Live | 6,000–9,000 Kbps |
+| 1080p | 60 | H.264 | Local record | 30,000–50,000 Kbps |
+| 1080p | 60 | HEVC | Local record | 20,000–35,000 Kbps |
+| 1440p | 60 | HEVC | Local record | 30,000–50,000 Kbps |
+
+Use the [Streaming Bitrate & Storage Calculator](/) to dial in exact values for your resolution and target file size.
+
+## When Should You Use Quick Sync?
+
+### Use QSV When:
+
+- **You have no discrete GPU** — Intel iGPU is your only hardware encoder option. Any modern iGPU beats x264 for single-PC streaming because x264 competes with game rendering for CPU time.
+- **You have an Arc GPU** — Arc's QSV quality is strong enough to be your primary encoder even if you also have an NVIDIA card; Arc AV1 is a genuine reason to choose Arc for a YouTube-focused setup.
+- **You have a laptop** — Most Intel laptop CPUs include a competent Quick Sync engine. Using it spares the CPU cores for the game and keeps thermals in check.
+- **You're recording locally** — QSV HEVC for local recordings is highly efficient. A 1-hour 1080p 60fps QSV HEVC recording at 25,000 Kbps uses roughly 11 GB — much more manageable than x264 files. Use the [recording time calculator](/tools/recording-time-calculator/) to plan disk usage.
+
+### Avoid QSV When:
+
+- **You have an NVIDIA RTX GPU** and are streaming H.264 to Twitch — NVENC Turing/Ada quality is at least equal to QSV on a modern iGPU and often better on high-motion content. Use NVENC instead. See the [NVENC vs x264 streaming](/blog/nvenc-vs-x264-streaming/) comparison.
+- **You're on Sandy Bridge or Ivy Bridge** — these generations lack the quality threshold for modern streaming. Use x264.
+- **You need very low-latency encoding with zero-latency GOP** — software encoders handle ultra-low-latency presets better; hardware encoders including QSV add 1–3 frame latency due to the hardware pipeline.
+
+## Quick Sync on Intel Arc vs iGPU: Key Differences
+
+Intel Arc discrete GPUs (A and B series) have a significantly upgraded media engine compared to even 13th/14th gen iGPUs:
+
+- **Dual media engines** — Arc A770 and B580/B770 have two media engines, enabling simultaneous encode + decode without stalling.
+- **Higher quality AV1** — Arc's AV1 encoder uses a more sophisticated rate-distortion optimization than the iGPU media engine.
+- **Higher throughput ceiling** — Arc can encode up to 8K AV1 in real time; iGPUs top out at 4K for reliable real-time AV1.
+- **Independent from CPU iGPU** — On a system with Arc + an Intel CPU, you can use the Arc media engine for QSV instead of the iGPU, freeing the iGPU for display output. OBS selects the correct device via the "Device" dropdown in the QSV encoder settings.
+
+For YouTube streamers on a budget, a used Arc A750 (~$150 as of 2026) provides better AV1 encoding than any other card in that price range. Check the [YouTube streaming settings](/platforms/youtube/) guide for YouTube-specific encoder recommendations.
+
+## Enabling Quick Sync in OBS: Step by Step
+
+OBS automatically detects QSV if your Intel drivers are up to date. If the Intel QSV encoder does not appear in OBS:
+
+- Install the latest **Intel Graphics Driver** (or Intel Arc & Iris Xe Graphics driver for Arc).
+- On Windows, also install the **Intel oneVPL** (Video Processing Library) runtime if you are on 12th gen or newer — this unlocks AV1 QSV in OBS.
+- Ensure OBS is version 30.x or newer, which includes full AV1 QSV support.
+- If you have both a discrete GPU and Intel iGPU, set the **OBS Process** to run on the Intel GPU via Windows Graphics Settings to ensure QSV uses the correct device.
+
+After enabling, set Rate Control to **CBR** for live streaming. Do not use VBR for live output — platform ingest servers expect a consistent bitrate. Read more about [CBR vs VBR for streaming](/blog/cbr-vs-vbr-for-streaming/).
+
+Check your upload speed before going live with the [Bandwidth Calculator](/tools/bandwidth-calculator/) — QSV lets you use higher bitrates efficiently, but your ISP upload is still the ceiling.
+
+## Frequently Asked Questions
+
+### Is Intel Quick Sync good enough for streaming in 2026?
+
+On 12th gen or newer Intel CPUs, Quick Sync H.264 quality is fully adequate for Twitch at 6,000 Kbps and YouTube at up to 12,000 Kbps. Arc GPU QSV is outright competitive with NVENC for HEVC, and Arc's AV1 encoder is the best hardware AV1 implementation for streaming available today. The old reputation of Quick Sync being "low quality" applies to pre-10th gen hardware — modern QSV has moved well past that.
+
+### Can I use Quick Sync if I also have an NVIDIA GPU?
+
+Yes. OBS lets you select any detected hardware encoder regardless of which GPU drives your display. If you have an RTX GPU and want to use QSV (for example, to free NVENC for recording while QSV streams), select the Intel QSV encoder in OBS Output settings and choose your Intel device. For most setups though, NVENC H.264 on RTX produces slightly better quality than iGPU QSV — use QSV on Arc or when NVENC is busy.
+
+### Does Quick Sync work for recording, not just streaming?
+
+Absolutely. QSV is excellent for local recordings because the hardware encoder is fast and efficient. Use QSV HEVC at 20,000–40,000 Kbps for 1080p recordings or QSV AV1 at 15,000–25,000 Kbps for a smaller file with equivalent quality. A 1-hour 1080p 60fps QSV HEVC recording at 25,000 Kbps produces roughly an 11 GB file. Plan your storage with the [recording time calculator](/tools/recording-time-calculator/).
+
+### Which Intel Quick Sync codec should I use for Twitch vs YouTube?
+
+For **Twitch**: Use QSV H.264 — Twitch requires H.264 and does not accept HEVC or AV1 from ingest. Target 6,000 Kbps at 1080p 60fps. See full [Twitch streaming settings](/platforms/twitch/). For **YouTube**: Use QSV AV1 (if 12th gen+ or Arc) for the best quality-per-bitrate ratio, or QSV HEVC on older hardware. YouTube accepts all three codecs for live streaming as of 2026. See [YouTube streaming settings](/platforms/youtube/).

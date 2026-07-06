@@ -1,0 +1,134 @@
+---
+slug: best-trovo-streaming-settings
+title: "Best Trovo Streaming Settings for 2026 (Bitrate Guide)"
+description: "Exact Trovo bitrate, resolution, and encoder settings for smooth 1080p streaming. Covers OBS, Streamlabs, and Trovo Studio with platform-specific recommendations."
+publishedAt: "2026-06-22"
+updatedAt: "2026-06-22"
+readTime: "8 min read"
+---
+
+For most Trovo streamers, **6,000 Kbps at 1080p 60fps with CBR and x264 or NVENC** is the sweet spot that fills Trovo's ingest capacity without overwhelming your viewers' connections. If you're on a slower upload line, 4,500 Kbps at 720p 60fps delivers a clean, responsive stream with zero buffering risk. This guide covers the exact numbers, encoder comparisons, and OBS settings you need to go live on Trovo today.
+
+## What Is Trovo and Why Do Settings Matter?
+
+Trovo is a live streaming platform owned by Tencent, popular across Southeast Asia, Latin America, and increasingly in Western markets. It uses standard RTMP ingest, meaning it works with OBS, Streamlabs, and any RTMP-compatible software. Unlike Twitch, Trovo does not enforce a published hard bitrate cap, but its ingest servers behave best when you stay at or below **8,000 Kbps** for video. Exceeding that can cause ingest instability and dropped frames on the platform's end, not yours.
+
+Because Trovo's transcoding coverage is less consistent than YouTube or Twitch, keeping your stream accessible to viewers on mid-range connections matters more here. A 6,000 Kbps stream at 1080p 60fps is a practical maximum that most broadband viewers can pull in full quality.
+
+## Recommended Trovo Streaming Settings
+
+| Quality Tier | Resolution | FPS | Video Bitrate | Encoder |
+|---|---|---|---|---|
+| Entry-level | 720p | 30 | 2,500 Kbps | x264 Fast / NVENC |
+| Standard | 720p | 60 | 4,000 Kbps | x264 Medium / NVENC |
+| Good | 1080p | 30 | 4,500 Kbps | x264 Medium / NVENC |
+| Recommended | 1080p | 60 | 6,000 Kbps | x264 Medium / NVENC |
+| High-end | 1080p | 60 | 7,500–8,000 Kbps | NVENC / AV1 |
+
+All rows assume **CBR rate control** and **AAC audio at 160 Kbps**, 48kHz. Add your audio bitrate on top of the video figure when checking your upload headroom. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm your connection supports the tier you want before going live.
+
+## OBS Settings for Trovo (Step by Step)
+
+Open OBS, go to **Settings > Stream**, and set:
+
+- **Service:** Custom
+- **Server:** Trovo's RTMP ingest URL — `rtmp://livepush.trovo.live/live/`
+- **Stream Key:** Copy from your Trovo Dashboard under Live > Go Live
+
+Then in **Settings > Output > Streaming**:
+
+- **Encoder:** NVENC H.264 (new) if you have an NVIDIA GPU, otherwise x264
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (adjust down if your upload is constrained)
+- **Keyframe Interval:** 2 seconds — critical for RTMP platforms; never leave it at 0
+- **Preset (x264):** Medium for quality; use Veryfast if your CPU struggles
+- **Preset (NVENC):** Quality
+- **Profile:** High
+- **Tune (x264):** zerolatency
+
+In **Settings > Video**:
+
+- **Base (Canvas) Resolution:** 1920x1080
+- **Output (Scaled) Resolution:** 1920x1080 (or 1280x720 for lower-tier)
+- **Downscale Filter:** Lanczos (sharpened scaling, 36 samples)
+- **Common FPS Values:** 60
+
+For audio, set **Settings > Audio** to 48 kHz sample rate, and the audio track bitrate to 160 Kbps in **Settings > Output > Audio**. If you stream music-heavy content, bump audio to 192 Kbps.
+
+The principles behind these settings — especially CBR vs VBR and keyframe intervals — are covered in depth in [CBR vs VBR for streaming](/blog/cbr-vs-vbr-for-streaming/) and the [OBS bitrate settings guide](/blog/best-obs-bitrate-settings/).
+
+## Encoder Selection: x264 vs NVENC vs AV1
+
+Your encoder choice changes how much quality you extract from a given bitrate budget.
+
+**x264 (CPU encoding)** remains the reference quality standard at medium preset. At 6,000 Kbps, x264 Medium produces cleaner motion detail than NVENC at the same bitrate, particularly in high-motion games. The tradeoff: it uses 20–50% of your CPU depending on resolution and preset. Use Fast or Veryfast if you're gaming on a single PC and see frame drops.
+
+**NVENC H.264 (NVIDIA GPU)** with RTX 30-series and newer is within 5–10% of x264 Medium quality at equivalent bitrates, while using under 1% CPU. For single-PC streamers, NVENC at 6,000 Kbps on a modern card is the best practical choice. The RTX 40-series NVENC further closed the gap.
+
+**AV1 (RTX 40-series, Intel Arc)** delivers roughly 30–40% better quality per bit than H.264, meaning a 4,500 Kbps AV1 stream can look as good as 6,000 Kbps H.264. Trovo's RTMP ingest accepts AV1, but viewer playback support in Trovo's web player depends on the viewer's browser. If the majority of your audience uses Chrome or Edge on modern hardware, AV1 is worth testing. For a full codec comparison see [H.264 vs H.265 vs AV1](/blog/h264-vs-h265-vs-av1/).
+
+For a deeper head-to-head of NVENC and software encoding, see [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
+
+## Bitrate by Upload Speed
+
+Your stream bitrate must fit inside your available upload bandwidth. The usable rule: **stream bitrate should not exceed 70–75% of your upload speed**, leaving headroom for other devices, game server traffic, and burst spikes.
+
+| Upload Speed | Max Recommended Bitrate | Practical Trovo Tier |
+|---|---|---|
+| 5 Mbps (5,000 Kbps) | 3,500 Kbps | 720p 60fps |
+| 8 Mbps (8,000 Kbps) | 5,600 Kbps | 1080p 30fps or 720p 60fps |
+| 10 Mbps (10,000 Kbps) | 7,000 Kbps | 1080p 60fps at 6,000 Kbps |
+| 15 Mbps (15,000 Kbps) | 10,500 Kbps | 1080p 60fps at 8,000 Kbps |
+| 25+ Mbps | 17,500+ Kbps | Full 8,000 Kbps with headroom |
+
+If you're not sure of your actual upload speed or want to model exact requirements, the [Streaming Bitrate & Storage Calculator](/) gives you file-size and bandwidth figures for any combination of resolution, frame rate, and bitrate.
+
+For more detail on minimum internet requirements, the [best internet speed for streaming guide](/blog/best-internet-speed-for-streaming/) breaks down requirements by platform and resolution.
+
+## Trovo vs Twitch vs Kick: Settings Differences
+
+Trovo, Twitch, and Kick all use RTMP ingest, but they differ in how they handle ingest and transcoding:
+
+- **Twitch** hard-caps non-partner video at 6,000 Kbps and has the widest transcoding rollout, so even high bitrate streams get downscaled for viewers.
+- **Kick** allows up to 8,000 Kbps and also has solid transcoding infrastructure.
+- **Trovo** has no published hard cap but behaves best at or below 8,000 Kbps. Transcoding availability varies by region and viewership level. New streamers may stream source-only, meaning every viewer pulls your full bitrate.
+
+Because Trovo viewers may be pulling source-quality streams more often, keeping your bitrate at 6,000 Kbps or below is more viewer-considerate than on platforms with universal transcoding. If you want to compare Twitch settings side-by-side, see the [Twitch streaming bitrate guide](/blog/twitch-streaming-bitrate-guide/) and [Twitch platform settings](/platforms/twitch/).
+
+## Simultaneous Recording Settings
+
+If you record locally while streaming to Trovo, configure a separate recording profile in OBS to avoid compression artifacts from double-encoding.
+
+In **Settings > Output > Recording**:
+
+- **Format:** MKV (remux to MP4 later via File > Remux)
+- **Encoder:** NVENC H.264 or x264 (can differ from stream encoder)
+- **Rate Control:** CQP (NVENC) or CRF (x264)
+- **CQP / CRF Value:** 18–20 for high quality archiving
+- **Preset:** Slow (x264) or Quality (NVENC)
+
+This local recording will be much larger than your stream file because it uses quality-based encoding, not a fixed bitrate. Estimate your disk usage with the [Recording Time Calculator](/tools/recording-time-calculator/) before a long session.
+
+## Trovo Studio vs OBS vs Streamlabs
+
+Trovo has its own first-party streaming software called **Trovo Studio**, based on an earlier OBS fork. It is simpler to set up — it auto-populates your RTMP key and gives you single-click presets — but it offers less control over encoder settings. If you want to fine-tune keyframe interval, x264 preset, or use NVENC AV1, use OBS or Streamlabs instead.
+
+For OBS-specific settings beyond Trovo, the [OBS settings hub](/obs/) covers every major output option in one place.
+
+## Frequently Asked Questions
+
+### What bitrate should I use for Trovo?
+
+**6,000 Kbps at 1080p 60fps is the recommended bitrate for most Trovo streamers.** If your upload speed is below 8 Mbps, drop to 4,000 Kbps at 720p 60fps. Trovo's ingest handles up to around 8,000 Kbps reliably, but staying at 6,000 Kbps ensures viewers without transcoding can still watch your stream without buffering.
+
+### Does Trovo have a bitrate limit?
+
+Trovo does not publish a hard bitrate cap the way Twitch does (6,000 Kbps for non-partners), but its ingest servers are most stable at or below 8,000 Kbps. Streaming above that can cause ingest-side dropped frames even when your OBS shows 0% dropped. Treat 8,000 Kbps as the practical ceiling.
+
+### Should I use x264 or NVENC for Trovo?
+
+Use **NVENC if you have an NVIDIA RTX-series GPU** — it nearly matches x264 Medium quality at the same bitrate while freeing up your CPU for gaming. Use x264 Medium only if you have a dedicated streaming PC or a CPU powerful enough (e.g., Intel Core i9/Ryzen 9) to encode at medium preset without impacting game performance. Both work equally well with Trovo's ingest.
+
+### What resolution and FPS should I stream on Trovo?
+
+**1080p 60fps is the best choice if your upload allows it** (minimum 8 Mbps upload recommended). For fast-paced games like FPS titles, 60fps is noticeably smoother and more watchable than 30fps. If your connection is limited, 720p 60fps with 4,000 Kbps looks better than 1080p 30fps at the same bitrate — frame rate has more impact on perceived quality than resolution for gaming content.

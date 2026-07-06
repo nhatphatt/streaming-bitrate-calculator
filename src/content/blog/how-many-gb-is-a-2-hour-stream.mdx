@@ -1,0 +1,129 @@
+---
+slug: how-many-gb-is-a-2-hour-stream
+title: "How Many GB Is a 2 Hour Stream Recording? (2026)"
+description: "Exact GB figures for 2-hour stream recordings at every common bitrate. Tables for 1h, 2h, 3h — plus tips to shrink file sizes without hurting quality."
+publishedAt: "2026-07-05"
+updatedAt: "2026-07-05"
+readTime: "8 min read"
+---
+
+A 2-hour stream recording at 6,000 Kbps (a common Twitch setting) produces roughly **5.4 GB**. At 8,000 Kbps it jumps to **7.2 GB**, and a high-quality 1080p60 recording at 15,000 Kbps hits **13.5 GB**. The formula is simple: multiply your bitrate in Mbps by the duration in seconds, then divide by 8 to get bytes. The tables below do all that math for you at every realistic bitrate.
+
+## The Core Formula
+
+Every file-size estimate comes down to one equation:
+
+**File size (GB) = (Bitrate in Kbps × Duration in seconds) ÷ 8,000,000**
+
+For a 2-hour (7,200-second) recording at 6,000 Kbps: (6,000 × 7,200) ÷ 8,000,000 = **5.4 GB**.
+
+This formula works for any container — MP4, MKV, MOV — because the container overhead is negligible (under 1%). The encoder matters more. H.264 (AVC) needs higher bitrates to match the quality of HEVC (H.265) or AV1, so the codec you choose directly affects how large your files are. See the [codec comparison guide](/compare/) for the full breakdown.
+
+Use the [Recording Time Calculator](/tools/recording-time-calculator/) if you want to flip the equation and find out how many hours fit on your remaining disk space.
+
+## File Size Tables: 1 Hour, 2 Hours, 3 Hours
+
+### Stream/Recording Bitrate vs. File Size
+
+| Bitrate | 1 Hour | 2 Hours | 3 Hours | Typical Use Case |
+|---|---|---|---|---|
+| 2,500 Kbps | 1.1 GB | 2.25 GB | 3.4 GB | 720p30 Twitch stream archive |
+| 4,000 Kbps | 1.8 GB | 3.6 GB | 5.4 GB | 720p60 or 1080p30 stream |
+| 6,000 Kbps | 2.7 GB | 5.4 GB | 8.1 GB | 1080p60 Twitch (standard cap) |
+| 8,000 Kbps | 3.6 GB | 7.2 GB | 10.8 GB | YouTube Live 1080p60 |
+| 10,000 Kbps | 4.5 GB | 9.0 GB | 13.5 GB | YouTube 1080p60 high quality |
+| 15,000 Kbps | 6.75 GB | 13.5 GB | 20.25 GB | Local recording, CQP-based H.264 |
+| 30,000 Kbps | 13.5 GB | 27.0 GB | 40.5 GB | Lossless/near-lossless capture |
+| 50,000 Kbps | 22.5 GB | 45.0 GB | 67.5 GB | Uncompressed-style archiving |
+
+All figures are for video only. Audio at 192 Kbps AAC adds roughly 86 MB per hour — negligible at recording bitrates but worth noting for long sessions.
+
+### Quality Tier Reference (1080p60)
+
+| Quality Tier | Codec | Approximate Bitrate | 2-Hour File Size |
+|---|---|---|---|
+| Broadcast archive | H.264 (x264 slow) | 15,000–20,000 Kbps | 13.5–18 GB |
+| High quality local | HEVC (NVENC) | 8,000–12,000 Kbps | 7.2–10.8 GB |
+| Stream archive copy | H.264 | 6,000 Kbps | 5.4 GB |
+| Balanced local | HEVC CQP 20 | ~4,000–6,000 Kbps | 3.6–5.4 GB |
+| Space-saving archive | AV1 (SVT-AV1) | 2,000–3,000 Kbps | 1.8–2.7 GB |
+
+HEVC at CQP 20 typically delivers better visual quality than H.264 at 15,000 Kbps CBR while occupying less disk space. AV1 pushes further — a 2-hour 1080p60 recording can sit under 3 GB while matching H.264 at 8,000+ Kbps. The tradeoff is encoding time: software AV1 (SVT-AV1) is slower than real-time on most systems unless you have a newer GPU with AV1 hardware encoding.
+
+## How Codec Choice Changes Your 2-Hour File Size
+
+If you're recording locally in OBS rather than archiving a stream, your codec matters far more than for live output. Here is how the major codecs compare at equivalent visual quality for a 2-hour 1080p60 session:
+
+- **H.264 (x264 medium, CQP 18–20):** roughly 12–18 GB — universal compatibility, every device plays it
+- **HEVC / H.265 (NVENC or x265, CQP 20):** roughly 5–9 GB — about 40–50% smaller than H.264 at the same quality
+- **AV1 (NVENC AV1 on RTX 40-series, CQ 28):** roughly 2.5–5 GB — best compression but requires modern hardware to encode and decode
+
+For most streamers, HEVC via NVENC is the sweet spot in 2026: nearly as fast as H.264 encoding, supported on every streaming platform for uploads, and cuts file sizes nearly in half. Check the [H.264 vs H.265 vs AV1 deep dive](/blog/h264-vs-h265-vs-av1/) for encoder-by-encoder quality comparisons.
+
+## OBS-Specific Recording Settings That Affect File Size
+
+### Rate Control Mode: CBR vs CQP
+
+When recording locally, avoid CBR (Constant Bitrate). CBR pads simple scenes with unnecessary data and still struggles on highly complex ones. Use **CQP** (Constant Quantizer Parameter) instead:
+
+- CQP 18: visually near-lossless, largest files
+- CQP 20–22: excellent quality, noticeably smaller files
+- CQP 24–26: good quality for archiving, very small files
+- CQP 28+: acceptable for podcasts/talking-head content only
+
+A 2-hour gaming session at HEVC CQP 20 via NVENC typically lands between 5–8 GB depending on scene complexity (fast-paced FPS games produce larger files than slow RPGs because there is more motion data to encode).
+
+### Container Format
+
+MKV is the safest container for recording in OBS. If OBS crashes mid-session, MKV files are recoverable; MP4 files are not. The file size is identical — MKV adds no overhead. After recording, use OBS's built-in Remux tool (File → Remux Recordings) to convert to MP4 for upload without re-encoding.
+
+Read the full [OBS recording settings guide](/blog/best-obs-bitrate-settings/) for the complete encoder configuration walkthrough.
+
+## Planning Your Disk Space
+
+If you stream or record regularly, it pays to calculate storage requirements before running out of space mid-session. Here is a practical planning guide for common setups:
+
+| Setup | Bitrate | Per Session (2h) | Per Month (20 sessions) |
+|---|---|---|---|
+| Twitch archive (6,000 Kbps) | 6,000 Kbps | 5.4 GB | 108 GB |
+| Local H.264 CQP 20 | ~12,000 Kbps avg | ~10.8 GB | ~216 GB |
+| Local HEVC CQP 20 | ~6,000 Kbps avg | ~5.4 GB | ~108 GB |
+| Local AV1 CQ 28 | ~3,000 Kbps avg | ~2.7 GB | ~54 GB |
+
+A 2 TB drive holds roughly 370 sessions at 5.4 GB each. At 20 sessions per month, that is 18 months of content before you need to archive or delete. The [Recording Time Calculator](/tools/recording-time-calculator/) lets you set your drive capacity and bitrate to get an exact session count.
+
+## Reducing File Size Without Losing Quality
+
+### Switch to a More Efficient Codec
+
+Moving from H.264 to HEVC cuts file sizes by roughly 40–50%. Moving from HEVC to AV1 cuts another 20–30%. If you have an RTX 4070 or newer, NVENC AV1 encoding is fast enough for real-time use at 1080p60 and produces excellent quality at bitrates that would look muddy with H.264.
+
+### Use CQP Instead of a Fixed High Bitrate
+
+Setting OBS to CBR 15,000 Kbps for local recording is overkill for most content and produces unnecessarily large files. Switching to CQP 20 with HEVC usually halves the file size while matching or exceeding that visual quality.
+
+### Post-Process With HandBrake
+
+If you have existing large archives, HandBrake can re-encode them with HEVC or AV1 at CRF 22–24 and typically reduces file sizes by 60–70% with minimal visible quality loss. This is especially useful for older H.264 archives recorded at high CBR bitrates.
+
+### Check Upload Time Before Transferring
+
+A 13.5 GB file at average US home upload speeds (50 Mbps) takes about 36 minutes to upload to YouTube or Google Drive. Use the [Upload Time Calculator](/tools/upload-time-calculator/) to plan transfers before they block your workflow.
+
+## Frequently Asked Questions
+
+### How many GB is a 2-hour Twitch VOD download?
+
+Twitch VODs are encoded at multiple quality levels for playback. The source-quality version of a 2-hour stream at 6,000 Kbps is about 5.4 GB. Lower quality tiers (720p, 480p) are significantly smaller. Twitch currently does not offer direct source-quality downloads to viewers, but streamers can export VODs to their Highlights section and download them via third-party tools at roughly that size.
+
+### Does recording at the same bitrate as streaming save a copy of the stream?
+
+Yes and no. In OBS's Advanced Output mode, you can set a separate recording bitrate from your stream bitrate. If you set both to 6,000 Kbps, the local recording file will be similar in size to the streamed data — but it is a separate encode written to disk, not a copy of the transmitted stream. The [OBS settings hub](/obs/) explains how to configure this dual-output setup.
+
+### Why is my recording file bigger than these estimates?
+
+The most common reason is CBR set too high (for example, CBR 15,000 Kbps on a mostly-static scene still writes a full 15,000 Kbps to disk). Another reason is lossless or near-lossless recording modes like "Indistinguishable Quality" in OBS Simple mode, which can produce files at 30,000–100,000+ Kbps. Switching to CQP rate control in Advanced mode gives you size-efficient output without the quality cost.
+
+### Should I record and stream at different bitrates?
+
+Always. Your stream bitrate is constrained by your upload speed and platform limits — typically 6,000–8,000 Kbps. Your local recording should use quality-based encoding (CQP) regardless of bitrate, letting the encoder use as much or as little data as the scene requires. This gives you a high-quality archive without inflating your stream bitrate. See the [CBR vs VBR explainer](/blog/cbr-vs-vbr-for-streaming/) for the theory behind why quality-based modes outperform fixed-bitrate for local recording.

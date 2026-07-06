@@ -1,0 +1,137 @@
+---
+slug: best-obs-settings-destiny-2
+title: "Best OBS Settings for Destiny 2 in 2026 (1080p 60fps)"
+description: "Optimal OBS settings for Destiny 2 streaming and recording at 1080p 60fps. Real bitrate numbers, encoder picks, and fixes for colorful particle effects pixelation."
+publishedAt: "2026-07-04"
+updatedAt: "2026-07-04"
+readTime: "9 min read"
+---
+
+For Destiny 2 at 1080p 60fps, use **6,000 Kbps CBR on Twitch** or **8,000–10,000 Kbps on YouTube**; for recording, CQP 18–20 with NVENC HEVC. Destiny 2 is one of the hardest games to encode cleanly because of its dense, overlapping particle effects — ability explosions, Super activations, and Void/Arc/Solar ability chains flood every frame with complex color data that low bitrates brutalize into a smeared mess. Getting the encoder and bitrate right makes the difference between a watchable stream and one where viewers can't tell a Nova Bomb from a loading screen.
+
+## Why Destiny 2 Is Hard to Stream
+
+Most games have calm periods between bursts of action. Destiny 2 barely does. Between the base visual complexity of environments like the Throne World or Neomuna, and abilities that layer transparent particle effects on top of enemies on top of destructible geometry — the encoder has to work extremely hard every single second of a raid, dungeon, or Trials match.
+
+The practical consequence: you need **more bitrate than you would for the same resolution in a slower game**. A 4,500 Kbps stream that looks acceptable for a JRPG will look terrible the moment a Shadebinder freezes a room full of Hive. Plan your settings around the worst-case scenario, not the quiet patrol sections.
+
+## Recommended Streaming Settings
+
+### Twitch
+
+Twitch caps most streamers at 6,000 Kbps. That is the number to aim for — do not stream Destiny 2 at anything lower than 5,500 Kbps if you want 1080p 60fps to hold up during ability spam. For platform-specific setup details, see the [Twitch streaming settings guide](/platforms/twitch/).
+
+| Setting | Recommended Value |
+|---|---|
+| Resolution | 1920x1080 |
+| Frame Rate | 60 fps |
+| Encoder | NVENC H.264 (RTX) or x264 Medium |
+| Rate Control | CBR |
+| Bitrate | 6,000 Kbps |
+| Keyframe Interval | 2 seconds |
+| Profile | High |
+| Audio Bitrate | 160 Kbps AAC |
+| Downscale Filter | Lanczos |
+
+If you are on an RTX 4000-series GPU, switch to **NVENC AV1** at 6,000 Kbps — AV1 extracts noticeably more quality from the same bitrate ceiling, which matters a lot in a game like Destiny 2 where you are constantly bumping against the encoding limit during particle-heavy sequences.
+
+### YouTube Live
+
+YouTube is a better platform for Destiny 2 streaming if your upload speed allows it, because the higher bitrate ceiling means particle effects and ability visuals hold up far better. See the [YouTube streaming guide](/platforms/youtube/) for full setup instructions.
+
+| Setting | Recommended Value |
+|---|---|
+| Resolution | 1920x1080 |
+| Frame Rate | 60 fps |
+| Encoder | NVENC H.264, HEVC, or AV1 |
+| Rate Control | CBR |
+| Bitrate | 8,000–10,000 Kbps |
+| Keyframe Interval | 2 seconds |
+| Profile | High |
+| Audio Bitrate | 192 Kbps AAC |
+
+At 10,000 Kbps on YouTube, Destiny 2's ability effects encode with far more detail. YouTube transcodes your stream anyway, so viewers on slower connections still get a good experience regardless of your source bitrate. Verify your connection can support this with the [bandwidth calculator](/tools/bandwidth-calculator/) — you need at least 13–14 Mbps upload headroom for a 10,000 Kbps stream with audio.
+
+### Kick
+
+Kick allows up to 8,000 Kbps, which puts it between Twitch and YouTube for Destiny 2. Use 7,500–8,000 Kbps at 1080p 60fps. Full platform details at the [Kick settings page](/platforms/kick/).
+
+## Encoder Choice: What Actually Matters for Destiny 2
+
+Particle effects and transparency are disproportionately expensive to encode. The encoder you choose determines how well the budget is spent on those expensive frames.
+
+**NVENC H.264 (RTX 20/30-series):** Solid choice for Twitch. Use the "P5 – Slow" or "P6 – Slower" quality preset. Do not use the default "Balanced" preset — it wastes bitrate.
+
+**NVENC H.264 / AV1 (RTX 40-series):** The RTX 4000-series NVENC is a significant jump in quality. At the same 6,000 Kbps Twitch limit, it handles particle-dense frames better than any previous generation. Prefer AV1 if your target platform supports it. For a full breakdown of encoder trade-offs, see the [OBS settings hub](/obs/).
+
+**x264 Medium or Slow:** Best quality at any given bitrate, but consumes CPU. If you have a dedicated streaming PC or a CPU with plenty of headroom (Ryzen 7 7800X3D / Core i9-14900K class), x264 Medium at 6,000 Kbps beats NVENC H.264 for complex scenes. Use "medium" — "slow" or "slower" often causes encoding lag on single-PC setups during raid content where both GPU and CPU are stressed.
+
+**AMD AMF H.264/HEVC:** Competitive on RDNA 3 (RX 7000-series). Use HEVC with Quality preset and CQP 20 for recording; for streaming, CBR 6,000–8,000 Kbps.
+
+## OBS Recording Settings for Destiny 2
+
+Recording locally removes the bitrate constraint entirely. This is where Destiny 2 visuals can look genuinely stunning.
+
+| Setting | Recommended Value |
+|---|---|
+| Container | MKV (remux to MP4 after) |
+| Encoder | NVENC HEVC or NVENC AV1 |
+| Rate Control | CQP |
+| CQP Value | 18 (quality) / 20 (space-saving) |
+| Quality Preset | P5 – Slow or P6 – Slower |
+| Resolution | 1920x1080 (or 2560x1440 if your monitor supports it) |
+| FPS | 60 |
+| Audio | 48 kHz, 192–320 Kbps AAC |
+
+At CQP 18 NVENC HEVC, a 1-hour Destiny 2 recording at 1080p 60fps typically runs **6–9 GB** — the high end of that range during raid content with constant particle effects. At 1440p 60fps, expect **10–16 GB per hour** for similarly hectic content. Use the [recording time calculator](/tools/recording-time-calculator/) to check how much footage fits on your drive before a long session.
+
+If you have an RTX 4000-series, **NVENC AV1 at CQP 20** produces files 30–40% smaller than HEVC at perceptually equivalent quality — an excellent option for keeping clip libraries manageable without sacrificing detail on ability visuals.
+
+## In-Game Settings That Affect Streaming Quality
+
+OBS settings alone are not enough — Destiny 2 has in-game options that directly impact how hard your encoder has to work.
+
+**Cap your framerate.** Set an in-game or RTSS framecap at 60fps if you are streaming at 60fps. Uncapped framerates cause GPU utilization spikes that can starve NVENC of encoding resources mid-frame. Even a brief spike to 200fps can cause a dropped frame in OBS.
+
+**Render Resolution.** Keep this at 100%. Streaming at a lower render resolution does not meaningfully reduce encoding complexity but does make the image look soft — you lose detail without gaining bitrate headroom.
+
+**High Dynamic Range.** Disable HDR in Destiny 2 when streaming unless your workflow explicitly handles HDR color grading. HDR output sent through OBS without proper tone mapping causes blown-out, washed-out looking streams — Destiny 2's colorful abilities look particularly bad in improperly handled HDR.
+
+**Motion Blur.** Turn it off. Motion blur adds temporal complexity that increases encoder bitrate requirements. With 60fps and good bitrate, you do not need it.
+
+## CBR vs VBR for Destiny 2 Streaming
+
+Always use **CBR (Constant Bitrate)** for live streaming — this is what every platform buffer model expects, and it avoids bitrate spikes that trigger dropped frames. Destiny 2 is specifically a case where VBR can fail badly: VBR allocates more bits to complex frames, which is logically correct, but the result is massive spikes during raids that can exceed your upload budget all at once. For a full explanation of the trade-offs, see the [CBR vs VBR for streaming guide](/blog/cbr-vs-vbr-for-streaming/).
+
+For **recording**, use CQP (Constant Quantization Parameter) — this is the recording equivalent of VBR and is correct here because you have no upload constraint.
+
+## Quick Bitrate Reference
+
+| Platform | Resolution | FPS | Bitrate | Notes |
+|---|---|---|---|---|
+| Twitch | 1080p | 60 | 6,000 Kbps | CBR, max for most users |
+| Twitch (AV1) | 1080p | 60 | 6,000 Kbps | RTX 4000+ only, better quality |
+| YouTube | 1080p | 60 | 8,000–10,000 Kbps | CBR, transcoded server-side |
+| Kick | 1080p | 60 | 7,500–8,000 Kbps | CBR |
+| Recording | 1080p | 60 | CQP 18–20 HEVC | ~6–9 GB/hr |
+| Recording | 1440p | 60 | CQP 18–20 HEVC | ~10–16 GB/hr |
+
+To estimate upload time after recording a Destiny 2 session, use the [upload time calculator](/tools/upload-time-calculator/) — a 9 GB clip at typical residential speeds takes 5–15 minutes depending on your ISP.
+
+## Frequently Asked Questions
+
+### What bitrate should I use for Destiny 2 on Twitch?
+
+Use **6,000 Kbps CBR** — this is Twitch's practical cap for non-partnered streamers and is the highest widely compatible bitrate. For Destiny 2 specifically, do not go below 5,500 Kbps at 1080p 60fps because the game's particle effects will look noticeably blocky during ability activations. If you have an RTX 4000-series GPU, use AV1 at 6,000 Kbps for better quality within the same limit.
+
+### Why does my Destiny 2 stream look pixelated during abilities?
+
+Destiny 2's ability effects — especially Arc, Void, and Strand Supers — create dense, rapidly-changing particle fields that require significantly more data to encode cleanly than static geometry. The fix is a combination of: increasing your bitrate to the platform maximum, switching to a higher-quality encoder preset (P5–P6 for NVENC, Medium for x264), and ensuring your in-game framerate is capped at exactly your OBS output framerate. Mismatched framerates are a common hidden cause of encoding artifacts during intense sequences.
+
+### Should I stream Destiny 2 at 1080p or 720p?
+
+Stream at **1080p 60fps** if your upload speed supports 6,000+ Kbps — Destiny 2's detailed environments and colorful effects genuinely benefit from the extra resolution. Drop to 900p 60fps (1600x900, scaled from 1080p) only if you have a borderline connection, as it provides a better quality-per-bit ratio than 720p while still looking clean in most scenes. Pure 720p 60fps at 4,000–5,000 Kbps is a last resort.
+
+### Does Destiny 2 need a special OBS scene setup?
+
+Beyond the encoder and bitrate settings covered above, no exotic scene setup is needed. One practical tip: add a **Color Correction filter** to your game capture source in OBS and reduce saturation by 5–10 points. Destiny 2 runs slightly oversaturated compared to most broadcast norms, and toning it down slightly avoids the chroma-heavy frames that cost extra bitrate. This is optional but noticeably helps in high-ability-density content like endgame raids.

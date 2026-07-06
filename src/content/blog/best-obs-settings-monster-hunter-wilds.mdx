@@ -1,0 +1,138 @@
+---
+slug: best-obs-settings-monster-hunter-wilds
+title: "Best OBS Settings for Monster Hunter Wilds (2026)"
+description: "Exact OBS settings for streaming Monster Hunter Wilds without tanking performance. NVENC encoder configs, bitrate, resolution, and per-platform recommendations."
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+readTime: "9 min read"
+---
+
+Monster Hunter Wilds is one of the most demanding games on PC in 2026 — a wide-open world full of dynamic weather, dense particle effects, and dozens of simultaneous AI actors. For streaming, use **NVENC H.264 or NVENC HEVC** at **6,000 Kbps CBR** for Twitch, or up to **12,000 Kbps** for YouTube, targeting 1080p 60fps. Keeping OBS off the CPU entirely is critical: the game will consume every thread you give it, and x264 encoding on top will crush your frame rate mid-hunt.
+
+## Why Monster Hunter Wilds Is Different to Stream
+
+Most games are either CPU-heavy or GPU-heavy. Wilds is both simultaneously. The open-world segments push GPU utilization above 95% on mid-range cards, while the complex NPC AI and physics strain the CPU — especially during multi-monster encounters or when the Sandtide rolls in. On a single-PC streaming setup, this leaves almost zero headroom for a software encoder.
+
+The solution is hardware encoding. NVIDIA's NVENC, AMD's AVC/HEVC via AMF, and Intel's Quick Sync all encode video using dedicated silicon that barely touches your game's frame budget. The quality gap between NVENC and x264 has also narrowed significantly with RTX 40-series hardware — P6/P7 presets on an RTX 4070 or better produce streams that are visually indistinguishable from x264 Medium at the same bitrate.
+
+## Recommended OBS Output Settings
+
+Open OBS → Settings → Output → set Output Mode to **Advanced**. This unlocks separate controls for the Streaming and Recording tabs with full encoder options.
+
+### Streaming Tab Settings
+
+| Setting | Recommended Value |
+|---|---|
+| Encoder | NVENC H.264 (NVIDIA) / H.264 AMF (AMD) / QuickSync H.264 (Intel) |
+| Rate Control | CBR |
+| Bitrate | 6,000 Kbps (Twitch/Kick) or 8,000–12,000 Kbps (YouTube) |
+| Keyframe Interval | 2 seconds |
+| Preset | P6 — Slower (NVENC) / Quality (AMF) |
+| Profile | High |
+| Psycho Visual Tuning | Enabled (NVENC) |
+| Max B-frames | 2 |
+
+**Keyframe interval must be 2 seconds** for Twitch and Kick — those platforms reject streams with irregular keyframes and seeking breaks for viewers. YouTube is more lenient, but 2 seconds is still best practice.
+
+### Recording Tab Settings (Simultaneous Recording)
+
+If you want a local archive while streaming, keep the recording encoder independent of the stream encoder. Most NVIDIA GPUs have two NVENC sessions available, so this works without performance cost:
+
+| Setting | Recommended Value |
+|---|---|
+| Encoder | NVENC HEVC |
+| Rate Control | CQP |
+| CQP Level | 18–20 |
+| Container | MKV (remux to MP4 after) |
+| Preset | P5 or P6 |
+
+HEVC at CQP 20 produces roughly 4–7 GB per hour at 1080p 60fps for action-heavy content like Wilds. Check how much recording time your drive can hold with the [Recording Time Calculator](/tools/recording-time-calculator/).
+
+## Video Settings (Canvas and Output Resolution)
+
+In OBS → Settings → Video:
+
+| Setting | Value |
+|---|---|
+| Base (Canvas) Resolution | Match your monitor (1920x1080 or 2560x1440) |
+| Output (Scaled) Resolution | 1920x1080 |
+| Downscale Filter | Lanczos (if scaling down from 1440p) |
+| FPS | 60 |
+
+If you game at 1440p, set the canvas to 2560x1440 and scale the output down to 1920x1080. Lanczos gives the sharpest downscale and makes foliage and fine monster details in Wilds look noticeably better than Bilinear at the same bitrate.
+
+Do not attempt to stream at 1440p on Twitch or Kick — both platforms cap at 1080p 60fps for most streamers, and the extra pixels only waste bitrate budget. YouTube supports 1440p well; if you stream there at 12,000–15,000 Kbps, streaming at native 1440p is worthwhile. See the full [YouTube platform settings guide](/platforms/youtube/) for specifics.
+
+## Bitrate by Platform and Quality Target
+
+Monster Hunter Wilds has high visual complexity: particle-heavy roars, mud physics, rain storms, and fast camera movement all stress the encoder harder than a typical shooter. Budget your bitrate accordingly — you need more than a slow-paced RPG at the same resolution.
+
+| Platform | Resolution | FPS | Recommended Bitrate |
+|---|---|---|---|
+| Twitch | 1080p | 60 | 6,000 Kbps |
+| Kick | 1080p | 60 | 6,000–8,000 Kbps |
+| YouTube Live | 1080p | 60 | 8,000–12,000 Kbps |
+| YouTube Live | 1440p | 60 | 12,000–18,000 Kbps |
+| Local recording | 1080p | 60 | CQP 18–20 (variable, ~20–60 Mbps) |
+
+Before going live, verify your upload speed can comfortably sustain your chosen bitrate. Your stream bitrate should not exceed 70-75% of your available upload. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm your connection can handle it.
+
+For a platform-by-platform breakdown of what Twitch accepts, see the [Twitch streaming settings guide](/platforms/twitch/).
+
+## NVENC Encoder Deep Dive
+
+NVENC preset naming changed with OBS 28+ and the new NVENC SDK. The old Fast/Medium/Slow presets became P1 through P7, where P7 is the slowest and highest quality. For gaming, the right balance is:
+
+- **P5 (Slow):** Good quality, near-zero GPU encoder load. Safe default.
+- **P6 (Slower):** Noticeably better quality than P5, still well within NVENC's capacity. Best choice for RTX 3070+.
+- **P7 (Slowest):** Marginal gain over P6, only worth it on RTX 4080/4090 or if you have headroom.
+
+Always enable **Psycho Visual Tuning** in NVENC settings. It instructs the encoder to preserve perceptual sharpness in textures — which matters a lot for Wilds' detailed monster designs and environmental detail. Keep **Max B-frames at 2**; setting it higher can introduce latency artifacts on some hardware.
+
+If you are on AMD, the AMF encoder's 'Quality' preset is the equivalent of NVENC P5-P6 in terms of performance vs. quality tradeoff. Intel Arc's Quick Sync has improved significantly in recent driver versions and is competitive with NVENC for H.264 at 6,000 Kbps.
+
+For a head-to-head quality comparison between hardware and software encoders, see the [NVENC vs x264 comparison](/blog/nvenc-vs-x264-streaming/).
+
+## In-Game Settings to Reduce Encoder Pressure
+
+OBS does not exist in a vacuum. Wilds' renderer directly determines how hard the encoder has to work. A few in-game changes can stabilize your stream quality without touching bitrate:
+
+- **Cap your in-game FPS to 60** (or 120 if you stream at 60 with OBS frame blending). Uncapped framerates waste GPU cycles on frames OBS never captures and increase frame time variance.
+- **Lower Volumetric Fog and Particle Quality one step** in Wilds' Display Settings. These settings are visually expensive for the encoder (high motion, high detail) and have a disproportionate impact on stream clarity compared to their visual benefit.
+- **Disable motion blur in-game.** Motion blur is expensive for the encoder and looks bad in streams due to double-blurring with the video codec.
+- **Set OBS process priority to 'Normal'**, not 'Above Normal'. Raising OBS priority can cause micro-stutters in Wilds since both processes compete for CPU time.
+
+## CBR vs VBR for Wilds
+
+Use **CBR (Constant Bitrate)** for streaming, not VBR. Streaming platforms expect a steady data rate; VBR can cause buffering on the viewer's end during the high-bitrate spikes that Wilds constantly generates. For a detailed explanation of why CBR is the right choice for live streaming, see our [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/).
+
+For local recording, flip this completely: CQP (quality-based variable bitrate) on NVENC is the right call. Wilds' quiet pre-hunt lobby scenes will encode at a low bitrate, and the system will automatically ramp up when a Balahara ambush fills the screen with water effects.
+
+## Audio Settings
+
+| Setting | Value |
+|---|---|
+| Sample Rate | 48 kHz |
+| Audio Bitrate | 160 Kbps |
+| Codec | AAC |
+| Channels | Stereo |
+
+160 Kbps AAC is sufficient for game audio and voice. If you play music on stream, bump to 192–320 Kbps. Audio bitrate adds on top of video bitrate — factor it into your upload budget.
+
+## Frequently Asked Questions
+
+### Should I use x264 instead of NVENC for Monster Hunter Wilds?
+
+No. On a single-PC setup running Wilds, x264 at Medium or Slow preset will compete directly with the game for CPU cores, causing dropped frames and stutters — especially during monster encounters with heavy physics. NVENC on any RTX card from the 3060 upward produces stream quality that is effectively identical to x264 Medium at 6,000 Kbps. The only scenario where x264 makes sense is a dedicated two-PC streaming setup where the encoding machine runs nothing but OBS.
+
+### Why does my stream look blurry during the Sandtide weather events?
+
+Sandtide and similar weather effects generate enormous amounts of particle motion and fog, which are extremely difficult for video codecs to encode cleanly at constrained bitrates. At 6,000 Kbps on Twitch, some softness is unavoidable — it is a bitrate limitation, not an OBS configuration error. You can reduce the visual impact by enabling Psycho Visual Tuning in NVENC settings, using the P6 preset instead of P5, and making sure your keyframe interval is exactly 2 seconds. Raising bitrate on YouTube to 10,000–12,000 Kbps resolves most of the blurring.
+
+### What resolution should I stream Monster Hunter Wilds?
+
+1080p 60fps is the standard recommendation for Twitch and Kick. The game's environmental detail benefits more from higher frame rate than higher resolution at typical streaming bitrates, because 60fps captures weapon animations and monster movements cleanly. If you stream on YouTube and have 15,000+ Kbps upload, 1440p 60fps is worth the upgrade. Use the [Streaming Bitrate Calculator](/) to see how different resolution and bitrate combinations affect file size and required bandwidth.
+
+### How do I stop OBS from dropping frames in Monster Hunter Wilds?
+
+Dropped frames in OBS during Wilds are almost always either a network issue (bitrate exceeding upload capacity) or an encoder overload issue (CPU x264 preset too slow, or GPU at 100% with no headroom for NVENC). First, check the OBS Stats panel: if 'Encoding lag' is non-zero, switch to a lighter NVENC preset or lower your output resolution. If 'Network' drops are showing, reduce your stream bitrate by 500–1,000 Kbps increments. Capping Wilds' framerate at exactly 60fps via the in-game limiter (not GPU driver) also stabilizes NVENC's workload significantly.

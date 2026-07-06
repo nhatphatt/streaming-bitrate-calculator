@@ -1,0 +1,137 @@
+---
+slug: best-kick-streaming-settings
+title: "Best Kick Streaming Settings for 1080p60 (2026)"
+description: "Exact Kick streaming settings for OBS: bitrate, encoder, resolution, FPS, and audio. Kick allows up to 8000 kbps — here is how to use all of it."
+publishedAt: "2026-06-18"
+updatedAt: "2026-06-18"
+readTime: "9 min read"
+---
+
+Kick supports video bitrates up to **8,000 kbps** for all streamers — no partner status required — and accepts 1080p60 without the artificial caps Twitch enforces on most accounts. For a single-PC setup with a mid-range GPU, the optimal starting point is **6,000–7,000 kbps CBR at 1080p 60fps using NVENC H.264**. If you have a clean upload connection above 15 Mbps, pushing to 8,000 kbps at the same resolution produces a noticeably sharper image during fast motion. Use the [Streaming Bitrate & Storage Calculator](/) to verify file size and bandwidth before going live.
+
+## Why Kick's Limits Actually Matter
+
+Most Twitch streamers are stuck at 6,000 kbps unless they hold partner status, and even then, there is no guarantee of transcoding for every viewer. Kick removed that bottleneck. Every streamer on Kick can broadcast at up to 8,000 kbps, and the platform currently delivers that bitrate directly to viewers without compulsory downscaling.
+
+That gap — 2,000 kbps of extra headroom — is meaningful. At 1080p 60fps, the difference between 6,000 kbps and 8,000 kbps H.264 is visible in fast-paced games. Shadows, particle effects, and rapid camera movement that would cause compression artifacts at 6,000 kbps stay clean at 8,000 kbps. Check the [Kick platform settings page](/platforms/kick/) for the current ingest server list and any updated limits.
+
+## Recommended Kick Streaming Settings (OBS)
+
+The table below covers the most common setups. For each tier, the bitrate assumes a stable upload with at least 25% headroom above the stream bitrate. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm your connection can handle your chosen bitrate.
+
+| Setup | Resolution | FPS | Video Bitrate | Audio Bitrate | Encoder |
+|---|---|---|---|---|---|
+| High-end (RTX 4070+) | 1080p | 60 | 7,000–8,000 kbps | 160 kbps | NVENC H.264 or HEVC |
+| Mid-range (RTX 3060 / GTX 1660) | 1080p | 60 | 6,000 kbps | 160 kbps | NVENC H.264 |
+| CPU-only / dedicated stream PC | 1080p | 60 | 6,000–7,000 kbps | 160 kbps | x264 Medium |
+| Limited upload (< 15 Mbps) | 720p | 60 | 4,500–5,000 kbps | 128 kbps | NVENC H.264 |
+| Low-motion content (IRL, chatting) | 1080p | 30 | 4,000–5,000 kbps | 160 kbps | NVENC H.264 |
+
+Always use **CBR (Constant Bitrate)** for streaming. Kick's RTMP ingest expects a steady data rate, and VBR spikes can cause dropped frames or encoder overload. Read the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) for the full explanation.
+
+## OBS Output Settings Step by Step
+
+### Output Mode
+
+In OBS, go to **Settings → Output** and switch Output Mode to **Advanced**. This unlocks the full encoder configuration and lets you separate stream and recording settings. Simple mode limits you to preset options and hides critical controls.
+
+### Video Bitrate and Rate Control
+
+- **Rate Control:** CBR
+- **Bitrate:** 6,000–8,000 kbps (see table above)
+- **Keyframe Interval:** 2 seconds (Kick requires this; do not leave it at 0)
+- **Profile:** High
+- **Tune:** None (or zerolatency if you have consistent frame pacing issues)
+
+A keyframe interval of 2 seconds is mandatory for reliable RTMP delivery. Setting it to 0 (auto) can result in irregular keyframes that cause viewer seek issues and stream instability.
+
+### Encoder Selection
+
+**NVENC H.264 (New)** is the right choice for the vast majority of single-PC streamers. It runs entirely on the GPU, adds essentially zero CPU overhead, and produces quality that rivals x264 Medium at equivalent bitrates — especially on RTX 30 and 40-series cards.
+
+- **Preset:** P5 (Slow) for best quality, P4 (Medium) if you notice performance dips
+- **Profile:** High
+- **Look-ahead:** On (improves bitrate distribution)
+- **Psycho Visual Tuning:** On
+- **Max B-frames:** 2
+
+If you have an RTX 40-series card, **NVENC HEVC** at 6,000–7,000 kbps matches the visual quality of H.264 at 8,000 kbps. Kick accepts HEVC streams. That said, H.264 remains the safer default because some viewers on older hardware or devices may have trouble playing HEVC in browsers. Compare codec tradeoffs at the [video codec comparison page](/compare/).
+
+**x264** is the right choice only if you have a dedicated streaming PC (a separate machine that does nothing but encode and stream). Use the Medium preset; Slow and Slower are only viable if you have 12+ cores dedicated to encoding.
+
+### Resolution and FPS
+
+- **Base (Canvas) Resolution:** Match your monitor — typically 1920×1080 or 2560×1440
+- **Output (Scaled) Resolution:** 1920×1080 for most Kick streams
+- **Downscale Filter:** Lanczos (sharpest for downscaling from 1440p)
+- **Common FPS Values:** 60 (or 59.94 if your game outputs NTSC-style frames)
+
+If you game at 1440p, downscale to 1080p in OBS for streaming while you can record locally at 1440p using a separate recording profile. The [OBS settings hub](/obs/) covers how to set up simultaneous stream and record at different resolutions.
+
+## Audio Settings for Kick
+
+| Setting | Value |
+|---|---|
+| Sample Rate | 48 kHz |
+| Channels | Stereo |
+| Audio Encoder | AAC |
+| Audio Bitrate | 160 kbps |
+
+Use 160 kbps AAC as the baseline. If you play music on stream or do music-focused content, bump this to 320 kbps — Kick does not penalize higher audio bitrates. Note that audio bitrate stacks on top of your video bitrate: 8,000 kbps video + 160 kbps audio = 8,160 kbps total egress from your machine.
+
+## Bandwidth Requirements
+
+Your upload speed needs to comfortably exceed your total stream bitrate. The rule: leave at least 25–30% of upload headroom for network overhead, background traffic, and burst variation.
+
+| Target Bitrate | Minimum Upload Needed | Recommended Upload |
+|---|---|---|
+| 4,500 kbps | 6 Mbps | 8 Mbps |
+| 6,000 kbps | 8 Mbps | 12 Mbps |
+| 7,000 kbps | 9.5 Mbps | 15 Mbps |
+| 8,000 kbps | 11 Mbps | 18 Mbps |
+
+Test your upload speed multiple times at different hours — peak evening hours often show 20–40% lower upload throughput than midday. If you consistently get dropped frames at 8,000 kbps, drop to 6,000–6,500 kbps rather than fighting the connection. See [best internet speed for streaming](/blog/best-internet-speed-for-streaming/) for a deeper look at connection requirements.
+
+## Kick vs Twitch: Settings Comparison
+
+The practical difference in settings between Kick and Twitch comes down to the bitrate ceiling and transcoding reliability.
+
+| Factor | Kick | Twitch (Non-Partner) |
+|---|---|---|
+| Max video bitrate | 8,000 kbps | 6,000 kbps |
+| 1080p 60fps available | All streamers | All streamers |
+| Transcoding (lower qualities for viewers) | Not guaranteed for all | Not guaranteed for non-partners |
+| HEVC support | Yes | No |
+| AV1 support | No (as of 2026) | Yes (partners) |
+| Recommended encoder | NVENC H.264 or HEVC | NVENC H.264 |
+| Keyframe interval | 2 seconds | 2 seconds |
+
+The transcoding caveat matters: Kick does not guarantee that all viewers will receive a lower-bitrate version of your stream. If a viewer only has a 5 Mbps download connection and you are streaming at 8,000 kbps, they may buffer. For maximum viewer reach, 6,000 kbps is still a reasonable choice even on Kick. Compare the full platform breakdown at [Twitch settings](/platforms/twitch/) vs [Kick settings](/platforms/kick/).
+
+## Common Problems and Fixes
+
+**Dropped frames / encoding overload:** Reduce encoder preset from P5 to P4. If drops continue, lower bitrate by 1,000 kbps increments. Check OBS Stats → Dropped Frames (both network and encoding columns) to isolate the cause.
+
+**Stream looks blurry during fast motion:** Your bitrate is too low for your resolution and FPS. Move from 6,000 kbps to 7,000–8,000 kbps, or switch from 1080p to 720p at the same bitrate — 720p 60fps at 6,000 kbps looks sharper than 1080p 60fps at 6,000 kbps in most games.
+
+**Keyframe errors / stream instability:** Confirm keyframe interval is set to exactly 2 in OBS (Settings → Output → Keyframe Interval). Do not leave it at 0 (auto).
+
+**High CPU usage with NVENC:** This usually means another OBS plugin or browser source is consuming CPU, not the encoder. NVENC H.264 itself consumes less than 1% CPU on a modern system. Check your scene sources for browser sources set to refresh too frequently.
+
+## Frequently Asked Questions
+
+### What is the best bitrate for Kick streaming?
+
+For 1080p 60fps on Kick, use **6,000–8,000 kbps CBR**. The ideal value depends on your upload speed: if you have 15 Mbps or more of reliable upload, 7,000–8,000 kbps gives the cleanest image during fast motion. If your upload is under 12 Mbps, stick with 6,000 kbps to maintain stability. Kick officially supports up to 8,000 kbps for all streamers, with no partner requirement.
+
+### Does Kick support 1080p 60fps for all streamers?
+
+Yes. Unlike Twitch, which has historically restricted 1080p 60fps to partners on some plans, Kick allows all streamers to broadcast at 1080p 60fps from day one. Set OBS output resolution to 1920×1080, FPS to 60, and bitrate to 6,000 kbps or higher for the best results.
+
+### Should I use NVENC or x264 for Kick?
+
+Use **NVENC H.264** if you have an NVIDIA GTX 1660 Super, RTX 20-series, or newer. NVENC runs on the GPU, freeing your CPU for the game and keeping frame rates stable. Use **x264** only on a dedicated streaming PC where the machine's sole job is encoding. x264 Medium beats NVENC quality at the same bitrate, but it requires significant CPU headroom that most single-PC setups do not have.
+
+### Can I stream at 8000 kbps on Kick without being a partner?
+
+Yes, Kick's 8,000 kbps limit applies to all accounts regardless of partner or affiliate status. This is one of the platform's main competitive advantages over Twitch. Just verify your upload speed can sustain 8,000 kbps plus overhead — you need at least 11–12 Mbps of stable upload to stream reliably at that bitrate. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to check your headroom.

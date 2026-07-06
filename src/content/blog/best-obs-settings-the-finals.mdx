@@ -1,0 +1,136 @@
+---
+slug: best-obs-settings-the-finals
+title: "Best OBS Settings for THE FINALS (2026 Guide)"
+description: "Optimal OBS streaming and recording settings for THE FINALS. Stop compression artifacts in destructible scenes with the right bitrate, encoder, and resolution."
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+readTime: "8 min read"
+---
+
+For THE FINALS, use at least **8,000 Kbps** when streaming at 1080p 60fps — and push to 10,000–12,000 Kbps on YouTube or Kick if your upload allows it. The game's physics-driven destruction engine generates extreme scene complexity that murders low bitrates, producing mud where walls should be crumbling concrete. Your encoder preset and rate control mode matter just as much as the raw number.
+
+THE FINALS is one of the most demanding games to stream cleanly. Every round features buildings collapsing, smoke billowing through holes, debris flying, fire spreading across surfaces, and six players in constant motion — all simultaneously. A bitrate that looks fine in Warzone or Fortnite will fall apart completely in THE FINALS. This guide gives you the exact settings to handle it.
+
+## Why THE FINALS Destroys Standard Bitrate Recommendations
+
+Most OBS guides recommend 6,000 Kbps for 1080p 60fps. That works for games with moderate motion. THE FINALS is not that game.
+
+The destruction system means your stream encoder is constantly trying to compress scenes that have no clean reference frames to work from. A wall exploding produces dozens of unique polygonal chunks, each with its own texture and motion vector — all in the span of a few frames. H.264 and HEVC both rely on temporal compression (storing only the changes between frames), and when every pixel is changing simultaneously, bitrate spikes hard.
+
+The result: compression artifacts appear as smeared blocks exactly when the action is most important. Boosting bitrate gives the encoder enough headroom to handle those peaks without degrading the image.
+
+## Recommended OBS Settings for THE FINALS
+
+### Streaming Settings
+
+Use **Advanced Output Mode** in OBS (Settings → Output → Output Mode: Advanced). The Streaming tab is where these settings live.
+
+| Setting | Recommended Value |
+|---|---|
+| Encoder | NVENC H.264 New or NVENC HEVC (RTX GPU) |
+| Rate Control | CBR |
+| Bitrate | 8,000–10,000 Kbps (Twitch) / 10,000–12,000 Kbps (YouTube/Kick) |
+| Keyframe Interval | 2 seconds |
+| Preset | P5 (Slow) or P6 (Slower) |
+| Profile | High |
+| Max B-frames | 2 |
+| Resolution | 1920x1080 |
+| FPS | 60 |
+| Audio Bitrate | 160 Kbps AAC |
+
+For Twitch specifically, the 8,000 Kbps cap is the partner limit — non-partners are capped at 6,000 Kbps, which will show artifacts in heavy destruction scenes. Even at 6,000 Kbps, use NVENC with P5 preset and CBR to squeeze every bit of quality you can. Check the [Twitch settings page](/platforms/twitch/) for platform-specific limits.
+
+### Recording Settings (Simultaneous or Standalone)
+
+Recording has no bitrate ceiling from the platform, so push higher. Use the Recording tab in Advanced Output Mode.
+
+| Setting | Recommended Value |
+|---|---|
+| Encoder | NVENC HEVC or NVENC AV1 (RTX 40-series) |
+| Rate Control | CQP |
+| CQP Value | 18–20 |
+| Preset | P5 or P6 |
+| Container | MKV (remux to MP4 after) |
+| Resolution | 1440p or 1080p |
+| FPS | 60 |
+
+CQP lets the encoder allocate more data during complex destruction sequences and less during calm lobby moments — exactly what THE FINALS needs. A 1-hour session at 1080p 60fps HEVC CQP 18 runs approximately 5–8 GB. At 1440p CQP 18, expect 10–15 GB per hour. Use the [recording time calculator](/tools/recording-time-calculator/) to plan drive space before a long session.
+
+## Encoder Choice: NVENC vs x264 vs AV1
+
+### NVENC H.264 (Best for Most Streamers)
+
+NVENC on RTX 20-series and newer, with P5 or P6 preset, is the practical choice for single-PC setups. It has near-zero CPU overhead, and the P5/P6 preset produces quality that rivals x264 medium. At 8,000–10,000 Kbps with P5, THE FINALS streams look excellent on Twitch and YouTube.
+
+### NVENC AV1 (Best Quality per Bitrate, RTX 40-series Only)
+
+AV1 on RTX 40-series cards delivers roughly 30–40% better quality at the same bitrate compared to H.264. At 8,000 Kbps with AV1, you get image quality closer to 10,000–12,000 Kbps H.264 — a significant advantage for destruction-heavy scenes. Twitch and YouTube both accept AV1 streams. Read the [codec comparison](/compare/) to understand the tradeoffs.
+
+### x264 (CPU Encoder)
+
+On a dual-PC streaming setup with a dedicated streaming PC, x264 at "medium" or "slow" preset edges out NVENC in quality per bitrate. On a single PC, stick with NVENC — x264 competes with your game for CPU time, which causes frame drops in a CPU-demanding game like THE FINALS.
+
+## Platform-Specific Bitrate Guidance
+
+Different platforms have different ceilings. Match your settings to where you stream.
+
+| Platform | Max Bitrate | Recommended for THE FINALS | Transcoding |
+|---|---|---|---|
+| Twitch (non-partner) | 6,000 Kbps | 6,000 Kbps CBR, NVENC P5 | Partners only |
+| Twitch (partner) | 8,000 Kbps | 8,000 Kbps CBR, NVENC P5 | Yes |
+| YouTube Live | ~51,000 Kbps | 10,000–12,000 Kbps | Yes, all users |
+| Kick | 8,000 Kbps | 8,000 Kbps CBR, NVENC P5 | Limited |
+
+YouTube's universal transcoding means all viewers get an appropriate quality tier regardless of your source bitrate — and a higher source bitrate means every tier looks better. If you stream to YouTube, 12,000 Kbps is easy to justify for THE FINALS. See the [YouTube settings page](/platforms/youtube/) for the full breakdown.
+
+Before locking in any bitrate, verify your upload headroom with the [bandwidth calculator](/tools/bandwidth-calculator/). Your stream bitrate should not exceed 75–80% of your measured upload speed. A 15 Mbps upload line can sustain 12,000 Kbps comfortably.
+
+## In-Game and OBS Video Settings
+
+### OBS Video Settings
+
+Under Settings → Video:
+
+- **Base (Canvas) Resolution:** Match your monitor — 1920x1080 or 2560x1440
+- **Output (Scaled) Resolution:** 1920x1080 for streaming (downscale from 1440p if needed)
+- **Downscale Filter:** Lanczos (sharpest result for downscaling)
+- **Common FPS Values:** 60
+
+### THE FINALS In-Game Graphics
+
+THE FINALS is GPU-bound in most scenarios, but the destruction physics use CPU threads. A few settings help keep your stream clean:
+
+- **Motion Blur:** Off. Motion blur makes the encoder's job harder and obscures what your viewers are watching.
+- **Ray Tracing:** Off or Low if streaming on a single PC. RT increases GPU load significantly, which can cause encoder queue drops at high bitrates.
+- **Particle Detail:** Medium. Ultra particle detail in destruction sequences multiplies scene complexity.
+- **Anti-Aliasing:** TAA. DLSS or FSR output can occasionally confuse the encoder in fast-motion scenes due to temporal artifacts stacking with video compression.
+
+## Diagnosing Artifacts in Your VODs
+
+If you review your VODs and see blocky smearing during explosions or building collapses, work through this checklist:
+
+- **Increase bitrate by 1,500–2,000 Kbps** — this is the most common fix
+- **Switch from VBR to CBR** — CBR provides a consistent data floor during fast motion
+- **Move to a slower NVENC preset** (P5 → P6) — slower presets analyze more reference frames
+- **Check for dropped encoder frames** in OBS Stats (View → Stats) — encoder drops mean your GPU or CPU can't keep up; lower game settings before raising encoder quality
+- **Verify your keyframe interval is exactly 2 seconds** — some platforms require this; mismatched keyframes can cause periodic decode artifacts
+
+For a deeper explanation of CBR versus VBR tradeoffs, the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) covers exactly when each mode helps.
+
+## Frequently Asked Questions
+
+### What bitrate should I use for THE FINALS on Twitch at 1080p 60fps?
+
+Use 6,000 Kbps if you're a non-partner — that is the platform cap. If you have partner status, push to 8,000 Kbps and use NVENC P5 or P6 preset with CBR rate control. Dropping to 720p 60fps at 6,000 Kbps can actually look cleaner than 1080p at the same bitrate if your NVENC quality is limited.
+
+### Is NVENC or x264 better for streaming THE FINALS?
+
+On a single PC, NVENC is better. THE FINALS uses substantial CPU resources for physics and destruction simulation, and running x264 at a quality preset that competes with NVENC would cause frame drops. Use NVENC H.264 P5 or, if you have an RTX 40-series card, NVENC AV1 for the best quality per bitrate at the same CPU cost.
+
+### Why does my stream look blurry specifically during building collapses?
+
+Building collapses generate extreme motion complexity — dozens of simultaneous objects moving with unique trajectories. The encoder runs out of bitrate headroom and falls back to heavy lossy compression in those frames. The fix is either a higher bitrate, a slower encoder preset (P5 or P6), or both. Switching from VBR to CBR also helps by guaranteeing a data floor during those peaks rather than letting the encoder pull back.
+
+### Can I stream and record simultaneously in OBS for THE FINALS?
+
+Yes — use Advanced Output Mode and configure separate Stream and Recording tabs. Stream at 8,000–10,000 Kbps CBR H.264 for the platform, and record simultaneously at CQP 18–20 HEVC or AV1 for a high-quality local copy. With an RTX card, both encoders run on the same NVENC hardware simultaneously without meaningfully impacting game performance. Check the [OBS settings hub](/obs/) for the full dual-output workflow.

@@ -1,0 +1,145 @@
+---
+slug: vp9-vs-av1-comparison
+title: "VP9 vs AV1 Codec Comparison: Which Is Better? (2026)"
+description: "VP9 vs AV1 codec comparison: efficiency, encode speed, YouTube usage, and real bitrate numbers to help you choose the right codec for streaming and uploads."
+publishedAt: "2026-07-04"
+updatedAt: "2026-07-04"
+readTime: "8 min read"
+---
+
+AV1 delivers roughly **30-50% better compression than VP9** at the same visual quality, but encodes 10-50x slower in software — making VP9 still the dominant codec for real-time streaming while AV1 takes over for uploads and VOD. YouTube uses VP9 for most live streams and AV1 for high-quality uploaded videos. Understanding exactly where each codec fits will help you pick the right one for your workflow without wasting bandwidth or encode time.
+
+## What Are VP9 and AV1?
+
+Both VP9 and AV1 are **royalty-free, open-source video codecs** developed as alternatives to the HEVC/H.265 licensing ecosystem. VP9 was created by Google and released in 2013. AV1 was developed by the Alliance for Open Media (AOMedia) — a coalition including Google, Mozilla, Netflix, Amazon, Apple, and Microsoft — and finalized in 2018.
+
+Neither codec requires licensing fees, which is why they dominate web video, YouTube, and browser-based streaming. Compare this with HEVC (H.265), which carries patent royalties and has fragmented hardware support. For a full breakdown of all four codecs including H.264, see our [video codec comparison](/compare/).
+
+## Compression Efficiency: The Core Difference
+
+AV1 is unambiguously the more efficient codec. At the same quality target (VMAF score ~93), typical real-world bitrate savings look like this:
+
+| Resolution | VP9 bitrate | AV1 bitrate | AV1 savings |
+|---|---|---|---|
+| 1080p 30fps | ~2,500 kbps | ~1,600 kbps | ~36% |
+| 1080p 60fps | ~4,500 kbps | ~2,900 kbps | ~36% |
+| 1440p 60fps | ~8,000 kbps | ~5,000 kbps | ~38% |
+| 4K 30fps | ~14,000 kbps | ~8,500 kbps | ~39% |
+| 4K 60fps | ~25,000 kbps | ~15,000 kbps | ~40% |
+
+These numbers represent software encoding at equivalent quality settings (libaom-av1 vs libvpx-vp9 at comparable quality targets). Hardware encoders (NVENC AV1 on RTX 40-series, Intel Arc) produce somewhat less aggressive savings — typically 25-35% over VP9 — but encode in real time.
+
+For context on how bitrate affects file size and upload times, use the [Streaming Bitrate Calculator](/) and [Upload Time Calculator](/tools/upload-time-calculator/).
+
+## Encode Speed: Where VP9 Still Wins
+
+The efficiency advantage of AV1 comes at a steep computational cost in software:
+
+| Codec | Encoder | Relative encode speed | Real-time 1080p60 capable? |
+|---|---|---|---|
+| VP9 | libvpx-vp9 | Baseline | Yes (quality 4-6) |
+| AV1 | libaom-av1 (quality 4) | ~20x slower than VP9 | No |
+| AV1 | SVT-AV1 (preset 6) | ~3-5x slower than VP9 | Near real-time |
+| AV1 | SVT-AV1 (preset 9-10) | ~1.5x slower than VP9 | Yes |
+| AV1 | NVENC AV1 (RTX 4070+) | Hardware accelerated | Yes |
+| AV1 | Intel Arc QSV AV1 | Hardware accelerated | Yes |
+
+The libaom-av1 reference encoder at its best quality settings is essentially unusable for real-time encoding — a single 1080p60 stream can take 10-30x real time on a modern CPU. SVT-AV1, developed by Intel and Netflix, dramatically improved this, and at preset 6-8 it achieves near-real-time 1080p60 with strong quality.
+
+**For live streaming**, hardware AV1 encoders on NVIDIA RTX 40-series and Intel Arc GPUs now make real-time AV1 streaming genuinely viable. Twitch, YouTube Live, and Kick accept AV1 streams from these encoders. For OBS settings to configure hardware AV1 encoding, see the [OBS settings hub](/obs/).
+
+## YouTube's Codec Strategy
+
+YouTube is the largest VP9 and AV1 deployment in the world, and its behavior is instructive:
+
+**VP9 on YouTube:**
+- Introduced around 2014-2015
+- Used for live streaming and lower-resolution playback
+- Default delivery codec for most desktop browsers via adaptive bitrate (DASH)
+- Still handles the majority of YouTube's streaming traffic in 2026
+
+**AV1 on YouTube:**
+- Rolled out for VOD uploads starting around 2018-2020
+- YouTube re-encodes uploaded videos to AV1 for 1080p and above on modern browsers
+- Enabled by default for Chrome, Firefox, Edge, and Android
+- Saves YouTube significant CDN bandwidth — at YouTube's scale, 35% bitrate savings equals massive cost reduction
+
+**What this means for creators:** When you upload to YouTube, the platform re-encodes your source file. Whether you upload H.264, VP9, or AV1 source material, YouTube will produce its own AV1 and VP9 delivery versions. Your priority as a creator is uploading the **highest quality source**, not a specific codec. Check your [YouTube platform settings](/platforms/youtube/) for upload recommendations.
+
+## Browser and Platform Support
+
+| Platform | VP9 | AV1 |
+|---|---|---|
+| Chrome (desktop) | Yes (since 2014) | Yes (since 2018) |
+| Firefox | Yes | Yes (since 2019) |
+| Edge | Yes | Yes |
+| Safari | Partial (macOS Big Sur+) | Yes (macOS Monterey+ / iOS 16+) |
+| Android Chrome | Yes | Yes |
+| iOS Safari | Partial | Yes (iOS 16+) |
+| Twitch | Yes | Yes (hardware encoders) |
+| YouTube Live | Yes | Yes |
+| Kick | Yes | Limited |
+| Netflix | VP9 limited | Yes (primary delivery codec) |
+
+Safari was notably late to both codecs. AV1 support landed in Safari in 2021 (macOS Monterey) and iOS 16 (2022), meaning the Apple ecosystem gap is largely closed as of 2026.
+
+## File Size and Storage: AV1 Advantage at Scale
+
+For creators storing or distributing large video libraries, AV1's compression advantage compounds quickly. Estimated storage at 1080p 60fps (VMAF ~93 quality):
+
+| Duration | VP9 (~4,500 kbps) | AV1 (~2,900 kbps) | AV1 savings |
+|---|---|---|---|
+| 1 hour | ~2.0 GB | ~1.3 GB | ~0.7 GB |
+| 10 hours | ~20.3 GB | ~13.1 GB | ~7.2 GB |
+| 100 hours | ~203 GB | ~131 GB | ~72 GB |
+
+Use the [Recording Time Calculator](/tools/recording-time-calculator/) to see how many hours fit on your drive at specific bitrates, or the [file size calculator](/size/) for per-resolution breakdowns.
+
+## When to Use VP9 vs AV1
+
+### Use VP9 When:
+- **Live streaming in OBS without a hardware AV1 encoder** — VP9 is still your best royalty-free option for CPU encoding in real time
+- **Maximum compatibility is required** — VP9 has broader legacy device support
+- **Low-latency requirements** — VP9 encoders generally have lower latency than AV1 encoders at comparable quality
+- **You're targeting platforms that don't yet support AV1 ingest**
+
+### Use AV1 When:
+- **Uploading to YouTube, Netflix, or any platform that accepts AV1 source** — better source quality for the platform's transcoder
+- **Distributing VOD content where file size or CDN bandwidth matters**
+- **You have an RTX 40-series or Intel Arc GPU** — hardware AV1 is now fast enough for live streaming
+- **Archiving content for long-term storage** — smaller files, same quality
+
+### The Practical Default in 2026
+
+For most streamers using OBS with a recent NVIDIA or Intel GPU: **use hardware AV1 for recordings and uploads, VP9 or H.264 for live streaming if your platform ingest is unreliable with AV1.** If you are streaming to YouTube Live with hardware AV1 and seeing good results, there is no reason to switch back to VP9.
+
+For a broader comparison including H.264 and HEVC, see [H.264 vs H.265 vs AV1](/blog/h264-vs-h265-vs-av1/) and our full [codec comparison tool](/compare/).
+
+## VP9 vs AV1 vs H.264: Quick Reference
+
+| Codec | Release | Royalty-free | Encode speed | Compression | Best use |
+|---|---|---|---|---|---|
+| H.264 | 2003 | No | Fastest | Baseline | Live streaming, max compat |
+| VP9 | 2013 | Yes | Medium | ~30% better than H.264 | Web video, YouTube Live |
+| HEVC (H.265) | 2013 | No | Slow | ~40% better than H.264 | 4K playback, Apple |
+| AV1 | 2018 | Yes | Slow (SW) / Fast (HW) | ~50% better than H.264 | VOD, uploads, modern streaming |
+
+For checking whether your upload speed supports any of these codecs at your target bitrate, use the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+
+## Frequently Asked Questions
+
+### Is AV1 better than VP9 for YouTube uploads?
+
+**Yes, AV1 source files give YouTube's transcoder more quality to work with**, and YouTube will produce better output versions as a result. That said, YouTube re-encodes everything regardless of what you upload, so the difference in final viewer quality between a high-bitrate H.264 upload and a high-bitrate AV1 upload is small. AV1 source material most benefits very large files where upload time is the bottleneck — a 35% smaller AV1 file uploads 35% faster. Use the [Upload Time Calculator](/tools/upload-time-calculator/) to see the time difference for your connection speed.
+
+### Can I live stream with AV1 in OBS?
+
+**Yes, if you have an RTX 40-series GPU or an Intel Arc GPU.** Both support hardware AV1 encoding fast enough for real-time 1080p60 or 4K30 streaming. In OBS, select 'AV1' under the NVENC or Intel QSV encoder and set the rate control to CBR for streaming. Software AV1 encoding (libaom-av1, SVT-AV1) is generally too slow for live streaming unless you use SVT-AV1 at preset 9-10 with quality compromises. For full OBS encoder settings, see the [OBS settings hub](/obs/).
+
+### Does VP9 still have a future given AV1 exists?
+
+**VP9 is not going away soon.** It has massive installed base support, is still the default delivery format for much of YouTube's traffic, and is more practical for real-time encoding on mid-range hardware. AV1 is clearly the future direction, but VP9 will remain relevant for live streaming workflows and legacy device support through the late 2020s. Think of the VP9-to-AV1 transition as similar to the H.264-to-HEVC transition — years of parallel deployment rather than an overnight switch.
+
+### What is the difference between AV1 hardware and software encoding quality?
+
+**Hardware AV1 encoders (NVENC, QSV) are faster but produce slightly lower quality than the best software encoders at the same bitrate.** At comparable speed settings, SVT-AV1 at preset 4-6 generally outperforms NVENC AV1 in compression efficiency by 10-15%. However, hardware encoders are 10-50x faster, making them the only practical choice for real-time streaming. For recordings and exports where you have time to encode, SVT-AV1 at preset 4-6 gives the best quality. For streaming, NVENC AV1 or Intel QSV AV1 is the right tool. Pair either with the [Streaming Bitrate Calculator](/) to find your target bitrate.

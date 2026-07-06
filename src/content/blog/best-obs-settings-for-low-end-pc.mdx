@@ -1,0 +1,173 @@
+---
+slug: best-obs-settings-for-low-end-pc
+title: "Best OBS Settings for a Low-End PC (2026 Guide)"
+description: "Cut CPU/GPU load in OBS on weak hardware. Exact settings for 720p streaming and recording: x264 veryfast, NVENC, downscale filters, and bitrate numbers."
+publishedAt: "2026-06-26"
+updatedAt: "2026-06-26"
+readTime: "9 min read"
+---
+
+Running OBS on a low-end PC is absolutely doable — but only if you set it up correctly. Stream at **720p 60fps using x264 veryfast at 3,500 Kbps** (or NVENC if your GPU supports it), with a Bilinear downscale filter and Process Priority set to Normal. These changes alone cut CPU usage by 40–60% compared to OBS defaults, and the quality difference is negligible on Twitch or Kick where transcoding handles the rest.
+
+The goal is simple: stop OBS from fighting your game for CPU/GPU resources. Every setting below is chosen to reduce encoder overhead while keeping your stream watchable.
+
+## Why Low-End PCs Struggle With OBS
+
+OBS defaults are designed for mid-range hardware. Out of the box, it sets the x264 preset to "veryfast," canvas to 1920x1080, and frame rate to 60fps — a combination that hammers a weak CPU. If your system has fewer than 6 CPU threads, less than 8 GB RAM, or a GPU below GTX 1060 / RX 580, you will hit encoding lag without tuning.
+
+The three biggest CPU killers in OBS are:
+- **Canvas resolution** — encoding 1080p costs roughly 2.5x more than 720p
+- **x264 preset** — going from "veryfast" to "fast" nearly doubles CPU load
+- **Frame rate** — 60fps costs about 80% more than 30fps on the encoder
+
+Fix these first, then fine-tune everything else.
+
+## Encoder Choice: x264 veryfast vs NVENC
+
+This is the most important decision for low-end hardware.
+
+**x264 veryfast** is for CPU-only setups (Intel HD/UHD, Ryzen APUs, no discrete GPU). The "veryfast" preset uses roughly 50% less CPU than "medium" with only a small quality penalty — at 720p and Twitch's 6,000 Kbps cap, the difference is invisible to viewers.
+
+**NVENC H.264** is for anyone with a dedicated NVIDIA GPU (GTX 950 or newer). NVENC offloads encoding entirely to the GPU's dedicated encoder chip, freeing your CPU completely. Even a GTX 1050 has a hardware encoder that runs NVENC without taxing the GPU's shader cores — gaming performance impact is under 2%.
+
+**AMD AMF** works the same way for RX 400-series and newer AMD cards. Choose H.264 (AVC) — HEVC on low-end AMD cards can produce artifacts.
+
+**Intel QSV** is available on Intel Core CPUs with integrated graphics (6th gen+). Quality is below x264 veryfast but the CPU savings are massive on budget laptops.
+
+| Your Hardware | Best Encoder | Why |
+|---|---|---|
+| No GPU / APU only | x264 veryfast | Only option; use superfast if CPU still maxes |
+| GTX 950 to GTX 1060 | NVENC H.264 | Frees CPU fully, acceptable quality |
+| GTX 1650 / RTX 30-series+ | NVENC H.264 or HEVC | HEVC cuts file size; NVENC quality is excellent |
+| RX 470–RX 580 / RX 6000 | AMF H.264 | Hardware encode, no CPU overhead |
+| Intel iGPU (no dGPU) | QSV or x264 veryfast | QSV for pure CPU savings |
+
+For more detail on how these codecs compare in quality, see the [video codec comparison](/compare/) or the [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/).
+
+## Resolution: 720p Is the Right Call
+
+Drop your output resolution to **1280x720**. This is not a compromise — it is the correct setting for low-end hardware. Here is why:
+
+- Encoding 720p costs roughly 60% less CPU than 1080p
+- Twitch provides transcoding to most streamers; viewers on mobile or slow connections select 480p anyway
+- At 3,500–5,000 Kbps, 720p looks sharper than 1080p at the same bitrate because you are cramming fewer pixels with the same data budget
+- Kick and YouTube also transcode, so your 720p source gets served at multiple quality levels
+
+Set the **canvas (base) resolution** to your monitor's native resolution (e.g., 1920x1080) and the **output (scaled) resolution** to 1280x720. OBS scales the capture down before encoding, which is correct — you preserve the full game capture and only pay encoding cost at 720p.
+
+## Downscale Filter: Bilinear Over Lanczos
+
+In Settings → Video, the downscale filter controls how OBS resizes your canvas to the output resolution. Options are:
+
+- **Bilinear** — fastest, lowest CPU cost, slightly softer image
+- **Bicubic** — moderate cost, sharper edges
+- **Lanczos** — sharpest, but significantly more CPU usage
+
+On a low-end PC, use **Bilinear**. The quality difference between Bilinear and Lanczos at 720p streaming is marginal, especially after the stream is re-encoded by Twitch or YouTube. Lanczos is worth it for recording to local disk, not for live streaming on constrained hardware.
+
+## Complete OBS Settings for Low-End PC
+
+Open OBS → Settings and apply these values exactly.
+
+### Video Settings
+
+| Setting | Value |
+|---|---|
+| Base (Canvas) Resolution | 1920x1080 (your monitor) |
+| Output (Scaled) Resolution | 1280x720 |
+| Downscale Filter | Bilinear |
+| Common FPS Value | 30 (or 60 if GPU encodes) |
+
+Start at 30fps. If you are using NVENC or AMF, 60fps adds almost no CPU cost and looks better. If you are on x264, stick to 30fps — the encoder load at 60fps is brutal on weak CPUs.
+
+### Output (Streaming) — Simple Mode
+
+| Setting | Value |
+|---|---|
+| Video Bitrate | 3,000–4,000 Kbps |
+| Encoder | x264 (or Hardware if available) |
+| Audio Bitrate | 128 Kbps |
+
+For x264, type **veryfast** in the encoder preset field. If OBS still causes stutters, drop to **superfast** — quality takes a small hit but stability is more important.
+
+For NVENC, set Quality to "Performance" preset and Max Quality mode off. This reduces GPU shader load.
+
+### Output (Streaming) — Advanced Mode (Recommended)
+
+Switch to Advanced mode (Settings → Output → Output Mode: Advanced) for full control.
+
+| Setting | x264 Value | NVENC Value |
+|---|---|---|
+| Encoder | x264 | NVENC H.264 |
+| Rate Control | CBR | CBR |
+| Bitrate | 3,500 Kbps | 4,000 Kbps |
+| Keyframe Interval | 2 sec | 2 sec |
+| Preset | veryfast | Performance |
+| Profile | main | main |
+| Tune | zerolatency | N/A |
+
+The **zerolatency** tune for x264 reduces buffering in the encoder pipeline — important on slow CPUs that fall behind in real time.
+
+For platform-specific bitrate guidance, check the [Twitch settings page](/platforms/twitch/) or [YouTube settings page](/platforms/youtube/). You can also verify your upload speed can sustain these bitrates with the [bandwidth calculator](/tools/bandwidth-calculator/).
+
+## General / Advanced Settings That Reduce Load
+
+These settings live outside Output but meaningfully reduce CPU usage:
+
+- **Process Priority:** Settings → Advanced → Process Priority → **Normal** (not High or Above Normal — this can cause audio glitches and scheduling issues)
+- **Disable Preview:** Right-click the preview canvas → Disable Preview when streaming. The live preview costs extra GPU cycles.
+- **Scene Collections:** Keep scenes minimal. Every source (game capture, webcam, overlays) adds encoding overhead. Cut webcam if you are struggling.
+- **Game Capture vs Display Capture:** Always use **Game Capture** (not Display Capture). Game Capture hooks the game directly and costs less CPU.
+- **Hardware Decode:** Settings → Advanced → Video → enable hardware decode for video file sources if you use them.
+
+## Bitrate Reference Table for Low-End Streaming
+
+| Resolution | FPS | Encoder | Recommended Bitrate | Platform Fit |
+|---|---|---|---|---|
+| 720p | 30 | x264 veryfast | 2,500–3,500 Kbps | Twitch, Kick, YouTube |
+| 720p | 60 | x264 veryfast | 3,500–4,500 Kbps | Twitch, Kick |
+| 720p | 60 | NVENC H.264 | 4,000–5,000 Kbps | Twitch, Kick, YouTube |
+| 480p | 30 | x264 superfast | 1,500–2,500 Kbps | Fallback for very slow CPUs |
+
+Use the [streaming bitrate and storage calculator](/) to estimate exactly how much data your session will consume, or the [recording time calculator](/tools/recording-time-calculator/) if you are also recording locally.
+
+## Recording on a Low-End PC
+
+Recording while streaming is the hardest ask for weak hardware. If you must do both:
+
+- Set the Recording encoder separately (Advanced output mode → Recording tab)
+- Use **NVENC HEVC CQP 23–26** for recording (GPU only, no extra CPU cost)
+- Record at 720p matching your stream output — no point recording at a higher res you cannot encode in real time
+- If you only have x264, do not record while streaming — you will drop frames on the stream
+
+For a full walkthrough of recording settings, see the [OBS recording settings guide](/blog/best-obs-bitrate-settings/).
+
+## What to Do If OBS Still Drops Frames
+
+**Encoding lag** (red indicator, "Encoding overloaded" warning) means your CPU or GPU cannot keep up:
+
+1. Drop x264 preset to **superfast**, then **ultrafast** as a last resort
+2. Lower FPS from 60 to 30
+3. Lower output resolution from 720p to 640x360 temporarily
+4. Close background apps (Chrome alone can consume 10–20% CPU on a weak machine)
+5. Disable Discord video, hardware acceleration in browsers, and any screen recorders running in parallel
+
+**Network drops** (yellow indicator) are separate — lower your bitrate by 500 Kbps increments. See the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) if you are unsure which rate control mode handles unstable connections better.
+
+## Frequently Asked Questions
+
+### Can I stream 1080p on a low-end PC?
+
+Not reliably with x264. Encoding 1080p at x264 veryfast still requires 4–6 CPU cores running at ~60% load just for OBS. On a dual-core or quad-core CPU below 3.5 GHz, you will see constant encoding lag. If you have NVENC (GTX 1060 or better), 1080p 30fps is possible since the GPU handles encoding — but 720p still produces a sharper image at the same bitrate.
+
+### Is x264 veryfast good enough quality for Twitch?
+
+Yes, at 720p and 3,500–4,500 Kbps it is. The "veryfast" preset uses fewer CPU cycles by doing a simpler motion search, which means slightly less compression efficiency — you need about 10–15% more bitrate to match "fast" quality. At 720p streaming bitrates, this gap is invisible. Twitch also re-encodes your stream, which masks minor encoder inefficiencies.
+
+### Should I use 30fps or 60fps on a weak CPU?
+
+Use 30fps if you are on x264. The encoder processes twice as many frames per second at 60fps, roughly doubling CPU load for the encoding step. At 30fps with x264 veryfast, most budget CPUs (Intel Core i5-4th gen, Ryzen 3 3200G) can stream stably. Switch to 60fps only after confirming CPU usage stays below 80% with a test stream.
+
+### Does lowering OBS canvas resolution hurt quality?
+
+No — set the canvas to your monitor resolution and scale the output down to 720p. Do not change the canvas resolution itself. If you set the canvas to 720p directly, OBS captures the game at 720p, which can cause mouse cursor issues and forces some games to render at lower resolution. Always downscale from a native-res canvas to a smaller output resolution.

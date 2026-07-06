@@ -1,0 +1,146 @@
+---
+slug: dual-pc-streaming-setup-guide
+title: "Dual PC Streaming Setup Guide (2026): Is It Worth It?"
+description: "Complete dual PC streaming setup guide for 2026. Learn how to connect a gaming PC and streaming PC via capture card or NDI, with bitrate and hardware tips."
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+readTime: "10 min read"
+---
+
+A dual PC streaming setup uses a dedicated gaming PC to run your game at full frame rate while a separate streaming PC handles all encoding and broadcasting. The result: zero performance hit to your game, plus the freedom to run x264 at slow or medium preset — a quality level simply not possible when encoding on the same machine that's rendering your game. For streamers targeting 1080p 60fps at 6,000–8,000 Kbps on Twitch or 12,000 Kbps on YouTube, this setup genuinely changes stream quality.
+
+## What You Actually Need
+
+The core hardware list is shorter than most guides suggest:
+
+- **Gaming PC** — your existing rig, any GPU. No encoder workload at all.
+- **Streaming PC** — a mid-range CPU machine. A used workstation with an Intel i7-9700K or Ryzen 7 3700X is enough for x264 Medium at 1080p 60fps.
+- **Transfer method** — either a capture card (HDMI) or NDI over your local network.
+- **Two monitors or a KVM switch** — so you can control both machines.
+- **A router with gigabit LAN** — required for NDI; strongly recommended regardless.
+
+The streaming PC does NOT need a gaming GPU. An old GTX 1660 or any recent integrated graphics is fine. Its job is CPU encoding, audio mixing, overlays, and uploading — not rendering 3D frames.
+
+## HDMI Capture Card vs NDI: Which Should You Use?
+
+This is the single most debated choice in dual PC setups. Both work well, but they suit different situations.
+
+| Feature | HDMI Capture Card | NDI (Network) |
+|---|---|---|
+| Hardware cost | $80–$300 for card | Free (software only) |
+| Video quality | Up to 4K 60fps capture | Up to 4K 60fps (NDI HX3) |
+| Latency (monitoring) | ~1–2 frames | ~100–200 ms |
+| CPU load on gaming PC | None | ~5–15% (NDI encoding) |
+| Cable required | HDMI cable between PCs | Just your LAN cable |
+| Stability | Very high | High on wired gigabit |
+| Best for | Dedicated studio, consoles | Flexible home setups |
+
+**Use a capture card** when your two PCs are next to each other, you want zero CPU impact on the gaming PC, or you're also streaming console gameplay. The [Elgato HD60 X](https://www.elgato.com) (~$180) and AVerMedia Live Gamer 4K 2.1 (~$300) are the top picks in 2026.
+
+**Use NDI** when your PCs are in different rooms, you want to avoid running cables, or you already own both machines with nothing extra to buy. Install the free NDI Tools from Vizrt, enable the NDI output in OBS on the gaming PC, then add an NDI source in OBS on the streaming PC.
+
+For capture card latency on the monitor side: always use your GPU's direct display output for gameplay — the capture card output to the streaming PC is a copy, not the signal you're playing on. Your gaming PC still drives its own monitor at full speed.
+
+## Setting Up the Capture Card Path
+
+**On the gaming PC:**
+- Connect your gaming PC's GPU HDMI output to the capture card **input port**
+- Connect the capture card **passthrough/output port** to your gaming monitor
+- In OBS (gaming PC side), you can optionally run a local recording or nothing at all — OBS isn't even needed on the gaming PC with a capture card
+
+**On the streaming PC:**
+- Install OBS and your capture card drivers
+- Add a **Video Capture Device** source in OBS, select your capture card
+- Set the resolution to match your gaming PC output (typically 1920x1080 or 2560x1440)
+- Configure encoder: use **x264 at Medium or Slow preset** — this is the point of having a dedicated streaming PC
+
+Bitrate settings remain the same as any stream. Check the [Twitch bitrate guide](/blog/twitch-streaming-bitrate-guide/) or [OBS bitrate settings](/blog/best-obs-bitrate-settings/) for platform-specific targets.
+
+## Setting Up NDI
+
+**On the gaming PC:**
+1. Install OBS and the obs-ndi plugin (bundled with NDI Tools from Vizrt)
+2. In OBS, go to Tools > NDI Output Settings, enable Main Output
+3. Name the source something clear like "Gaming-PC"
+
+**On the streaming PC:**
+1. Install OBS and the same obs-ndi plugin
+2. Add a new source: NDI Source
+3. Select your gaming PC's NDI output from the dropdown
+4. The video and audio stream over your LAN automatically
+
+NDI over standard gigabit requires roughly 125 Mbps of bandwidth for 1080p 60fps uncompressed. NDI HX (compressed) drops this to 8–20 Mbps at minor quality cost. Both work fine on any modern gigabit home router — just make sure both PCs are on **wired ethernet**, not Wi-Fi.
+
+## Encoder Settings on the Streaming PC
+
+The streaming PC's entire purpose is running a high-quality software encoder without affecting game performance. These are the recommended OBS settings:
+
+| Target | Encoder | Preset | Bitrate | Profile |
+|---|---|---|---|---|
+| Twitch 1080p 60fps | x264 | Medium | 6,000 Kbps | High |
+| YouTube 1080p 60fps | x264 | Medium | 10,000–12,000 Kbps | High |
+| Kick 1080p 60fps | x264 | Medium | 8,000 Kbps | High |
+| Twitch 1080p 60fps (GPU) | NVENC H.264 | P5 (Slow) | 6,000 Kbps | High |
+| YouTube 1080p 60fps (GPU) | NVENC AV1 | P5 | 8,000 Kbps | High |
+
+Rate control should be **CBR** for live streaming on all platforms. Read the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) if you want to understand why CBR is the standard for live streams.
+
+If the streaming PC has an RTX 4060 or newer, NVENC AV1 is worth using for YouTube — it delivers noticeably better quality than x264 H.264 at the same bitrate. See [NVENC vs x264](/blog/nvenc-vs-x264-streaming/) for a full encoder comparison.
+
+Use the [Streaming Bitrate Calculator](/) to confirm the right bitrate for your resolution, frame rate, and target platform before going live.
+
+## Minimum Streaming PC Specs
+
+The streaming PC needs enough CPU headroom to encode at a quality preset without dropping frames. These are tested 2026 baselines:
+
+| CPU | x264 Preset Possible | 1080p 60fps? |
+|---|---|---|
+| Intel Core i5-12400 | Medium | Yes |
+| Intel Core i7-9700K | Medium-Slow | Yes |
+| Ryzen 7 3700X | Medium-Slow | Yes |
+| Ryzen 9 5900X | Slow-Veryslow | Yes |
+| Intel i3-10100 | Fast only | Yes (limited quality) |
+
+You need at least an i5-level processor from the last four years for a comfortable Medium preset. The i3-10100 can do it but leaves little headroom — stick to the Fast preset and accept slightly lower quality than Medium.
+
+RAM: 16 GB is enough. Storage: any SSD for the OS. No gaming-grade GPU required — integrated graphics handle OBS overlays and browser sources fine.
+
+## Audio Routing in a Dual PC Setup
+
+Audio is where most dual PC setups trip up. The options:
+
+**Via capture card audio:** If your gaming PC's audio outputs through HDMI, it's carried automatically in the HDMI signal to the capture card. In OBS on the streaming PC, the capture card device includes the audio — just set the audio track in your Video Capture Device source.
+
+**Via NDI:** NDI carries audio natively. No extra steps needed if you configure OBS on the gaming PC to capture desktop audio before sending it over NDI.
+
+**Via 3.5mm cable:** Run a 3.5mm cable from the gaming PC's audio out to a USB audio interface on the streaming PC. This is the lowest-latency method but requires physical cabling and sync calibration in OBS.
+
+**Microphone:** Your mic should be connected to the streaming PC. This way your voice is captured locally, at full quality, with no compression from the capture card or NDI transport.
+
+## Is a Dual PC Setup Worth It in 2026?
+
+**Yes, if:** You already own two capable PCs and want maximum stream quality. You stream 1080p 60fps and notice encoding artifacts on a single PC. You play GPU-intensive games and see FPS drops when OBS is running.
+
+**No, if:** Your gaming PC has an RTX 4070 or newer — NVENC on modern RTX cards is genuinely excellent and most viewers can't tell the difference from x264 Medium. Single-PC streaming on an RTX 4070 at 6,000 Kbps is a fair trade against the complexity of a dual PC setup.
+
+**Maybe, if:** You're on an RTX 3060 or older and stream high-motion games at 1080p 60fps. Run the [Bandwidth Calculator](/tools/bandwidth-calculator/) to confirm your upload speed first — connection quality matters more than encoder quality at most bitrate levels.
+
+Check your upload speed handles the stream safely, then verify file sizes with the [Recording Time Calculator](/tools/recording-time-calculator/) if you also record locally on the streaming PC.
+
+## Frequently Asked Questions
+
+### Do both PCs need to be in the same room?
+
+No. NDI works over any wired gigabit LAN regardless of room layout. A capture card requires an HDMI cable run between the PCs, so room proximity matters there — HDMI cables max out at practical lengths around 5–10 meters before signal boosters are needed. NDI with a wired switch is the better option for different rooms.
+
+### Can the streaming PC also handle local recordings?
+
+Yes, and this is one of the biggest benefits of the setup. While the gaming PC runs uncompressed or lightly compressed gameplay, the streaming PC can simultaneously record the broadcast stream locally as a backup VOD. Use OBS's multiple output feature — one output for the live stream and one for a local MKV recording. Check the [OBS recording settings guide](/obs/) for the right local recording quality settings.
+
+### What capture card resolution should I capture at?
+
+Match your gaming PC's display output resolution. If you game at 1080p, capture at 1080p. If you game at 1440p on a high-res monitor, you can capture at 1440p and have OBS downscale to 1080p for the stream output — this actually improves stream quality slightly due to the downscale filtering. Avoid capturing at 4K if you're streaming 1080p; it wastes CPU cycles on the streaming PC for minimal benefit.
+
+### Does NDI affect game performance?
+
+NDI requires the gaming PC to encode a compressed video stream before sending it over the network. NDI HX uses roughly 5–10% CPU on a modern 8-core processor and negligible GPU. Standard NDI (uncompressed) is heavier — around 10–15% CPU — but shifts that CPU work onto network bandwidth instead of encode time. On an 8-core gaming CPU like a Ryzen 5 7600X, NDI HX has no measurable FPS impact in GPU-bound games.

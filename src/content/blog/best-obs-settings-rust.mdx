@@ -1,0 +1,146 @@
+---
+slug: best-obs-settings-rust
+title: "Best OBS Settings for Rust in 2026 (NVENC Guide)"
+description: "Best OBS settings for streaming Rust in 2026. Exact bitrate, NVENC encoder config, and CPU-saving tips for survival game streams on Twitch and YouTube."
+publishedAt: "2026-06-19"
+updatedAt: "2026-06-19"
+readTime: "8 min read"
+---
+
+For streaming Rust, use NVENC with CBR at 6,000 Kbps for Twitch or 10,000–12,000 Kbps for YouTube, at 1080p 60fps. Rust is one of the most CPU-demanding survival games available — its server tick logic, player simulation, and dense base geometry all fight for CPU cores simultaneously, which means x264 software encoding is almost always a bad idea. NVENC offloads encoding to your GPU's dedicated hardware encoder, leaving your CPU free to run the game.
+
+## Why Rust Destroys CPU Encoders
+
+Rust's architecture is unusually hard on the CPU. The Unity engine handles all physics, item state, and player interaction server-side even in the client process. Large bases with hundreds of building blocks generate significant CPU load just to render. Add 100+ players on a popular server, active raids with rockets and explosive charges, and constant inventory management — and a typical Ryzen 5 or Core i5 is already at 80–90% CPU usage before OBS gets a single core.
+
+Using x264 at "faster" preset requires roughly 4–8 CPU threads just for encoding. On a 6-core CPU this causes immediate frame drops in OBS and stuttering in-game. NVENC solves this entirely — it uses a dedicated encoder chip on any RTX or GTX 16-series card and consumes virtually no CPU resources.
+
+The other compression challenge: Rust's environments are procedurally varied, with dense forest areas, rock formations, and cluttered player bases all creating high-detail, constantly-moving scenes. This means Rust sits in the **very high compression complexity** tier, similar to Warzone or PUBG. You need every bitrate kilobit working efficiently.
+
+## Recommended OBS Settings by Platform
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC (New) P4 |
+| Twitch | 720p | 60 | 4,500 Kbps | NVENC (New) P5 |
+| YouTube Live | 1080p | 60 | 10,000–12,000 Kbps | NVENC (New) P4 |
+| YouTube Live | 1440p | 60 | 15,000–18,000 Kbps | NVENC (New) P4 |
+| Kick | 1080p | 60 | 7,000–8,000 Kbps | NVENC (New) P4 |
+
+Check your upload speed before going live with the [Bandwidth Calculator](/tools/bandwidth-calculator/). For YouTube uploads of Rust VODs, use the [Upload Time Calculator](/tools/upload-time-calculator/) to estimate how long they will take to process.
+
+## NVENC Encoder Settings (Full Configuration)
+
+Open OBS, go to Settings > Output > Streaming. Switch output mode to **Advanced**, then configure:
+
+- **Encoder:** NVIDIA NVENC H.264 (new)
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) / 10,000 Kbps (YouTube)
+- **Keyframe Interval:** 2 seconds (required by Twitch; YouTube accepts 0 = auto)
+- **Preset:** P4 (Slow) — this is the ideal balance for Rust
+- **Tuning:** High Quality
+- **Profile:** High
+- **Look-ahead:** Off (adds latency, not worth it for live streaming)
+- **Psycho Visual Tuning:** On
+- **GPU:** 0 (use primary GPU)
+- **Max B-frames:** 2
+
+**Why P4 and not P5 or P6?** Rust's heavy GPU load during raids and large base rendering means higher NVENC presets can occasionally stall the encoder if the GPU is already near capacity. P4 is the sweet spot: significantly better quality than P1–P3 with minimal risk of encoding stalls. On an RTX 4070 or better, P5 is safe. On older cards (GTX 1080, RTX 2060), stick to P4.
+
+For AV1 encoding on RTX 40-series cards, see the [codec comparison guide](/compare/) to understand whether switching to NVENC AV1 is worth it for your setup.
+
+## Video Settings in OBS
+
+- **Base (Canvas) Resolution:** 1920x1080
+- **Output (Scaled) Resolution:** 1920x1080 (or 1280x720 if CPU/GPU limited)
+- **Downscale Filter:** Lanczos (Sharpened scaling, 32 samples) — Rust's textures benefit from the extra sharpness
+- **Common FPS Values:** 60
+
+If you are on a mid-range GPU and notice frame drops during raids, drop the output resolution to 1280x720 rather than lowering the encoder preset. 720p at 60fps with a clean encode looks far better on stream than 1080p with constant artifacts.
+
+Use the [Recording Time Calculator](/tools/recording-time-calculator/) to figure out how long your drive can hold Rust session recordings before filling up.
+
+## In-Game Rust Settings for Streaming
+
+Rust's graphics settings have a bigger-than-usual impact on stream quality because of how dense the game's scenes can become. These settings reduce GPU load without tanking the visual appearance on stream:
+
+- **Graphics Quality:** 5–6 (not max — max adds detail invisible on a 1080p stream)
+- **Shadow Quality:** 2 — shadows are very expensive in Rust and barely visible during raids
+- **SSAO:** Off — screen-space ambient occlusion has almost no impact on stream viewers but costs GPU cycles
+- **Anisotropic Filtering:** 4x or 8x (16x is not visible on stream)
+- **Motion Blur:** Off — motion blur adds noise that the encoder has to encode, wasting bitrate
+- **Depth of Field:** Off
+- **Water Quality:** 2
+- **Grass Displacement:** Off
+- **Tree Quality:** 50–75 — reduces draw calls significantly near bases in forests
+- **Max Gibs:** 500 (default 1000 — rocket raids spawn enormous numbers of gibs that tank FPS)
+
+**Max Gibs is the single most impactful setting for raid streams.** A full rocket raid on a large base can spawn thousands of debris objects at default settings, dropping FPS from 100 to 30 in seconds. Setting it to 500 or lower keeps the frame rate stable during the moments that matter most to your audience.
+
+## CPU Optimization Outside OBS
+
+Even with NVENC doing the encoding, Rust can still stress your CPU enough to cause stutters that appear in the stream capture. These tweaks help:
+
+- Set Rust's process priority to **Normal** (not High — giving Rust high priority starves OBS's capture thread)
+- Set OBS process priority to **Above Normal** in OBS Settings > Advanced
+- Disable background programs: Discord hardware acceleration, browser tabs, and any overlay apps (Overwolf especially) consume CPU time that Rust needs
+- Use **Game Capture** in OBS, not Window Capture or Display Capture — Game Capture uses GPU memory directly and has zero CPU overhead
+- Disable Windows HAGS (Hardware-Accelerated GPU Scheduling) if you experience stuttering — it helps in some games but causes frame-pacing issues in Rust for some users
+
+## x264 Settings (If You Must)
+
+If you do not have an NVIDIA GPU and must use x264, the settings are narrow:
+
+- **Preset:** Superfast (Rust will not run well with anything slower)
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch)
+- **Profile:** High
+- **Tune:** None (zerolatency reduces quality too much)
+
+At superfast preset, x264 quality is noticeably lower than NVENC P4. The stream will have more macro-blocking during action scenes. This is the ceiling for most 6-core CPUs running Rust. AMD GPU users should use AMF (AMD encoder) with Quality preset instead — it performs similarly to NVENC on modern RDNA cards.
+
+For a detailed breakdown of encoder quality comparisons, read the [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/).
+
+## Recording Settings for Rust Clips
+
+For local recording (not streaming), use higher quality settings:
+
+- **Encoder:** NVENC H.264 (new) or NVENC HEVC if storage is a concern
+- **Rate Control:** CQP
+- **CQ Level:** 18–22 (18 = near lossless, 22 = good balance)
+- **Preset:** P5 or P6 (you can afford slower presets for recording since there is no latency constraint)
+
+At CQP 20 with NVENC H.264, Rust recordings run approximately 8–14 GB per hour at 1080p 60fps depending on scene complexity — dense forests and active raid bases are on the high end. For HEVC/H.265 at the same quality level, expect roughly 40–50% smaller files. Check the [file size calculator](/size/) to plan your storage before a long session.
+
+See the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) for a full explanation of when to use CQP over CBR.
+
+## Quick Checklist Before Going Live
+
+- NVENC (New) selected as encoder, not x264 or old NVENC
+- CBR rate control, not VBR
+- Keyframe interval set to 2 seconds
+- Game Capture source, not Display Capture
+- Max Gibs set to 500 or lower in Rust settings
+- Motion Blur off in Rust
+- OBS process priority set to Above Normal
+- Upload speed confirmed to be at least 8,000 Kbps for Twitch (6,000 Kbps stream + headroom)
+
+For Twitch-specific configuration, the [Twitch platform guide](/platforms/twitch/) has the latest ingest server recommendations. If you stream to Kick, check the [Kick platform guide](/platforms/kick/) for their current bitrate limits.
+
+## Frequently Asked Questions
+
+### Does Rust need NVENC or can I use x264?
+
+NVENC is strongly recommended for Rust. The game consumes 80–95% of a typical 6 to 8-core CPU at 60fps, leaving almost nothing for software encoding. x264 at faster or superfast preset is technically possible but produces noticeably lower quality streams and often causes in-game stutters. Any NVIDIA GTX 1060 or newer supports NVENC at no CPU cost.
+
+### What bitrate should I use for streaming Rust on Twitch?
+
+Use 6,000 Kbps at 1080p 60fps — the maximum Twitch allows for non-partner streamers. Rust has very high scene complexity due to base geometry, foliage, and explosion effects, so you want every kilobit available. If you are on a slower connection, 4,500 Kbps at 720p 60fps is the next best option and still looks clean.
+
+### Why does my Rust stream look blocky during raids?
+
+Rocket raids and large explosions create massive amounts of debris, fire, and smoke in a single frame. This particle complexity overwhelms the encoder at any fixed bitrate. The best fixes are: set Max Gibs to 500 in Rust settings, turn off Motion Blur, and make sure you are using NVENC P4 (not P1 or P2). If you are on Twitch, there is an absolute bitrate ceiling of 6,000 Kbps that cannot be raised, so some artifacting during extreme raids is unavoidable.
+
+### Is 1080p or 720p better for Rust streaming on a budget PC?
+
+720p 60fps with NVENC P5 at 4,500 Kbps consistently outperforms 1080p with a degraded encoder setting or insufficient bitrate. Downscaling to 720p reduces the amount of data the encoder needs to process, resulting in crisper details and fewer compression artifacts during combat and raiding. Use Lanczos downscaling in OBS for the sharpest results at 720p.

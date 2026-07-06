@@ -1,0 +1,119 @@
+---
+slug: how-much-data-does-streaming-use
+title: "How Much Data Does Streaming Use? (2026 Guide)"
+description: "Exact GB-per-hour figures for watching and broadcasting at every quality level, plus monthly data cap math for Twitch, YouTube, and more."
+publishedAt: "2026-06-30"
+updatedAt: "2026-06-30"
+readTime: "8 min read"
+---
+
+Streaming uses between **0.3 GB and 7.2 GB per hour** depending on quality — 720p30 viewing sits around 1.5–2 GB/hr, while broadcasting 1080p60 at 6,000 Kbps burns roughly 2.7 GB/hr of upload. If you are watching 4K HDR on YouTube or Netflix, expect 5–7 GB/hr. Monthly data cap math matters: a 1 TB cap disappears fast when you stream several hours a day from both sides of the connection.
+
+## Why "Streaming Data" Means Two Different Things
+
+Most guides conflate watching and broadcasting. They are different pipelines with different numbers:
+
+- **Watching (download):** Your device receives a compressed stream from a CDN. The bitrate is set by the platform or your quality selector.
+- **Broadcasting (upload):** Your encoder sends a raw RTMP or SRT stream to the ingest server. You control the bitrate in OBS or your streaming software.
+
+Both consume your data allowance. If you stream 4 hours a day and watch streams 2 hours a day, both sides add up against a shared monthly cap. Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to check whether your plan can sustain your target bitrate with headroom to spare.
+
+## Data Usage for Watching Streams (Download)
+
+Streaming platforms encode at multiple quality levels. The bitrate you actually receive depends on which tier you select (or which one adaptive bitrate picks for you).
+
+| Quality | Typical Bitrate | GB per Hour |
+|---|---|---|
+| 160p / mobile low | 300 Kbps | 0.13 GB |
+| 360p | 700 Kbps | 0.32 GB |
+| 480p | 1,500 Kbps | 0.68 GB |
+| 720p 30fps | 3,000 Kbps | 1.35 GB |
+| 720p 60fps | 4,500 Kbps | 2.03 GB |
+| 1080p 30fps | 5,000 Kbps | 2.25 GB |
+| 1080p 60fps | 8,000 Kbps | 3.60 GB |
+| 1440p 60fps | 12,000 Kbps | 5.40 GB |
+| 4K 30fps | 13,000 Kbps | 5.85 GB |
+| 4K 60fps HDR | 16,000 Kbps | 7.20 GB |
+
+Formula: **GB/hr = (Kbps × 3600) ÷ (8 × 1,000,000)**. At 8,000 Kbps, that is (8,000 × 3,600) ÷ 8,000,000 = 3.6 GB.
+
+Twitch caps most streamers at 6,000 Kbps source quality, so watching a Twitch stream at source uses around 2.7 GB/hr. YouTube Live lets partners push up to 51,000 Kbps, but viewers are served transcoded renditions — typically the 1080p60 tier at 8,000 Kbps unless you select the original.
+
+## Data Usage for Broadcasting (Upload)
+
+When you go live, your encoder (OBS, Streamlabs, XSplit) sends a continuous upload stream. The bitrate you set is almost exactly what leaves your network — CBR mode makes this predictable to the byte.
+
+| Stream Quality | Video Bitrate | Audio Bitrate | Total Bitrate | GB per Hour |
+|---|---|---|---|---|
+| 720p 30fps (Twitch low) | 2,500 Kbps | 160 Kbps | 2,660 Kbps | 1.20 GB |
+| 720p 60fps | 4,000 Kbps | 160 Kbps | 4,160 Kbps | 1.87 GB |
+| 1080p 30fps | 5,000 Kbps | 160 Kbps | 5,160 Kbps | 2.32 GB |
+| 1080p 60fps (Twitch max) | 6,000 Kbps | 320 Kbps | 6,320 Kbps | 2.84 GB |
+| 1080p 60fps (YouTube) | 9,000 Kbps | 320 Kbps | 9,320 Kbps | 4.19 GB |
+| 1440p 60fps | 12,000 Kbps | 320 Kbps | 12,320 Kbps | 5.54 GB |
+| 4K 60fps | 24,000 Kbps | 320 Kbps | 24,320 Kbps | 10.94 GB |
+
+Audio bitrate is often forgotten. A 320 Kbps AAC audio track adds 0.14 GB/hr — small but nonzero over a 6-hour session. For platform-specific bitrate recommendations, see the [Twitch settings guide](/platforms/twitch/) or the [YouTube settings guide](/platforms/youtube/).
+
+The encoder you use (x264, NVENC, AV1) affects quality per bitrate but not data usage — 6,000 Kbps in is 6,000 Kbps out regardless of encoder. For encoder comparisons, see the [codec comparison page](/compare/).
+
+## Monthly Data Cap Math
+
+Here is how quickly common streaming habits eat into a 1 TB (1,024 GB) monthly data cap:
+
+| Activity | Daily Hours | Bitrate | Monthly Data |
+|---|---|---|---|
+| Watching Twitch 1080p60 | 2 hrs/day | 6,000 Kbps | ~162 GB |
+| Watching YouTube 4K | 1 hr/day | 16,000 Kbps | ~216 GB |
+| Broadcasting 1080p60 to Twitch | 3 hrs/day | 6,320 Kbps | ~256 GB |
+| Broadcasting 1080p60 to YouTube | 3 hrs/day | 9,320 Kbps | ~378 GB |
+| All of the above combined | — | — | ~1,012 GB |
+
+A streamer who broadcasts 3 hours daily at 6,000 Kbps and watches streams 2 hours a day at 1080p60 uses roughly 418 GB/month from streaming alone — before any other internet use. On a 1 TB cap, that leaves 606 GB for everything else. On a 500 GB or unlimited-but-throttled plan, you could hit your ceiling in the second week.
+
+**Key takeaway:** Broadcasting is the bigger data drain per hour because it runs at a fixed CBR bitrate for the entire session with no adaptive downstepping.
+
+## Codec Efficiency: AV1 vs HEVC vs H.264
+
+The codec your encoder or platform uses changes how much data is needed for equivalent quality:
+
+- **H.264 (AVC):** The baseline. Needs the most bits for a given quality level. Nearly universal hardware support.
+- **H.265 (HEVC):** ~30–40% more efficient than H.264 at the same visual quality. Good for recordings and VOD, limited by patent licensing for streaming.
+- **VP9:** Google's royalty-free alternative to HEVC. YouTube uses it for desktop playback, saving roughly 35% bandwidth vs H.264.
+- **AV1:** The current efficiency leader — 40–50% better than H.264. YouTube serves AV1 to supported browsers, Facebook uses it, and OBS 31+ supports AV1 encoding on RTX 40-series and RX 7000-series GPUs.
+
+For viewers on a data cap, switching the YouTube playback codec preference to AV1 (automatic in Chrome/Firefox on supported content) cuts data consumption noticeably at the same visual quality. Full details are on the [codec comparison page](/compare/).
+
+## Streaming vs Recording: Local File Sizes
+
+If you record your stream locally at the same time (common with OBS dual-output), the local recording eats disk space, not internet bandwidth. But it is worth knowing:
+
+A 4-hour stream recorded at 1080p60 with NVENC at 30,000 Kbps (CQP 18) produces a file roughly 54 GB. At x264 CRF 18 it may be 80–100 GB. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to estimate how much storage you need before a long session. The [File Size Calculator](/size/) can reverse the math: enter your bitrate and duration to get the exact GB figure.
+
+## Tips for Reducing Data Usage Without Killing Quality
+
+- **Lower your stream bitrate if you are near your data cap.** Drop from 6,000 to 4,500 Kbps — viewers on 1080p monitors see modest difference, but you save 0.67 GB/hr of upload.
+- **Watch at 720p60 instead of 1080p60 when data is tight.** The difference in perceived quality is smaller than the 40% data saving.
+- **Use AV1 for recording instead of H.264.** Same visual quality, smaller files, no impact on upload.
+- **Monitor your real-time bitrate in OBS** — dropped frames or network instability can cause your actual upload to fluctuate even on CBR. The [OBS settings hub](/obs/) covers stability optimizations.
+- **Schedule long streams off-peak** if your ISP throttles after hitting a soft cap threshold.
+
+For a full walkthrough of how bitrate choices affect both quality and data, the [best OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) breaks down every platform and resolution combination.
+
+## Frequently Asked Questions
+
+### How much data does a 4-hour Twitch stream use?
+
+Broadcasting 4 hours at 1080p60 with a 6,000 Kbps video bitrate and 160 Kbps audio uses approximately 11.4 GB of upload data. If you are also watching another stream at 1080p60 during breaks, add another 1–2 GB for those hours. Plan on 12–14 GB total upload for a 4-hour session.
+
+### Does streaming use my download data too?
+
+Yes — watching any stream (Twitch, YouTube Live, Netflix, Disney+) consumes your download allowance. Only broadcasting uses your upload. Both count against the same monthly data cap on most ISPs. A viewer watching YouTube at 1080p60 for 3 hours uses around 10.8 GB of download data.
+
+### Can I stream on a mobile hotspot without hitting my cap quickly?
+
+It depends on your plan. Streaming at 720p 30fps at 2,500 Kbps for 2 hours uses about 2.25 GB — feasible on a 15 GB plan if you are careful. Streaming at 1080p60 at 6,000 Kbps for 2 hours burns 5.4 GB. Most mobile hotspot plans throttle after 15–50 GB, making them impractical for daily broadcasting. Check your available upload speed first with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+
+### Does using a higher-quality encoder like NVENC or AV1 reduce my data usage?
+
+No — the encoder affects quality at a given bitrate but not how many bits per second you transmit. NVENC at 6,000 Kbps and x264 at 6,000 Kbps both consume exactly 6,000 Kbps of upload. The difference is that NVENC or AV1 may produce *better-looking video* at that same bitrate, meaning you could potentially drop to 5,000 Kbps and still match the quality of x264 at 6,000 Kbps — saving ~0.45 GB/hr.

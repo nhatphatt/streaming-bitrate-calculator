@@ -1,0 +1,117 @@
+---
+slug: best-bitrate-for-720p-streaming
+title: "Best Bitrate for 720p Streaming in 2026 (30fps & 60fps)"
+description: "The best bitrate for 720p streaming is 2,500-4,000 Kbps at 30fps or 3,500-5,000 Kbps at 60fps. Full guide for Twitch, YouTube, and Kick."
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+readTime: "7 min read"
+---
+
+For 720p streaming at 30fps, **2,500–4,000 Kbps** is the practical sweet spot. At 60fps, push that to **3,500–5,000 Kbps**. These numbers work on Twitch, YouTube Live, and Kick without taxing a modest upload connection — and if you're on 10 Mbps upload or less, 720p is often the smarter choice over a pixelated 1080p stream that your connection can't properly sustain.
+
+720p (1280x720) is not a compromise — it is a deliberate choice. Many competitive games are harder to read at 1080p on mobile viewers, and a clean, artifact-free 720p60 stream almost always looks better than a blocky 1080p60 stream cramped into 4,500 Kbps. Use the [Streaming Bitrate & Storage Calculator](/) to model the exact numbers for your setup.
+
+## Why 720p Is Still a Smart Choice in 2026
+
+Bandwidth availability has improved globally, but streaming at 720p remains relevant for three reasons:
+
+- **Upload constraints:** Many residential connections in 2026 still top out at 10–20 Mbps upload. After leaving 25% headroom for overhead, you have 7,500–15,000 Kbps to work with. That's fine for 720p60 and leaves CPU/GPU headroom for the game.
+- **Viewer reach:** Twitch transcoding is not guaranteed for unaffiliated streamers. A 720p source stream is already close to what 720p viewers see, so the transcoding gap matters less.
+- **Encoder quality:** At 720p, even x264 Very Fast produces excellent quality at 4,000 Kbps. You don't need an NVENC GPU or a powerful CPU to get a sharp, clean picture.
+
+Before locking in any settings, check whether your upload speed has room to spare. The [Bandwidth Calculator](/tools/bandwidth-calculator/) shows exactly how much of your line a given bitrate will consume.
+
+## Recommended Bitrates for 720p Streaming
+
+The table below covers H.264 (the universal default codec). If you're streaming AV1 or HEVC, you can hit equivalent quality at roughly 30–40% lower bitrate — see the [codec comparison](/compare/) for details.
+
+| Platform | Resolution | FPS | Recommended Bitrate | Notes |
+|---|---|---|---|---|
+| Twitch | 720p | 30 | 2,500–4,000 Kbps | Good for most games; well under 6,000 Kbps cap |
+| Twitch | 720p | 60 | 3,500–5,000 Kbps | Competitive gaming sweet spot |
+| YouTube Live | 720p | 30 | 2,500–5,000 Kbps | YouTube transcodes; higher end preferred |
+| YouTube Live | 720p | 60 | 3,500–6,000 Kbps | Aim for 4,500+ for fast-motion games |
+| Kick | 720p | 30 | 2,500–4,000 Kbps | Matches Twitch guidance |
+| Kick | 720p | 60 | 4,000–5,500 Kbps | Kick allows up to 8,000 Kbps |
+
+For Twitch-specific configuration steps (ingest server, keyframe interval, encoder preset), see the [Twitch settings guide](/platforms/twitch/). For YouTube-specific setup, the [YouTube settings page](/platforms/youtube/) covers target latency and recommended upload specs.
+
+## 720p 30fps vs 720p 60fps: Which Should You Use?
+
+**Frame rate has a larger visual impact than most streamers expect.** Going from 30fps to 60fps roughly doubles the data needed to maintain equivalent quality. Here's a practical breakdown:
+
+- **720p 30fps** is ideal for: talking-head streams, slow-paced RPGs, card games, creative/art streams, strategy games. Motion is infrequent enough that 30fps never feels choppy.
+- **720p 60fps** is better for: shooters, fighting games, platformers, racing games, sports titles. Fast motion at 30fps produces visible blur and judder that even casual viewers notice.
+
+A firm rule: if the game runs above 60fps and involves fast reaction-based gameplay, always prefer 720p 60fps over 720p 30fps. The upload cost is worth it.
+
+## How to Choose Bitrate Based on Your Upload Speed
+
+Your video bitrate should never exceed **75% of your sustained upload speed**. This leaves room for audio (add 128–160 Kbps), OBS overhead, and other background traffic.
+
+| Upload Speed | Max Safe Video Bitrate | Recommended 720p Setting |
+|---|---|---|
+| 5 Mbps (5,000 Kbps) | ~3,750 Kbps | 720p 30fps at 3,000–3,500 Kbps |
+| 10 Mbps (10,000 Kbps) | ~7,500 Kbps | 720p 60fps at 4,500–5,000 Kbps |
+| 15 Mbps (15,000 Kbps) | ~11,250 Kbps | 720p 60fps at 5,000 Kbps or step up to 1080p |
+| 20 Mbps+ | ~15,000 Kbps | 720p 60fps at max, or upgrade to 1080p 60fps |
+
+If you're right on the edge of your upload capacity, always run a speed test during peak hours — not just once. ISP speeds fluctuate. The [bandwidth calculator](/tools/bandwidth-calculator/) can show you the precise Mbps required for any bitrate combination.
+
+## Encoder Settings for 720p Streaming
+
+### x264 (CPU Encoding)
+
+x264 is still the gold standard for quality-per-bitrate. At 720p, the CPU load is manageable even on mid-range processors:
+
+- **Preset:** Very Fast or Faster for single-PC streaming; Medium or Slow on a dedicated streaming PC
+- **Rate Control:** CBR (always for live streaming — see the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) for why)
+- **Keyframe Interval:** 2 seconds (required by most platforms)
+- **Profile:** Main or High
+- **Tune:** (none) for games; 'film' for video/IRL content
+
+At 720p resolution, x264 Faster produces quality virtually identical to x264 Medium, because the encoder has fewer pixels to work with. The CPU savings are real — use them for better game performance.
+
+### NVENC and AMD AMF
+
+GPU encoders shine at 720p. The lower resolution means the encoder has ample time to apply quality passes:
+
+- **NVENC (NVIDIA):** Use 'Max Quality' or 'High Quality' preset. RTX 3000/4000-series NVENC at 4,000 Kbps 720p60 looks excellent.
+- **AMD AMF:** Use 'Quality' preset, CQP for recording or CBR for streaming.
+- **Intel Quick Sync:** Solid option on 12th-gen and newer Intel CPUs; use 'Quality' preset.
+
+Full encoder comparison and OBS configuration steps are in the [OBS settings hub](/obs/).
+
+## Storage and Upload Considerations
+
+If you're also recording locally while streaming 720p, know your file sizes. A 720p 60fps stream captured at 4,000 Kbps generates roughly **1.8 GB per hour**. A local CQP recording at higher bitrate will be significantly larger — use the [recording time calculator](/tools/recording-time-calculator/) to plan your drive space before long sessions.
+
+If you're uploading VODs to YouTube afterward, a 2-hour 720p60 recording at 8,000 Kbps CQP will be around **7 GB**. Estimate your upload time with the [upload time calculator](/tools/upload-time-calculator/).
+
+## 720p vs 1080p: When to Upgrade
+
+720p is the right choice if your upload is under 10 Mbps, if your CPU/GPU is entry-level, or if your game is competitive and you prioritize frame rate over resolution. Move to 1080p when:
+
+- Your sustained upload consistently exceeds 15 Mbps
+- You stream slow-paced or visually detailed content where sharpness matters more than frame rate
+- You have NVENC (RTX series) or can run x264 with headroom to spare
+
+The [best OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) covers the full resolution ladder from 720p to 4K.
+
+## Frequently Asked Questions
+
+### What is the best bitrate for 720p 30fps streaming?
+
+**2,500–4,000 Kbps** is the recommended range for 720p 30fps. At 3,000 Kbps, most games — including fast-paced shooters — stream cleanly with minimal blocking artifacts. On very slow connections (5 Mbps upload), 2,500 Kbps is the floor; anything lower will produce visible compression on motion-heavy scenes.
+
+### What bitrate should I use for 720p 60fps on Twitch?
+
+Aim for **3,500–5,000 Kbps** for 720p 60fps on Twitch. The platform's 6,000 Kbps cap leaves comfortable room, and 4,500 Kbps is the practical sweet spot for competitive games — enough to handle fast motion cleanly without saturating a typical upload connection. Visit the [Twitch platform page](/platforms/twitch/) for the full recommended settings list.
+
+### Is 2,500 Kbps enough for 720p streaming?
+
+Yes, for 720p 30fps with a CPU or GPU encoder set to 'Fast' or better. At 2,500 Kbps, static and slow scenes look clean; you'll see some compression on very fast particle effects or screen flashes. Raise it to 3,000–3,500 Kbps if your upload allows, especially for action games.
+
+### Can I stream 720p with 5 Mbps upload?
+
+Yes. At 5 Mbps upload, target 3,000–3,500 Kbps video bitrate (leaving ~1,500 Kbps headroom for audio, overhead, and other traffic). Use CBR mode, set a keyframe interval of 2 seconds, and run a test stream before going live to confirm no dropped frames. The [bandwidth calculator](/tools/bandwidth-calculator/) can verify your exact headroom.

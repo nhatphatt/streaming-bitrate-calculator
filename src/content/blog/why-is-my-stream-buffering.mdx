@@ -1,0 +1,123 @@
+---
+slug: why-is-my-stream-buffering
+title: "Why Is My Stream Buffering? Fix It Fast (2026)"
+description: "Stream buffering ruining your broadcast or viewer experience? Learn the real causes — bitrate, keyframes, CBR vs VBR, upload speed — and how to fix them."
+publishedAt: "2026-06-18"
+updatedAt: "2026-06-18"
+readTime: "8 min read"
+---
+
+Stream buffering happens when the data arriving at a viewer's player can't keep pace with playback — the buffer drains, video stalls, and the dreaded spinning wheel appears. The root cause is almost always a mismatch between the bitrate being sent, the upload bandwidth available, and the playback conditions on the viewer's end. Fixing it means identifying which side of the stream is the bottleneck: your broadcast machine, your internet connection, the ingest server, or the viewer's device.
+
+## Broadcaster-Side Buffering vs Viewer-Side Buffering
+
+These two categories look identical to a viewer but require completely different fixes.
+
+**Broadcaster-side** problems mean your stream is arriving at the platform broken or unstable. Symptoms include dropped frames in OBS, stream health warnings on Twitch/YouTube dashboards, or viewers reporting buffering even on fast connections. The signal is corrupted before it ever reaches a CDN.
+
+**Viewer-side** problems mean the stream data is delivered correctly from the platform but the viewer's own internet, device, or player can't absorb it fast enough. Here the platform's analytics show healthy ingest, but individual viewers report issues — often correlated with geography, ISP, or device type.
+
+Knowing which you're dealing with determines whether you fix your encoder settings or tell your viewers to lower their quality setting.
+
+## The Bitrate Math You Need to Know
+
+Bitrate is the single biggest lever. Your output bitrate must stay comfortably below your available upload bandwidth — not equal to it. A useful rule: your stream bitrate should be no more than **70–80% of your sustained upload speed**, leaving headroom for network overhead, TCP retransmission, and other background traffic.
+
+| Resolution & FPS | Recommended Bitrate (H.264) | Minimum Upload Needed |
+|---|---|---|
+| 1080p 60fps | 6,000 kbps | ~8.5 Mbps |
+| 1080p 30fps | 4,500–6,000 kbps | ~8 Mbps |
+| 720p 60fps | 4,500–6,000 kbps | ~8 Mbps |
+| 720p 30fps | 2,500–4,000 kbps | ~5 Mbps |
+| 480p 30fps | 1,000–2,000 kbps | ~2.8 Mbps |
+
+Use the [bandwidth calculator](/tools/bandwidth-calculator/) to enter your resolution and fps and get the exact upload speed you need before troubleshooting anything else.
+
+## Why CBR Matters More Than You Think
+
+This is one of the most overlooked causes of buffering on the broadcaster side. **Variable Bitrate (VBR)** encoding lets the encoder spike above your target bitrate during complex scenes — a fast-moving game, a crowded chat overlay, confetti effects. Those spikes can burst 2–3x your average bitrate for fractions of a second.
+
+**Constant Bitrate (CBR)** caps the encoder at your target at all times, producing a predictable, flat data stream that ingest servers and CDN buffers handle much more gracefully. Every major streaming platform — Twitch, YouTube Live, Kick — officially recommends CBR for live streaming for exactly this reason.
+
+If you're on OBS and still using VBR, switch it: Output → Streaming → Rate Control → CBR. Set your bitrate to a fixed value at or below the platform's recommended cap. Read more in the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) for a full breakdown of when each makes sense.
+
+## Keyframe Interval: The 2-Second Rule
+
+Every streaming platform requires a **2-second keyframe interval** (also called keyframe interval = 2). A keyframe is a full reference frame — without one, a CDN segment has no starting point and the player buffers while it waits for the next keyframe before it can resume playback.
+
+Setting your keyframe interval to anything other than 2 seconds — whether 0 (auto), 3, or 5 — causes the platform's segmenter to misalign with your stream, creating gaps in the buffer. In OBS: Output → Streaming → Keyframe Interval → 2.
+
+This single setting change fixes a surprising number of "random" buffering complaints from viewers.
+
+## Encoder Performance: CPU and GPU Overload
+
+If your encoder is dropping frames because your CPU or GPU can't keep up with the encoding workload in real time, the stream's bitrate becomes erratic and packets arrive late — causing buffering even when your upload bandwidth is perfectly adequate.
+
+Signs of encoder overload in OBS: the Encoding Overloaded warning in the bottom status bar, and a rising "Skipped frames (encoder lag)" percentage in Stats.
+
+Fixes:
+- Switch from x264 (CPU) to NVENC (NVIDIA) or AMF (AMD) to offload encoding to your GPU — see the [NVENC vs x264 comparison](/blog/nvenc-vs-x264-streaming/) for detail on quality tradeoffs
+- Lower your x264 preset from "veryfast" toward "ultrafast" to reduce CPU load
+- Drop from 1080p60 to 1080p30 or 720p60 — halving framerate cuts encoding load significantly
+- Close background applications consuming CPU: browsers with heavy tabs, Discord video, game overlays
+
+## Network Instability: Packet Loss and Jitter
+
+A clean 20 Mbps upload won't save you if there's 2% packet loss on your route to the ingest server. Packet loss forces TCP retransmissions, which creates bursty, uneven data delivery — the ingest buffer sees irregular gaps and the stream goes unstable.
+
+How to diagnose:
+- Run a continuous ping to your ingest server IP (e.g., `ping -t` on Windows) and watch for spikes above 50ms or any timeouts
+- Use OBS's built-in Stats panel — watch "Dropped Frames (Network)" during the stream
+- Use a wired Ethernet connection instead of Wi-Fi. A 5 GHz Wi-Fi signal with 90% signal strength can still have 1–3% packet loss under interference
+
+Also check which ingest server you're connecting to in OBS. The default "Auto" selection picks the best server at connection time but doesn't re-evaluate mid-stream. If you're seeing issues, manually pin to the geographically closest ingest server for your platform. See the [Twitch settings guide](/platforms/twitch/) or [YouTube settings guide](/platforms/youtube/) for ingest server lists.
+
+## Platform Transcode Queue Lag
+
+On Twitch, YouTube Live, and Kick, your ingest stream gets transcoded into multiple quality levels (1080p, 720p, 480p, etc.) before being distributed to viewers via CDN. During peak hours — Friday evenings, major esports events — transcode queues back up and the CDN edge nodes can't keep the buffer full.
+
+Viewer symptoms: buffering starts at the same time for many viewers simultaneously, the stream health dashboard shows clean ingest, and the problem resolves after 15–20 minutes without any action on your end.
+
+You can't fix this, but you can work around it: stream at Twitch's maximum allowed bitrate (6,000 kbps for non-partners, 8,000 kbps for partners) so that the original-quality feed remains watchable while transcodes catch up. Check current platform caps at [Twitch streaming settings](/platforms/twitch/) and [Kick settings](/platforms/kick/).
+
+## Viewer-Side Fixes to Suggest
+
+When your stream health is clean but specific viewers report buffering, the issue is on their end. Practical fixes to share:
+
+- **Lower the quality manually** — switching from 1080p60 to 720p30 cuts download bitrate from ~6,000 kbps to ~3,000 kbps
+- **Check download speed** — viewers need at least 1.5x the stream bitrate to absorb bursts without stalling
+- **Clear browser cache / switch to the platform app** — browser-based players have smaller buffers than native apps
+- **Check for ISP throttling** — some ISPs throttle Twitch/YouTube traffic during peak hours; a VPN test can confirm this
+- **Device performance** — older phones and smart TVs struggle with 60fps H.264 decode; suggest 30fps streams for broader compatibility
+
+For a deeper look at the internet speed requirements involved, the [best internet speed for streaming guide](/blog/best-internet-speed-for-streaming/) covers both broadcaster and viewer needs side by side.
+
+## Quick Diagnostic Checklist
+
+- Output bitrate is 70–80% of sustained upload speed
+- Rate control is set to CBR (not VBR or CQP)
+- Keyframe interval is exactly 2 seconds
+- Encoder preset is not causing CPU/GPU overload (check OBS Stats)
+- Wired Ethernet connection in use (no Wi-Fi)
+- Correct ingest server selected (closest geography)
+- No background bandwidth-heavy processes (updates, cloud backups)
+
+If you want to verify your full setup — resolution, bitrate, encoder, and codec — against platform requirements all in one place, the [OBS settings hub](/obs/) covers every major platform configuration.
+
+## Frequently Asked Questions
+
+### Why does my stream buffer only during intense game scenes?
+
+This is almost always caused by VBR encoding spiking above your upload capacity during high-motion frames. Switch to CBR in your encoder settings and set a hard bitrate cap. The encoder will sacrifice some fine detail in busy scenes rather than spiking bandwidth, which eliminates those targeted buffering moments entirely.
+
+### My upload speed is 50 Mbps but my stream still buffers — why?
+
+Raw upload speed tests measure burst speed under ideal conditions. Real sustained upload throughput to a specific ingest server is almost always lower, and packet loss or jitter matters more than raw speed. Run a continuous ping to the ingest server IP, check OBS's dropped frames counter under Stats, and try switching to a different ingest server. Also confirm no other devices on your network are consuming upload bandwidth simultaneously.
+
+### What is the right bitrate for 1080p 60fps streaming?
+
+For H.264/AVC on platforms like Twitch and YouTube Live, 6,000 kbps is the standard recommendation for 1080p60. HEVC (H.265) and AV1 can achieve comparable quality at 3,000–4,000 kbps, but platform support for those codecs in live ingest is still limited as of 2026. See the [codec comparison](/compare/) for details on H.264 vs HEVC vs AV1 quality-per-bit tradeoffs.
+
+### Does a higher bitrate always mean less buffering for viewers?
+
+No — higher bitrate increases the viewer's download requirement and makes buffering more likely for viewers on slower connections. The goal is matching your bitrate to your audience's median connection speed. Most streaming platforms recommend 6,000 kbps or below for broad compatibility. Going higher is only beneficial if your entire audience has fast, stable broadband and you have a verified stable upload connection yourself.

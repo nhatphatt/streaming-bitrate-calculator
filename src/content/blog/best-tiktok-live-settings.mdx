@@ -1,0 +1,163 @@
+---
+slug: best-tiktok-live-settings
+title: "Best TikTok Live Streaming Settings in 2026"
+description: "Master TikTok Live streaming with the right bitrate, resolution, and encoder settings for mobile and PC. Covers TikTok LIVE Studio, vertical 9:16 output, and bandwidth needs."
+publishedAt: "2026-06-16"
+updatedAt: "2026-06-16"
+readTime: "8 min read"
+---
+
+For TikTok Live, the optimal settings are **720x1280 or 1080x1920 at 30fps with a 2,000–4,500 Kbps video bitrate** — vertical 9:16 format is mandatory since TikTok renders horizontal streams as letterboxed bars. TikTok LIVE Studio and OBS both support these output dimensions natively, and your upload speed needs to comfortably exceed your bitrate by at least 50% to avoid dropped frames. Here is exactly what to set and why.
+
+## TikTok Live Resolution: Vertical Only
+
+TikTok is a mobile-first platform and its live player is locked to portrait orientation. Streaming in 16:9 landscape does not fill the screen — TikTok will pillarbox or letterbox it, and it looks unprofessional on phone screens.
+
+The two working resolutions for TikTok Live:
+
+| Resolution | Aspect Ratio | Best For |
+|---|---|---|
+| 720x1280 | 9:16 | Lower upload speed, mobile-only audiences |
+| 1080x1920 | 9:16 | Highest visual quality on TikTok LIVE Studio / PC |
+
+In OBS, set your **canvas** and **output** to 1080x1920 under Settings > Video. TikTok LIVE Studio handles the vertical layout automatically when you select the TikTok output mode.
+
+## TikTok Live Bitrate Limits
+
+TikTok does not publish a hard ingest cap the way Twitch does, but extensive real-world testing establishes practical ceilings. Going above ~5,000 Kbps rarely improves quality because TikTok re-encodes your stream before delivery; you just burn upload for no viewer benefit.
+
+| Quality Level | Resolution | FPS | Video Bitrate | Audio Bitrate |
+|---|---|---|---|---|
+| Minimum viable | 720x1280 | 24 | 1,500 Kbps | 96 Kbps |
+| Standard | 720x1280 | 30 | 2,000–3,000 Kbps | 128 Kbps |
+| Recommended | 1080x1920 | 30 | 3,500–4,500 Kbps | 160 Kbps |
+| Maximum useful | 1080x1920 | 30 | 5,000 Kbps | 160 Kbps |
+
+TikTok Live does **not** support 60fps delivery to viewers — the platform caps playback at 30fps regardless of what you send. Do not waste bitrate on a 60fps output.
+
+Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify your upload connection can sustain your chosen bitrate with headroom.
+
+## TikTok LIVE Studio Settings (PC)
+
+TikTok LIVE Studio is TikTok's own free broadcasting software, available on Windows. It is simpler than OBS but covers most streaming needs.
+
+**Recommended TikTok LIVE Studio settings:**
+
+- **Resolution:** 1080x1920 (selectable in Stream Settings)
+- **Frame Rate:** 30fps
+- **Video Bitrate:** 3,500–4,500 Kbps (set under Stream Quality)
+- **Encoder:** Hardware (NVENC/QuickSync) if available, otherwise Software (x264)
+- **Audio:** 160 Kbps AAC, 44.1 kHz or 48 kHz
+
+TikTok LIVE Studio includes a built-in internet speed test. Run it before going live — if your upload measures below 5 Mbps, drop your bitrate to 2,000–2,500 Kbps to avoid buffering.
+
+## OBS Settings for TikTok Live
+
+Many creators prefer OBS for TikTok Live because it offers more scene control, overlays, and multi-source layouts. The key difference from a standard stream setup is the output dimensions.
+
+**OBS Video Settings (Settings > Video):**
+
+- **Base (Canvas) Resolution:** 1080x1920
+- **Output (Scaled) Resolution:** 1080x1920
+- **Downscale Filter:** Lanczos (sharpest for portrait content)
+- **Common FPS:** 30
+
+**OBS Output Settings (Settings > Output > Streaming):**
+
+- **Encoder:** NVENC H.264 (New) for NVIDIA GPUs, x264 for CPU
+- **Rate Control:** CBR
+- **Bitrate:** 3,500–4,500 Kbps
+- **Keyframe Interval:** 2 seconds
+- **Preset (NVENC):** Quality
+- **Profile:** High
+- **Tune:** None (or zerolatency if you have latency issues)
+
+For audio: 160 Kbps AAC under Settings > Audio. Always use CBR for live streaming — see [CBR vs VBR for streaming](/blog/cbr-vs-vbr-for-streaming/) if you want to understand why VBR causes problems on live ingest.
+
+To connect OBS to TikTok, use a custom RTMP server. TikTok provides your stream key in TikTok Studio (web dashboard) under Go Live > RTMP. The ingest URL is typically `rtmp://push.tiktokv.com/live/` with your unique stream key appended.
+
+## Mobile vs PC: Which Is Better for TikTok Live?
+
+Most TikTok streamers start on mobile because it is frictionless — the TikTok app handles everything. But mobile streaming has real constraints.
+
+| Feature | Mobile (TikTok App) | PC (LIVE Studio / OBS) |
+|---|---|---|
+| Setup time | Instant | 15–30 min initial setup |
+| Resolution control | Fixed by app (~720p) | Full control up to 1080x1920 |
+| Bitrate control | Automatic (1,500–2,500 Kbps) | Manual, up to 5,000 Kbps |
+| Overlays & alerts | Limited (built-in stickers) | Full (StreamElements, Streamlabs) |
+| Multi-scene switching | No | Yes |
+| Facecam + screen capture | No (one or other) | Yes (unlimited sources) |
+| Minimum upload speed | 3 Mbps | 5–8 Mbps |
+
+**Mobile** is the right choice for on-the-go content, react streams, and audiences under 100 viewers where quality is secondary to convenience. **PC** is the right choice once you want overlays, alerts, scene switching, or higher visual quality.
+
+## Upload Speed Requirements
+
+TikTok Live is unforgiving about upload speed — dropped frames show up as black flashes or pixelated artifacts mid-stream. The safe rule: your upload speed should be **at least 1.5× your total bitrate** (video + audio combined).
+
+| Stream Quality | Total Bitrate | Minimum Upload Speed |
+|---|---|---|
+| 720p mobile | ~2,000 Kbps | 3 Mbps |
+| 720x1280 standard | 2,500 Kbps | 4 Mbps |
+| 1080x1920 recommended | 4,700 Kbps | 7 Mbps |
+| 1080x1920 maximum | 5,200 Kbps | 8 Mbps |
+
+Run a speed test during your typical streaming hours — upload speeds on home connections often dip in the evening. Also check your router placement; Wi-Fi interference is a common cause of unstable TikTok Live streams. Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to calculate the exact upload headroom for your settings.
+
+## Encoder Choice: x264 vs NVENC on TikTok
+
+Since TikTok re-encodes your stream server-side before delivering to viewers, the efficiency difference between x264 and NVENC matters less than on Twitch. Either encoder at 4,000 Kbps will look identical to TikTok viewers. The practical choice:
+
+- **NVENC / QuickSync (GPU):** Use this for single-PC setups. It offloads encoding from your CPU, so the rest of your system stays responsive during the stream.
+- **x264 (CPU):** Produces marginally better quality per bit, useful if you are already pushing near TikTok's ceiling at 5,000 Kbps and want to maximize source quality before re-encode. Use the Medium preset.
+
+For a deeper comparison of what encoder efficiency means in practice, see our [NVENC vs x264 streaming guide](/blog/nvenc-vs-x264-streaming/).
+
+## Optimizing Your TikTok Live Layout
+
+Because TikTok fills a 9:16 phone screen, you need to think differently about your layout:
+
+- **Face cam should dominate** the upper two-thirds of the frame. Viewers on TikTok expect a close-up face, not a tiny webcam in a corner.
+- **Text overlays** need larger font sizes than 16:9 layouts — what reads fine at 1920 pixels wide becomes tiny at 1080 pixels wide.
+- **Chat and alerts** work best in the lower third. TikTok overlays its own gift notifications at the bottom, so leave space.
+- **Game capture** for mobile game streams works well with a full-bleed vertical capture from your phone or an emulator output configured to 9:16.
+
+## How Much Data Does TikTok Live Use?
+
+At 4,000 Kbps (video) plus 160 Kbps (audio), you transmit roughly **4,160 Kbps total = ~500 MB per hour** of upload data. This matters if you stream on a capped internet connection or via mobile hotspot.
+
+To calculate exact data usage for your specific bitrate and duration, use the [Recording Time Calculator](/tools/recording-time-calculator/) or the main [Streaming Bitrate & Storage Calculator](/).
+
+## Comparing TikTok Live vs Other Platforms
+
+TikTok Live sits in a different category from Twitch, YouTube Live, or Kick because of the vertical format and aggressive server-side re-encode. Here is how the ingest settings compare:
+
+| Platform | Max Useful Bitrate | Resolution | Aspect Ratio | 60fps Support |
+|---|---|---|---|---|
+| TikTok Live | ~5,000 Kbps | 1080x1920 | 9:16 vertical | No (30fps cap) |
+| Twitch | 8,000 Kbps (Partner) | 1920x1080 | 16:9 | Yes |
+| YouTube Live | 51,000 Kbps | 3840x2160 | 16:9 | Yes |
+| Kick | 8,000 Kbps | 1920x1080 | 16:9 | Yes |
+
+If you stream to multiple platforms simultaneously, you will need separate output profiles — a 9:16 canvas for TikTok and a 16:9 canvas for Twitch or YouTube. Some tools like Restream let you send a single stream to multiple platforms, but TikTok's RTMP ingest has historically required a direct connection rather than a relay service.
+
+For full Twitch and YouTube settings comparisons, see [Twitch settings](/platforms/twitch/) and [YouTube settings](/platforms/youtube/).
+
+## Frequently Asked Questions
+
+### What is the best bitrate for TikTok Live?
+
+**3,500–4,500 Kbps** at 1080x1920 30fps is the recommended sweet spot for PC streaming via TikTok LIVE Studio or OBS. Going higher than 5,000 Kbps provides no viewer benefit because TikTok re-encodes the stream before delivery. On mobile, the TikTok app automatically manages bitrate between roughly 1,500 and 2,500 Kbps based on your connection.
+
+### Does TikTok Live support 1080p?
+
+Yes, TikTok Live supports 1080x1920 (portrait 1080p) when streaming from a PC via TikTok LIVE Studio or OBS with RTMP. The TikTok mobile app typically caps at 720x1280. Viewers on newer Android and iOS devices will see the full 1080p quality; older devices or slower connections receive a downscaled version from TikTok's CDN.
+
+### Can you stream TikTok Live in 60fps?
+
+No. TikTok Live currently caps viewer playback at 30fps regardless of what frame rate you send. Setting your encoder to 60fps wastes approximately 40% more bitrate for zero viewer benefit. Always use 30fps for TikTok Live output.
+
+### How much upload speed do I need for TikTok Live?
+
+For a standard 720x1280 stream at 2,500 Kbps, you need at least **4 Mbps stable upload**. For the recommended 1080x1920 at 4,500 Kbps, aim for **7–8 Mbps** with minimal other devices using your connection. Check your real-world upload speed with the [Bandwidth Calculator](/tools/bandwidth-calculator/) — theoretical speeds from your ISP plan are often not what you actually get during peak hours.

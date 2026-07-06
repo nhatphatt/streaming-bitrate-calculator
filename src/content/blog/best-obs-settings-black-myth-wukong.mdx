@@ -1,0 +1,148 @@
+---
+slug: best-obs-settings-black-myth-wukong
+title: "Best OBS Settings for Black Myth: Wukong (2026)"
+description: "Optimal OBS settings for streaming Black Myth: Wukong on Twitch and YouTube. NVENC encoder, bitrate, resolution, and GPU tips for this demanding UE5 title."
+publishedAt: "2026-06-16"
+updatedAt: "2026-06-16"
+readTime: "9 min read"
+---
+
+Black Myth: Wukong is one of the most GPU-intensive games ever released — its Unreal Engine 5 Lumen lighting and Nanite geometry push even RTX 4090s to their limits at 4K. For streaming and recording, the golden rule is: **use NVENC, not x264**, lock your in-game frame rate, and target 1080p 60fps at 6,000 Kbps for Twitch or 8,000–12,000 Kbps for YouTube. This guide gives you the exact settings to stream Black Myth without tanking your FPS or destroying your stream quality.
+
+## Why Black Myth: Wukong Is Different to Stream
+
+Most games let you get away with nearly any OBS configuration. Black Myth does not. The game runs almost entirely on your GPU — Lumen global illumination, ray-traced reflections, and Nanite virtual geometry all demand maximum GPU headroom. If you use x264 (CPU encoding), you lose roughly 10–15% of your frame budget on encoding alone, which can cause hitching and dropped frames in the most visually dense combat sequences.
+
+The fix is simple: offload encoding entirely to your GPU using NVENC (NVIDIA), AMF (AMD), or QuickSync (Intel). On an RTX 3060 or better, NVENC H.264 or HEVC costs you almost nothing in game performance, which means your GPU can focus entirely on rendering Wukong's stunning environments.
+
+For a full overview of why NVENC beats x264 for GPU-heavy games, see our guide on [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
+
+## Recommended OBS Settings for Streaming Black Myth: Wukong
+
+### Core Output Settings (OBS → Settings → Output → Advanced Mode)
+
+| Setting | Twitch | YouTube |
+|---|---|---|
+| Encoder | NVENC H.264 (new) | NVENC H.264 or HEVC (new) |
+| Rate Control | CBR | CBR |
+| Bitrate | 6,000 Kbps | 8,000–12,000 Kbps |
+| Keyframe Interval | 2 seconds | 2 seconds |
+| Preset | P5 (Slow) | P5 (Slow) |
+| Profile | High | High |
+| Psycho Visual Tuning | Enabled | Enabled |
+| GPU | 0 (primary GPU) | 0 (primary GPU) |
+| Max B-frames | 2 | 2 |
+
+**Why P5 (Slow) preset?** NVENC presets range from P1 (fastest, lowest quality) to P7 (slowest, best quality). P5 is the sweet spot — it produces noticeably sharper output than P1–P3 with almost zero additional GPU overhead since the encode engine runs independently from the render pipeline.
+
+### Video Settings (OBS → Settings → Video)
+
+| Setting | Value |
+|---|---|
+| Base (Canvas) Resolution | 1920x1080 |
+| Output (Scaled) Resolution | 1920x1080 |
+| Downscale Filter | Lanczos |
+| FPS | 60 |
+
+Do not attempt to stream at 1440p or 4K on Twitch — the platform caps non-partnered streamers at 6,000 Kbps, which is simply not enough data for higher resolutions at 60fps. At 6,000 Kbps and 1440p, fast-moving particle effects and cloth physics will noticeably degrade. Stick to 1080p.
+
+For YouTube, if your upload speed allows 15,000+ Kbps and you have an RTX 4070 or better, you can bump the canvas to 2560x1440 and stream at 12,000–15,000 Kbps. The extra resolution genuinely improves how UE5 environment details look. Check your [bandwidth requirements](/tools/bandwidth-calculator/) before committing to higher bitrates.
+
+### Audio Settings
+
+| Setting | Value |
+|---|---|
+| Sample Rate | 48 kHz |
+| Audio Bitrate | 160 Kbps |
+| Encoder | AAC |
+| Channels | Stereo |
+
+Black Myth has an outstanding orchestral soundtrack — do not compress it with 128 Kbps audio. Use 160 Kbps minimum, or 320 Kbps if you prioritize audio fidelity and the total bandwidth fits your upload.
+
+## In-Game Settings to Run Alongside OBS
+
+Streaming Black Myth requires a careful balance between visual quality and frame rate headroom. Here are the levers that matter most:
+
+- **Frame Rate Cap:** Lock to 60fps in-game (or use RTSS at 59 fps). An uncapped frame rate causes GPU utilization spikes that can cause NVENC to stutter.
+- **Ray Tracing:** Disable ray-traced reflections and shadows first if you are frame-limited. Lumen at "Medium" still looks exceptional.
+- **DLSS / FSR:** Enable DLSS Quality (NVIDIA) or FSR Quality (AMD/Intel). Running DLSS gives the GPU headroom it needs to encode simultaneously.
+- **Resolution Scale:** Do not drop below 67% (DLSS Balanced). Below that, UE5 temporal upscaling artifacts become visible in the stream.
+- **Texture Quality:** Keep at High — textures are VRAM-bound, not compute-bound, and do not affect encoding performance.
+
+## RTX 40-Series: Use NVENC AV1 for YouTube
+
+If you own an RTX 4070, 4080, or 4090, you have access to NVENC AV1 — the most efficient streaming codec available in 2026. AV1 delivers roughly 30–40% better quality per kilobit compared to H.264 at the same bitrate.
+
+For YouTube (which fully supports AV1 streams), this means streaming at 6,000 Kbps NVENC AV1 produces quality equivalent to roughly 9,000 Kbps H.264. Black Myth's particle-heavy boss fights — which are the hardest scenes to encode cleanly — benefit enormously from AV1's superior motion handling.
+
+Settings for NVENC AV1 on YouTube:
+
+- Encoder: **NVENC AV1 (new)**
+- Rate Control: **CBR**
+- Bitrate: **6,000–9,000 Kbps**
+- Keyframe Interval: **2**
+- Preset: **P5**
+
+Twitch added AV1 support in 2024, so it is also viable there within the 6,000 Kbps cap. Compare codec efficiency in detail using our [H.264 vs H.265 vs AV1 guide](/blog/h264-vs-h265-vs-av1/).
+
+## Recording Black Myth: Wukong in OBS
+
+For local recording (separate from streaming), use quality-based encoding instead of fixed bitrate:
+
+| Setting | Value |
+|---|---|
+| Encoder | NVENC HEVC (new) or NVENC AV1 (RTX 40) |
+| Rate Control | CQP |
+| CQP Value | 18–20 |
+| Container | MKV (remux to MP4 after) |
+| Resolution | Match your display (1080p, 1440p, or 4K) |
+| FPS | 60 |
+
+At CQP 20 with NVENC HEVC at 1080p 60fps, expect files of roughly 4–6 GB per hour. At 1440p, expect 8–12 GB per hour. At 4K, plan for 20–35 GB per hour depending on scene complexity. Plan your storage accordingly using the [Recording Time Calculator](/tools/recording-time-calculator/).
+
+If you are simultaneously streaming and recording, use OBS Advanced Output mode to set independent settings for each — stream at CBR 6,000 Kbps H.264 while recording at CQP 18 HEVC. This gives you a broadcast-quality local copy regardless of stream bitrate constraints.
+
+## Platform-Specific Settings at a Glance
+
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|---|---|---|---|---|
+| Twitch (standard) | 1080p | 60 | 6,000 Kbps | NVENC H.264 |
+| Twitch (AV1, RTX 40+) | 1080p | 60 | 6,000 Kbps | NVENC AV1 |
+| YouTube (standard) | 1080p | 60 | 8,000–12,000 Kbps | NVENC H.264 |
+| YouTube (high quality) | 1440p | 60 | 12,000–15,000 Kbps | NVENC H.264 or HEVC |
+| YouTube (RTX 40+ AV1) | 1080p/1440p | 60 | 6,000–9,000 Kbps | NVENC AV1 |
+| Kick | 1080p | 60 | 6,000–8,000 Kbps | NVENC H.264 |
+| Local Recording | Native | 60 | CQP 18–20 | NVENC HEVC |
+
+For detailed Twitch-specific guidance see [Twitch streaming settings](/platforms/twitch/), and for YouTube see [YouTube streaming settings](/platforms/youtube/).
+
+## Upload Speed Requirements
+
+Your stream bitrate is only one piece of the puzzle. Your actual upload headroom needs to be 25–30% higher than the bitrate to prevent dropped frames during network fluctuations. Black Myth sessions often last 3–5 hours — any marginal connection will eventually drop packets.
+
+| Target Bitrate | Minimum Upload Speed | Recommended Upload Speed |
+|---|---|---|
+| 6,000 Kbps | 8 Mbps | 10 Mbps |
+| 8,000 Kbps | 11 Mbps | 14 Mbps |
+| 12,000 Kbps | 16 Mbps | 20 Mbps |
+| 15,000 Kbps | 20 Mbps | 25 Mbps |
+
+Use the [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify your connection can sustain your chosen bitrate before going live. The [Streaming Bitrate & Storage Calculator](/) also helps you model file sizes for recordings at any quality level.
+
+## Frequently Asked Questions
+
+### Can I stream Black Myth: Wukong on a single PC without killing my FPS?
+
+Yes, but only if you use NVENC. On an RTX 3070 or better, NVENC H.264 at P5 adds less than 2% GPU overhead compared to not streaming at all. x264 at even the "veryfast" preset costs significantly more. Enable DLSS Quality in-game to give the GPU the headroom it needs to run both rendering and encoding simultaneously.
+
+### What bitrate should I use for Twitch at 1080p 60fps?
+
+Use exactly 6,000 Kbps CBR. Twitch's non-partnered cap is 6,000 Kbps — sending more wastes your upload bandwidth without benefiting viewers. At 6,000 Kbps with NVENC H.264 at P5, Black Myth looks good in slower traversal scenes; fast combat will show some compression, which is the platform cap at work, not your OBS settings. For the full Twitch setup, see [Twitch streaming settings](/platforms/twitch/).
+
+### Should I use CBR or VBR for streaming Black Myth?
+
+Always use CBR for live streaming. VBR (variable bitrate) can spike above your platform cap during intense visual sequences — exactly the kind of heavy particle fights and Lumen lighting changes that Black Myth produces constantly. CBR locks the output and prevents dropped frames or connection resets. For a full breakdown of when each mode makes sense, read our [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/).
+
+### How much storage do I need to record a full Black Myth: Wukong playthrough?
+
+A complete playthrough runs roughly 30–50 hours depending on exploration. At CQP 20 NVENC HEVC 1080p 60fps (4–6 GB/hour), expect 120–300 GB total. At 1440p (8–12 GB/hour), plan for 240–600 GB. A 2 TB SSD gives comfortable headroom for the full game plus editing space. Use the [Recording Time Calculator](/tools/recording-time-calculator/) to model your exact storage needs.

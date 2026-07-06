@@ -1,0 +1,108 @@
+---
+slug: how-much-upload-speed-to-stream-1080p-60fps
+title: "How Much Upload Speed to Stream 1080p 60fps (2026)"
+description: "Find out exactly how much upload speed you need to stream 1080p 60fps on Twitch, YouTube, and Kick — with headroom rules and bitrate tables."
+publishedAt: "2026-06-25"
+updatedAt: "2026-06-25"
+readTime: "7 min read"
+---
+
+To stream 1080p at 60fps you need a minimum of **8–10 Mbps upload speed** in practice — enough to push a 6,000 Kbps video bitrate plus 160 Kbps audio, with the 25–40% headroom buffer that prevents dropped frames. If you want to stream at YouTube's recommended 10,000–12,000 Kbps, budget **15–18 Mbps** upload. The golden rule: your total stream bitrate should never exceed 75% of your measured upload speed.
+
+## Why Upload Speed and Bitrate Are Not the Same Number
+
+Your internet plan advertises upload speed in Mbps, but OBS and streaming software set bitrate in Kbps. Converting is simple: 1 Mbps = 1,000 Kbps. A 10 Mbps upload line can theoretically carry 10,000 Kbps — but ISP upload speeds fluctuate, other devices on your network compete for bandwidth, and TCP overhead eats into headroom. Streaming at 100% of your tested speed guarantees dropped frames during any momentary dip.
+
+The 75% rule is the safest baseline. For a live gaming stream where you cannot afford stutters, some streamers drop that to 65% to account for UDP packet loss and peak home network traffic.
+
+Use the [bandwidth calculator](/tools/bandwidth-calculator/) to run your exact numbers before going live.
+
+## Recommended Upload Speed by Platform and Bitrate
+
+| Platform | Max Video Bitrate | Audio Bitrate | Total Stream Kbps | Minimum Upload | Recommended Upload |
+|---|---|---|---|---|---|
+| Twitch (non-partner) | 6,000 Kbps | 160 Kbps | ~6,160 Kbps | 8.2 Mbps | 10 Mbps |
+| Twitch (partner) | 8,000 Kbps | 160 Kbps | ~8,160 Kbps | 10.9 Mbps | 14 Mbps |
+| YouTube Live | 12,000 Kbps | 160 Kbps | ~12,160 Kbps | 16.2 Mbps | 18 Mbps |
+| Kick | 8,000 Kbps | 160 Kbps | ~8,160 Kbps | 10.9 Mbps | 14 Mbps |
+
+"Minimum upload" in the table above already applies the 75% headroom rule. The "Recommended" column adds extra margin for a household with background activity (smart TVs, cloud backups, other devices). For detailed per-platform encoder settings see [Twitch settings](/platforms/twitch/), [YouTube settings](/platforms/youtube/), and [Kick settings](/platforms/kick/).
+
+## How to Calculate Your Own Required Upload Speed
+
+The formula is straightforward:
+
+- **Step 1** — Add your video bitrate + audio bitrate to get total stream bitrate (Kbps)
+- **Step 2** — Divide by 1,000 to convert to Mbps
+- **Step 3** — Divide by 0.75 to get minimum safe upload Mbps
+
+Example: streaming Twitch at 6,000 Kbps video + 160 Kbps audio = 6,160 Kbps total. Divide by 1,000 = 6.16 Mbps. Divide by 0.75 = **8.2 Mbps minimum upload needed**.
+
+Always run a speed test during peak hours — evening residential upload speeds can be 30–50% lower than the advertised rate on cable and DSL connections. Fiber connections are far more consistent. Run three tests at different times and use the lowest result as your planning baseline.
+
+## Bitrate Targets for 1080p 60fps — Which Quality Level Are You At?
+
+Not all 1080p 60fps streams look the same. Bitrate is the lever.
+
+| Bitrate | Visual Quality at 1080p 60fps | Upload Needed | Best For |
+|---|---|---|---|
+| 3,500–4,500 Kbps | Acceptable, visible compression in motion | 5–7 Mbps | Limited bandwidth, slower games |
+| 5,000–6,000 Kbps | Good — Twitch sweet spot | 7–10 Mbps | Most games, general streaming |
+| 7,000–8,000 Kbps | Very good — Kick/Twitch partner tier | 10–14 Mbps | Fast-paced FPS, high motion |
+| 9,000–12,000 Kbps | Excellent — YouTube Live tier | 13–18 Mbps | Showpiece streams, IRL, sports |
+
+Fast-motion content (fighting games, racing, FPS shooters) needs more bits than slow-motion content (RPGs, strategy, Just Chatting). If you stream a mix, size for your worst-case scenario.
+
+## Encoder Efficiency: The Same Upload Speed Goes Further with Better Codecs
+
+Your encoder choice changes how much quality you get from a fixed bitrate budget — and therefore how much upload speed you actually need.
+
+**H.264 / AVC** remains the universal baseline. It is what most viewers and platforms support reliably. At 6,000 Kbps it produces good 1080p 60fps quality. It requires the most bandwidth for a given quality level.
+
+**NVENC H.264** (NVIDIA GPU) matches x264 Medium quality at the same bitrate with far less CPU load. Good choice for single-PC setups.
+
+**AV1** (RTX 40-series, Intel Arc, AMD RX 7000 series) delivers roughly 25–35% better visual quality at the same bitrate compared to H.264. If your GPU supports AV1 hardware encoding and your platform supports receiving it (Twitch and YouTube both do), you can achieve excellent 1080p 60fps at only 4,500–5,000 Kbps — reducing upload requirements by around 20%.
+
+See the full [codec comparison (H.264 vs HEVC vs VP9 vs AV1)](/compare/) for a deep dive on efficiency tradeoffs, and [best OBS bitrate settings](/blog/best-obs-bitrate-settings/) for encoder-specific configuration.
+
+## What If You Are Right on the Edge?
+
+If your measured upload speed is borderline — say, 9 Mbps trying to push a 6,000 Kbps Twitch stream — here are concrete ways to stabilize your stream:
+
+- **Use CBR (constant bitrate)**, not VBR. CBR produces a predictable upload load so your router can handle it without burst spikes. See [CBR vs VBR for streaming](/blog/cbr-vs-vbr-for-streaming/) for details.
+- **Wire up with Ethernet.** Wi-Fi adds jitter and unpredictable packet loss. A wired connection alone can eliminate most dropped-frame problems.
+- **Set OBS network buffer** — in OBS, enable "Dynamically change bitrate to manage congestion" under Advanced Output to let the encoder absorb short dips gracefully.
+- **Reduce audio to 128 Kbps.** Dropping audio from 160 to 128 Kbps saves 32 Kbps — small, but every bit counts at the margin.
+- **Upgrade to a lower-bitrate codec.** AV1 at 4,500 Kbps on a 9 Mbps line leaves a much healthier 53% headroom vs H.264 at 6,000 Kbps.
+
+If your upload speed is consistently under 7 Mbps, streaming 1080p 60fps will be unstable regardless of your setup. Drop to 720p 60fps at 4,500–5,000 Kbps (6–7 Mbps upload needed) or 1080p 30fps at 4,500 Kbps until you can improve your connection. Use the [upload time calculator](/tools/upload-time-calculator/) to model different bandwidth scenarios.
+
+## Real-World Upload Speed Requirements: Summary
+
+| Your Tested Upload Speed | Can You Stream 1080p 60fps? | Recommended Setting |
+|---|---|---|
+| Under 6 Mbps | No — drop to 720p 60fps | 4,000 Kbps H.264, or 3,500 Kbps AV1 |
+| 6–8 Mbps | Marginal — use AV1 or lower bitrate | 4,500 Kbps AV1, or 5,000 Kbps H.264 CBR |
+| 8–12 Mbps | Yes — Twitch/Kick level | 6,000 Kbps H.264 or 8,000 Kbps on Kick |
+| 12–18 Mbps | Yes — YouTube quality tier | 10,000–12,000 Kbps |
+| 18+ Mbps | Yes — maximum quality | 12,000 Kbps+ on YouTube, 8,000 Kbps on Kick |
+
+For the most accurate numbers for your specific resolution, frame rate, and encoder, run everything through the [Streaming Bitrate and Storage Calculator](/).
+
+## Frequently Asked Questions
+
+### Is 10 Mbps upload enough for 1080p 60fps streaming on Twitch?
+
+Yes — 10 Mbps is the comfortable sweet spot for Twitch 1080p 60fps at 6,000 Kbps. You have roughly 33% headroom above the stream bitrate, which is enough for background traffic and ISP fluctuations. If your 10 Mbps is from a cable or DSL connection that dips during peak evening hours, wire up via Ethernet and test at night before relying on it.
+
+### Does my download speed matter for streaming?
+
+Download speed has no direct effect on your outgoing stream quality. What matters entirely is upload speed. However, if you are also playing an online game while streaming, download speed affects your in-game connection quality, which can indirectly cause frame drops if your router becomes congested and prioritizes download over upload.
+
+### Why do I still get dropped frames if my upload speed is fast enough?
+
+Dropped frames despite adequate upload speed usually point to CPU or GPU bottlenecks causing OBS to miss frames before they even reach the network, a misconfigured encoder preset (x264 "Ultrafast" produces much larger frames than "Medium"), or local network congestion from Wi-Fi interference or a shared router. Check OBS stats: if "Encoding lag" is high, the problem is compute, not bandwidth. If "Network" dropped frames are high, it is genuinely an upload issue.
+
+### How do I check if my upload speed is stable enough to stream?
+
+Run speed tests at [fast.com](https://fast.com) or [speedtest.net](https://speedtest.net) three to five times over an hour during peak evening hours — not at 3am. Look at the lowest result, not the average. For streaming stability, also run a ping test to your nearest Twitch or YouTube ingest server: jitter under 10ms and packet loss under 0.1% are the targets. The [bandwidth calculator](/tools/bandwidth-calculator/) can help translate your test results into a concrete bitrate recommendation.

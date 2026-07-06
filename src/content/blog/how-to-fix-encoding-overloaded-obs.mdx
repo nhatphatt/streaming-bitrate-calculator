@@ -1,0 +1,160 @@
+---
+slug: how-to-fix-encoding-overloaded-obs
+title: "How to Fix Encoding Overloaded in OBS (2026)"
+description: "OBS showing 'Encoding overloaded'? Fix it fast with the right encoder preset, resolution downscale, NVENC switch, and bitrate tweaks. Step-by-step guide."
+publishedAt: "2026-06-19"
+updatedAt: "2026-06-19"
+readTime: "8 min read"
+---
+
+The "Encoding overloaded" warning in OBS means your CPU (or GPU) cannot compress video frames fast enough to keep up with your output frame rate — frames get dropped, your stream stutters, and recordings skip. The fix is almost always one of four things: switching to a faster encoder preset, enabling NVENC/AMD hardware encoding, lowering your output resolution, or reducing your frame rate. Most streamers can eliminate the warning in under five minutes.
+
+## What 'Encoding Overloaded' Actually Means
+
+OBS encodes every frame of your stream or recording in real time. If encoding a single frame takes longer than your frame interval (16.7 ms at 60 fps, 33.3 ms at 30 fps), OBS falls behind and starts dropping frames. The red warning appears in the bottom-right of the OBS status bar.
+
+Two root causes cover 95% of cases:
+
+- **CPU overload** — you are using x264 software encoding and the CPU is maxed out by the game and encoder simultaneously
+- **Wrong preset** — x264 is set to a slow or medium preset, which demands far more CPU than fast or veryfast
+
+The remaining 5% involves GPU bottlenecks with hardware encoders, usually on very old GPUs.
+
+## Step 1 — Switch to a Hardware Encoder (NVENC / AMF / QuickSync)
+
+This is the single highest-impact fix. Hardware encoders offload encoding entirely to a dedicated chip on your GPU, freeing the CPU to run your game.
+
+**How to switch:**
+
+1. Open OBS → Settings → Output → set Output Mode to **Advanced**
+2. Under the Streaming tab, change Encoder to:
+   - **NVIDIA NVENC H.264 (new)** — RTX/GTX 10-series and newer
+   - **AMD HW H.264 (AMF)** — Radeon RX 400 series and newer
+   - **Intel QuickSync H.264** — 6th-gen Intel Core and newer (iGPU must be enabled in BIOS)
+3. Click Apply and restart the stream
+
+NVENC on a modern RTX 40-series GPU uses roughly 10–15% of the dedicated encoder chip, leaving your game completely unaffected. For a deeper comparison of encoder quality, see [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
+
+## Step 2 — Lower the x264 CPU Preset
+
+If you must stay on x264 (dedicated streaming PC, no GPU encoder, or quality requirement), change the CPU Usage Preset in Settings → Output → Encoder Settings.
+
+| Preset | Relative CPU Load | Quality vs. NVENC |
+|---|---|---|
+| placebo | ~800% | Marginal gain |
+| veryslow | ~400% | Slightly better |
+| slow | ~200% | Slightly better |
+| medium | ~100% (default) | Comparable |
+| fast | ~60% | Near-identical |
+| veryfast | ~40% | Slightly lower |
+| superfast | ~25% | Noticeably lower |
+| ultrafast | ~15% | Significantly lower |
+
+**Recommended fix:** Set the preset to **veryfast** or **fast**. The visual difference at streaming bitrates (4,000–8,000 Kbps) is minimal, but CPU usage drops by 40–60%. Most streamers will never notice the quality difference at 6,000 Kbps on Twitch.
+
+## Step 3 — Downscale Output Resolution
+
+Encoding a 1920x1080 frame is roughly 2.25x more work than encoding a 1280x720 frame. Dropping your output resolution is one of the most effective ways to reduce encoder load without touching quality settings.
+
+**How to downscale in OBS:**
+
+1. Settings → Video
+2. Set **Output (Scaled) Resolution** to a lower value than your canvas
+3. Set **Downscale Filter** to **Lanczos** (best sharpness) or **Bilinear** (fastest, minimal CPU)
+
+| Output Resolution | Pixels | Encoder Load (relative) | Recommended For |
+|---|---|---|---|
+| 1920x1080 | 2,073,600 | 100% | Dedicated PC or hardware encoder |
+| 1280x720 | 921,600 | ~44% | Most single-PC setups |
+| 1024x576 | 589,824 | ~28% | Very low-end CPUs |
+| 852x480 | 409,920 | ~20% | Emergency fallback only |
+
+For streaming to Twitch or Kick, **1280x720 at 60 fps** with 4,500–5,000 Kbps looks excellent and cuts encoder load nearly in half compared to 1080p60. Check the [Twitch recommended settings](/platforms/twitch/) for current platform guidance.
+
+## Step 4 — Lower Frame Rate
+
+If resolution downscaling is not enough, dropping from 60 fps to 30 fps cuts encoder work by exactly half. Many games — RPGs, strategy, MOBAs — look perfectly fine at 30 fps on stream.
+
+In OBS → Settings → Video → set **Common FPS Values** to 30. For fast-paced shooters where 60 fps matters, keep fps and instead reduce resolution or switch to hardware encoding.
+
+## Step 5 — Reduce Bitrate
+
+Counterintuitively, a very high bitrate (above ~10,000 Kbps) slightly increases encoder load on x264 because the rate controller works harder to use all available bits. If you are recording locally at extremely high bitrates (50,000+ Kbps), try dropping to 20,000–30,000 Kbps for CQP mode instead.
+
+For streaming, platform bitrate caps (Twitch 6,000–8,000 Kbps, YouTube 15,000 Kbps) are rarely the cause. Use the [streaming bitrate calculator](/) to confirm your target bitrate is sensible for your resolution. You can also verify your available upload bandwidth with the [bandwidth calculator](/tools/bandwidth-calculator/).
+
+## Step 6 — Close Background Applications
+
+Before any settings change, kill these common culprits:
+
+- **Web browsers** — Chrome/Edge with video tabs use 5–15% CPU easily
+- **Discord with video** — hardware-accelerated but still competes for GPU encoder resources
+- **Antivirus scans** — real-time scanning during a stream can spike CPU by 20–30%
+- **Game launchers** — Steam, Epic, and Battle.net updates in background
+- **Screen recorders running simultaneously** — two encoders at once
+
+Task Manager → CPU column, sort descending, close everything non-essential.
+
+## Step 7 — Process Priority (Advanced)
+
+On Windows, OBS can be given higher CPU scheduling priority:
+
+1. Settings → Advanced → Process Priority → set to **High** (not Realtime — that can destabilize the system)
+2. This ensures OBS gets CPU time before lower-priority background tasks
+
+This helps most on systems where a game and OBS are fighting for the same cores.
+
+## NVENC-Specific: Encoding Overloaded on GPU
+
+If you see encoding overloaded *with* NVENC enabled, the cause is almost never GPU encoder saturation (NVENC can handle 4K60 easily). More likely causes:
+
+- **Preset set to P7 (Quality) at 4K60** — switch to P5 (Balanced) or P4 in the NVENC settings
+- **GPU at 100% from the game** — the NVENC chip shares VRAM bandwidth; reduce in-game resolution or settings
+- **Driver issue** — update NVIDIA drivers or roll back one version if overload appeared after a recent update
+- **Using HEVC (H.265) at high resolution** — H.265 NVENC uses more encoder chip resources than H.264; switch to H.264 if overloaded. See the [H.264 vs H.265 vs AV1 codec comparison](/blog/h264-vs-h265-vs-av1/) for tradeoffs.
+
+## Recommended Settings to Eliminate Encoding Overloaded
+
+| Scenario | Encoder | Preset | Output Resolution | FPS |
+|---|---|---|---|---|
+| Single PC, RTX GPU | NVENC H.264 | P5 Balanced | 1920x1080 | 60 |
+| Single PC, AMD GPU | AMF H.264 | Balanced | 1920x1080 | 60 |
+| Single PC, CPU-only | x264 | veryfast | 1280x720 | 60 |
+| Dual PC setup | x264 | fast | 1920x1080 | 60 |
+| Low-end CPU, no dGPU | x264 | superfast | 1280x720 | 30 |
+| Recording locally | NVENC H.264 | P6 Quality | 1920x1080 | 60 |
+
+For recording storage estimates at these settings, use the [recording time calculator](/tools/recording-time-calculator/) to see how long your drive will last.
+
+## Quick Diagnostic Checklist
+
+Run through this in order — stop when the warning disappears:
+
+- Switch from x264 to NVENC/AMF/QuickSync
+- Change x264 preset to veryfast
+- Drop output resolution from 1080p to 720p
+- Drop frame rate from 60 to 30
+- Close browsers and background apps
+- Set OBS process priority to High
+- Lower in-game graphics settings to reduce GPU/CPU pressure
+- Update GPU drivers
+
+Most people fix this at step one or two. If you are still stuck after step six, your hardware is genuinely underpowered for the resolution and frame rate you are targeting — and lowering those further is the right move, not a workaround.
+
+## Frequently Asked Questions
+
+### Why does encoding overload happen even with a fast CPU?
+
+The encoder needs consistent, uninterrupted CPU time on *every single frame* within the frame interval. Even a fast CPU will trigger overload if a game causes CPU spikes that starve OBS — especially in open-world games or titles with heavy shader compilation. Switching to a hardware encoder eliminates this entirely because OBS no longer competes with the game for CPU time.
+
+### Does lowering bitrate fix encoding overloaded?
+
+Lowering bitrate has a minor effect on x264 CPU load at typical streaming bitrates (3,000–8,000 Kbps), so it is not a reliable fix on its own. The much more impactful changes are encoder preset, resolution, and encoder type. That said, if you are recording at 80,000+ Kbps with x264 Lossless, switching to CQP mode at quality 18–23 will dramatically reduce CPU load.
+
+### Will NVENC quality look worse than x264 on stream?
+
+On RTX 30-series and RTX 40-series GPUs, NVENC H.264 quality is essentially indistinguishable from x264 veryfast at typical Twitch bitrates (4,000–6,000 Kbps). NVENC at P5 or P6 preset on RTX 40 actually *outperforms* x264 medium in some tests because the hardware is optimized for temporal motion estimation. The old reputation of NVENC being blurry dates to Pascal-generation (GTX 10-series) hardware.
+
+### Is it better to stream at 720p60 or 1080p30 with a weak CPU?
+
+For fast-paced games (shooters, battle royale), choose 720p60. Motion clarity from the higher frame rate is far more important than resolution when you are watching a stream on a 1080p monitor — 720p content is upscaled cleanly. For talking-head content, tutorials, or slow-paced games, 1080p30 is the better choice since the extra detail is visible and the lack of motion blur at 30 fps is not punishing. The [OBS settings hub](/obs/) has platform-specific recommendations for each scenario.

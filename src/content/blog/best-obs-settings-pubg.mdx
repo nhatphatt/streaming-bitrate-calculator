@@ -1,0 +1,127 @@
+---
+slug: best-obs-settings-pubg
+title: "Best OBS Settings for PUBG Streaming (2026)"
+description: "Optimal OBS settings for PUBG in 2026. Get the right bitrate, encoder, resolution, and FPS to capture long-range clarity and fast gunfights without dropped frames."
+publishedAt: "2026-07-02"
+updatedAt: "2026-07-02"
+readTime: "9 min read"
+---
+
+For PUBG streaming, use **6,000 Kbps CBR at 1080p 60fps with NVENC H.264 or AV1** on a single-PC setup, or push to **8,000–10,000 Kbps on YouTube** where platform transcoding removes the bitrate ceiling. PUBG is especially demanding on encoders because its massive open maps combine long sightlines with foliage, grass detail, and explosive gunfights — all of which punish low bitrates harder than most other shooters. Getting these settings right is the difference between a stream where viewers can actually call out enemies at 300 meters and one that looks like a compressed mess.
+
+## Why PUBG Needs Higher Bitrate Than Most Games
+
+PUBG's visual complexity comes from two sources that matter enormously for streaming: **spatial detail** and **temporal motion**.
+
+Spatial detail refers to scenes with lots of fine variation — grass fields, tree lines, rocky hillsides, the texture of a building at distance. H.264 and HEVC encoders break the frame into macroblocks, and high-frequency detail (think hundreds of individual grass blades) requires far more bits to reproduce accurately than a smooth surface or a flat-color wall. At 6,000 Kbps, a sniper shot across Erangel's wheat fields will look far worse in PUBG than the same bitrate applied to a VALORANT match with flat-color walls.
+
+Temporal motion refers to how much the frame changes between each sample. Vehicle chases, firefights in the final circle, and even simple camera pans across terrain all create enormous per-frame differences that the encoder has to spend bits resolving.
+
+The practical result: **PUBG needs at least 1,000–2,000 Kbps more than a comparable arena shooter** to look clean at the same resolution and frame rate. Use our [Streaming Bitrate & Storage Calculator](/) to model exactly how much bandwidth your target settings will consume.
+
+## Recommended OBS Settings for PUBG
+
+### Complete Settings Table
+
+| Setting | Twitch / Kick | YouTube Live | Local Recording |
+|---|---|---|---|
+| Resolution | 1080p | 1080p or 1440p | 1080p or 1440p |
+| FPS | 60 | 60 | 60 |
+| Video Bitrate | 6,000 Kbps | 8,000–12,000 Kbps | CQP 18–20 (HEVC) |
+| Rate Control | CBR | CBR | CQP |
+| Encoder | NVENC H.264 or AV1 | NVENC H.264 or AV1 | NVENC HEVC or AV1 |
+| Keyframe Interval | 2 seconds | 2 seconds | 0 (auto) |
+| Preset | P5 (Slow) | P5 (Slow) | P5 (Slow) |
+| Profile | High | High | Main |
+| Audio Bitrate | 160 Kbps | 160 Kbps | 320 Kbps |
+| Audio Codec | AAC | AAC | AAC |
+
+### Why CBR for Streaming
+
+Always use **CBR (Constant Bitrate)** for live streaming PUBG, never VBR. Streaming platforms buffer incoming data based on a steady bitrate; VBR spikes during firefights can overwhelm the buffer and cause dropped frames at exactly the moment your stream looks most interesting. For a deeper explanation, see our [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/).
+
+### Encoder: NVENC vs x264 for PUBG
+
+If you are on a **single PC**, NVENC is the only practical choice. PUBG is a CPU-heavy game — running x264 at medium or slow preset will rob the game of CPU threads, causing stutters in exactly the high-action moments that already stress the encoder.
+
+- **NVENC H.264 (RTX 20/30-series):** Set preset to P5 (Slow) in OBS. This is the sweet spot between quality and encoder load.
+- **NVENC AV1 (RTX 40-series and newer):** Use this if your GPU supports it. AV1 delivers roughly 30% better quality at the same bitrate, which is a significant advantage for PUBG's complex terrain. Twitch and YouTube both support AV1 streams as of 2026.
+- **x264 Medium (dual-PC setup):** If you have a dedicated streaming PC, x264 at medium preset beats NVENC H.264 quality at the same bitrate. A dual-PC setup is the highest quality option for competitive PUBG streamers.
+
+For a detailed comparison of encoder efficiency, see our [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/).
+
+## Resolution and Scaling
+
+**1080p 60fps is the standard target** for most PUBG streamers. The reasoning: at 720p, long-range targets — already tiny on screen — become nearly unresolvable for viewers. Even at 6,000 Kbps, 1080p preserves enough detail in the mid-to-long range that viewers can follow the action.
+
+If you stream to YouTube and have an upload speed above 15 Mbps, **1440p at 10,000–12,000 Kbps** is genuinely worth it for PUBG. The extra resolution means viewers can actually make out players at the edges of gun range, which is relevant context for PUBG in a way it is not for close-range games.
+
+Use Lanczos as your downscale filter in OBS (Video → Downscale Filter) if your game resolution and output resolution differ. It is the sharpest option and helps preserve the fine detail that matters so much in PUBG's terrain.
+
+## In-Game Settings to Optimize for Streaming
+
+OBS quality is only half the equation. PUBG's in-game render settings directly affect how much work the encoder has to do.
+
+- **Anti-Aliasing: TAA or DLSS** — DLSS (if you have RTX hardware) produces a cleaner, more consistent image frame-to-frame, which encodes more efficiently than FXAA or raw aliasing.
+- **Shadow Quality: Low or Very Low** — Shadows are expensive to render and produce high-frequency noise at the edges, which costs encoder bits. Lowering them frees GPU for rendering and encoding.
+- **Post-Processing: Low** — Motion blur and depth-of-field add blur to the frame which the encoder treats as detail to preserve. Disable them.
+- **Texture Quality: Ultra or High** — Textures are worth the GPU cost. They encode cleanly (surfaces with consistent detail), and high texture quality at low bitrate still looks better than low textures.
+- **View Distance: High or Ultra** — This directly determines whether distant players render at all. Worth the GPU cost for a game built around long-range engagement.
+- **FPS Cap: 120 or 144** — Cap your in-game FPS slightly above your monitor refresh rate. Uncapped frames waste GPU cycles that could serve the NVENC encoder; capping them maintains consistent encoder pacing.
+
+## Upload Speed Requirements
+
+Your upload speed must be at least **1.5x your target bitrate** to prevent dropped frames under normal network load. PUBG sessions run long — 25 to 35 minutes per match — so the margin matters.
+
+| Target Bitrate | Minimum Upload | Comfortable Upload |
+|---|---|---|
+| 6,000 Kbps | 9 Mbps | 12+ Mbps |
+| 8,000 Kbps | 12 Mbps | 16+ Mbps |
+| 10,000 Kbps | 15 Mbps | 20+ Mbps |
+| 12,000 Kbps | 18 Mbps | 24+ Mbps |
+
+Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify whether your connection can sustain your target bitrate before you go live. If you are near the minimum, enable the **Network Optimization** option in OBS Settings → Advanced and set the socket send buffer to 0 (auto).
+
+## Platform-Specific PUBG Settings
+
+### Twitch
+
+Twitch caps most streamers at **6,000 Kbps video**. With PUBG, every Kbps counts, so always max out at 6,000 rather than leaving headroom. Set keyframe interval to exactly **2 seconds** — Twitch requires this for VOD and clip processing. For full Twitch-specific settings, see our [Twitch platform guide](/platforms/twitch/).
+
+### YouTube Live
+
+YouTube re-encodes your stream server-side, so higher source bitrates directly improve every quality tier viewers can select. For PUBG at 1080p 60fps, target **8,000–12,000 Kbps**. YouTube's bitrate guidance suggests up to 9,000 Kbps for 1080p 60fps, but many streamers successfully push 12,000 Kbps without issues. See our [YouTube platform guide](/platforms/youtube/) for full recommended values.
+
+### Kick
+
+Kick allows up to **8,000 Kbps**, making it a meaningful step up from Twitch for PUBG's detail-heavy scenes. Set 8,000 Kbps CBR, 1080p 60fps, NVENC H.264 P5 preset. See our [Kick platform guide](/platforms/kick/) for more.
+
+## Recording PUBG Locally
+
+If you want a high-quality local copy alongside your stream, use OBS Advanced Output mode to set separate recording settings:
+
+- **Encoder:** NVENC HEVC (or NVENC AV1 on RTX 40-series)
+- **Rate Control:** CQP
+- **CQP Value:** 18 for excellent quality, 20 for good quality with smaller files
+- **Container:** MKV (remux to MP4 via File → Remux Recordings after the session)
+- **Resolution:** Match your game resolution (1080p or 1440p)
+
+At CQP 18 HEVC, a 30-minute PUBG session records to approximately **3–6 GB** depending on scene complexity. Use our [Recording Time Calculator](/tools/recording-time-calculator/) to check how many sessions fit on your drive before you start.
+
+## Frequently Asked Questions
+
+### What bitrate should I use for PUBG on Twitch?
+
+Use **6,000 Kbps CBR** — Twitch's maximum for most streamers. PUBG needs every Kbps available at this cap because its open terrain, grass, and long-range detail all push the encoder harder than arena shooters. If you are a Twitch Partner with access to higher bitrate, 7,000–8,000 Kbps will produce a noticeably cleaner image on sniping sequences and open-field fights.
+
+### Is 1080p or 720p better for PUBG streaming?
+
+**1080p** is strongly preferred for PUBG. Unlike fast-paced close-quarters games where 720p can still look acceptable, PUBG's gameplay revolves around identifying and tracking targets at long range. At 720p, those targets become too small for viewers to resolve clearly, which makes the stream feel low-quality even if the bitrate is fine. If your upload is too limited for 1080p 60fps at 6,000 Kbps, try 1080p 30fps before dropping to 720p.
+
+### Should I use x264 or NVENC for PUBG?
+
+Use **NVENC** for a single-PC setup and **x264 medium** only on a dedicated streaming PC. PUBG is CPU-intensive; running x264 on the same machine costs you frame time and causes game stutters during firefights and vehicle chases. NVENC on an RTX card (especially RTX 40-series with AV1 support) produces excellent quality with negligible CPU overhead. See our [complete codec comparison](/compare/) for quality benchmarks across encoders.
+
+### How do I stop my PUBG stream from looking blurry during gunfights?
+
+Blur during gunfights is almost always a **bitrate problem**. Fast camera movement, explosions, and multiple players in frame create huge frame-to-frame differences that overwhelm a low bitrate. First, verify you are using CBR and not VBR. Second, increase your bitrate — try 500 Kbps increments up to your platform cap. If you are already at the cap, try NVENC AV1 (RTX 40-series), which gets approximately 30% more quality out of the same bitrate versus H.264, or use a dual-PC setup with x264 medium. Check our [best OBS bitrate settings guide](/blog/best-obs-bitrate-settings/) for a full quality-versus-bitrate breakdown.

@@ -1,0 +1,123 @@
+---
+slug: how-much-storage-for-4k-video-recording
+title: "How Much Storage for 4K Video Recording? (2026 Guide)"
+description: "Exact GB-per-hour figures for 4K recording by codec and bitrate. Learn how to size your drive correctly and avoid running out of space mid-session."
+publishedAt: "2026-07-04"
+updatedAt: "2026-07-04"
+readTime: "9 min read"
+---
+
+A single hour of 4K video recording consumes anywhere from **6 GB to over 100 GB** depending on your codec, bitrate, and quality settings. For practical purposes: HEVC/H.265 at CQP 20 uses roughly 15–25 GB/hr at 4K 60fps, H.264 at the same quality uses 30–50 GB/hr, and lossless or ProRes formats push past 100 GB/hr. If you are planning a 4K recording setup, a 2 TB dedicated SSD is the minimum sensible starting point for most creators.
+
+## Why 4K Storage Adds Up So Fast
+
+4K resolution (3840×2160) is exactly four times the pixel count of 1080p. That raw data increase compounds with frame rate — 4K 60fps carries eight times the pixel-throughput of 1080p 30fps. Codecs compress this data, but the compression efficiency varies enormously between H.264, HEVC, and AV1. Choosing the wrong codec or quality setting can mean the difference between fitting 40 hours on a 2 TB drive or filling it in under 8 hours.
+
+Use the [Recording Time Calculator](/tools/recording-time-calculator/) to get exact estimates for your specific drive size and bitrate settings without doing the math manually.
+
+## 4K Storage by Codec and Bitrate (GB per Hour)
+
+This table covers the most common recording scenarios in 2026. All figures assume 4K (3840×2160) with stereo audio at 192 Kbps AAC.
+
+| Codec | Quality Setting | Target Bitrate | GB per Hour (30fps) | GB per Hour (60fps) |
+|---|---|---|---|---|
+| H.264 (x264/NVENC) | CRF/CQP 23 | ~40 Mbps | 17–19 GB | 33–38 GB |
+| H.264 (x264/NVENC) | CRF/CQP 18 | ~80 Mbps | 34–38 GB | 67–75 GB |
+| HEVC (x265/NVENC) | CQP 20 | ~20 Mbps | 8–10 GB | 15–20 GB |
+| HEVC (x265/NVENC) | CQP 16 | ~50 Mbps | 20–24 GB | 38–46 GB |
+| AV1 (NVENC/SVT-AV1) | CQ 20 | ~15 Mbps | 6–8 GB | 12–15 GB |
+| AV1 (NVENC/SVT-AV1) | CQ 16 | ~35 Mbps | 14–16 GB | 26–32 GB |
+| Apple ProRes 422 | N/A | ~750 Mbps | 320 GB | 640 GB |
+| Lossless H.264 | CRF 0 | ~300 Mbps | 128 GB | 256 GB |
+
+**Key takeaway:** HEVC at CQP 20 is the sweet spot for 99% of creators — excellent quality at roughly half the storage of H.264. AV1 cuts it another 25–30% further if your hardware supports it (RTX 40-series, Intel Arc, AMD RX 7000-series).
+
+## How Codec Choice Changes Everything
+
+### H.264 — The Legacy Standard
+
+H.264 is still the default in many cameras and older OBS setups. At 4K 60fps with decent quality (CQP 18), expect **67–75 GB per hour**. That fills a 2 TB drive in roughly 27–30 hours of recording. H.264 decodes on literally every device, which is its only remaining advantage for recording. For anything beyond quick, temporary captures, move to HEVC or AV1.
+
+Compare H.264 against newer codecs in detail on the [video codec comparison page](/compare/).
+
+### HEVC (H.265) — The Practical Choice for 4K
+
+HEVC delivers roughly the same visual quality as H.264 at half the bitrate. At CQP 20, a 4K 60fps recording runs about **15–20 GB per hour** — a 2 TB drive holds around 100–133 hours. This is the recommended codec for most 4K recording workflows in 2026: NVENC HEVC on NVIDIA GPUs encodes in real-time with near-zero CPU load.
+
+### AV1 — The Efficient Future
+
+AV1 is the most storage-efficient option for real-time recording if you have compatible hardware. RTX 40-series NVENC AV1 at CQ 20 produces **12–15 GB per hour at 4K 60fps**. The trade-off: AV1 is more CPU-intensive to decode, though playback on modern systems (Chrome, VLC, Windows 11 Media Player) is hardware-accelerated and smooth.
+
+For a full breakdown of which codec to choose for your GPU, see the [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/).
+
+### When Bitrate Matters More Than Codec
+
+If you are recording to upload to a platform like YouTube, the codec of your source file matters less than raw bitrate — YouTube re-encodes everything. In that case, recording at a higher bitrate (even H.264) often produces a better final result after YouTube's compression than a low-bitrate HEVC file. For YouTube-destined 4K footage, targeting 50–100 Mbps H.264 or 25–50 Mbps HEVC gives the transcoder plenty of quality headroom. Check [YouTube platform settings](/platforms/youtube/) for exact upload recommendations.
+
+## Drive Sizing: How Much Storage Do You Actually Need?
+
+### Calculate Your Recording Hours First
+
+Before buying storage, estimate your real usage:
+
+- How many hours of 4K do you record per week?
+- How long before you offload/delete footage?
+- Do you keep multiple edit versions or just originals?
+
+A documentary filmmaker recording 4 hours of 4K 60fps HEVC footage per day, retaining 30 days of material, needs: 4 hr × 20 GB × 30 days = **2,400 GB (roughly 2.4 TB)** of working storage.
+
+The [file size calculator](/size/) lets you input resolution, fps, bitrate, and duration to get an instant size estimate.
+
+### Recommended Drive Sizes by Use Case
+
+| Use Case | Codec | Recording Frequency | Recommended Drive |
+|---|---|---|---|
+| Casual gaming clips (30 min/day) | HEVC CQP 20 | Daily | 500 GB SSD |
+| Full gaming sessions (3 hr/day) | HEVC CQP 20 | Daily, kept 2 weeks | 2 TB SSD |
+| YouTube content creator (4K 60fps) | HEVC CQP 18 | 10 hr/week, kept 1 month | 4 TB SSD or NAS |
+| Professional video work (ProRes) | ProRes 422 | 2 hr/day | 4–8 TB fast NAS |
+| Event videography (H.264) | H.264 CRF 18 | Per-event, immediate offload | 1 TB portable SSD |
+
+### SSD vs HDD for 4K Recording
+
+A modern 4K HEVC recording at CQP 20 runs around **20–50 Mbps sustained write speed**. Any SATA SSD or 7200rpm HDD can handle this comfortably. You do **not** need NVMe for recording — NVMe's speed advantage only matters for reads during editing, not writes during capture.
+
+The practical reason to use an SSD over HDD for recording storage: SSDs are silent, vibration-resistant, and handle the random-write behavior of long recording sessions more gracefully than HDDs. NAS drives work well for archival after recording; avoid recording directly to a network drive unless it sustains 100+ Mbps reliably.
+
+## OBS Settings for 4K Recording Storage Optimization
+
+In OBS, go to **Settings → Output → Advanced** and use the Recording tab separately from your stream settings. Recommended 4K recording settings for storage efficiency:
+
+- **Encoder:** NVENC HEVC (NVIDIA), AMF HEVC (AMD), or QuickSync HEVC (Intel)
+- **Rate Control:** CQP (not CBR — CBR wastes space on static scenes)
+- **CQP Value:** 20 for standard quality, 18 for archive-grade quality
+- **Container:** MKV (crash-safe; remux to MP4 after recording)
+- **FPS:** Match your source — 60fps for gaming/action, 30fps for interviews/screen recording
+
+Avoid CBR for local recordings entirely. [CBR vs VBR explained](/blog/cbr-vs-vbr-for-streaming/) covers why CBR wastes storage without any quality benefit when writing to disk.
+
+For the full OBS configuration walkthrough, the [OBS settings hub](/obs/) covers every setting in detail.
+
+## Estimating Upload Time for 4K Files
+
+A 4K 60fps HEVC file at 20 GB/hr: a typical 2-hour recording is about 40 GB. At a 100 Mbps upload connection, that takes roughly **54 minutes** to upload to YouTube. At 50 Mbps, around 108 minutes.
+
+Use the [Upload Time Calculator](/tools/upload-time-calculator/) to get exact figures for your connection speed and file size before committing to a long upload.
+
+## Frequently Asked Questions
+
+### How many GB is 1 hour of 4K video?
+
+It depends entirely on the codec and quality settings. At typical consumer settings (H.264, ~40 Mbps), expect 17–19 GB per hour at 4K 30fps, or 33–38 GB at 60fps. Using HEVC at CQP 20, those figures drop to 8–10 GB and 15–20 GB respectively. At the extreme, ProRes 422 at 4K 60fps generates roughly 640 GB per hour.
+
+### Is 2 TB enough for 4K video recording?
+
+Yes, for most creators using HEVC or AV1. At 4K 60fps HEVC CQP 20 (15–20 GB/hr), a 2 TB drive holds approximately 100–133 hours of footage. If you record in H.264 or at higher quality settings, budget closer to 30–50 hours per 2 TB. Professional workflows with ProRes need much more — plan for 3–4 TB minimum per event day.
+
+### Does 4K video need an NVMe SSD?
+
+No. For recording 4K video, sustained write speeds above 100–200 Mbps are rarely needed even for high-bitrate formats. A standard SATA SSD (500 MB/s write) or modern HDD (120–160 MB/s write) handles 4K HEVC and H.264 recording without issue. NVMe speeds only become relevant when simultaneously reading and writing large files during active video editing or proxy generation.
+
+### What is the best codec for 4K recording to save storage?
+
+AV1 offers the best storage efficiency among practical real-time codecs in 2026 — roughly 25–30% smaller files than HEVC at the same visual quality. For creators without AV1-capable hardware (RTX 40-series, Intel Arc, AMD RX 7000-series), HEVC at CQP 18–20 is the best choice, cutting storage roughly in half compared to H.264. Compare all codec options side-by-side at the [codec comparison tool](/compare/).

@@ -1,0 +1,126 @@
+---
+slug: best-obs-settings-deadlock
+title: "Best OBS Settings for Deadlock (2026 Streaming Guide)"
+description: "Optimal OBS settings for streaming Deadlock at 1080p/1440p 60fps. Covers bitrate, encoder, resolution, and platform-specific configs for Twitch, YouTube, and Kick."
+publishedAt: "2026-06-26"
+updatedAt: "2026-06-26"
+readTime: "8 min read"
+---
+
+For streaming Deadlock on Twitch, use **6,000 Kbps CBR, 1080p 60fps, NVENC H.264** — that combination handles the game's fast-paced team fights and dense particle effects without overwhelming your upload or CPU. On YouTube or Kick where caps are looser, push to 8,000–10,000 Kbps for noticeably cleaner visuals. Deadlock's hybrid MOBA-shooter visual style — dark maps, constant ability spam, six-player chaos — is genuinely demanding to encode, so encoder choice matters more here than it does for slower-paced games.
+
+## Why Deadlock Is Harder to Stream Than Most Games
+
+Deadlock combines Valve's Source 2 engine with the density of a MOBA and the pace of a third-person shooter. Every second of a team fight involves cascading particle effects, translucent ability visuals, and rapid camera movement — exactly the conditions that punish low bitrate streams.
+
+Unlike a game such as Minecraft or CS2 (which have large areas of uniform color that compress well), Deadlock scenes are visually complex in nearly every frame. That complexity means your encoder has to work harder, and if your bitrate is too low, you will see obvious macro-blocking and color banding during fights. The fix is simple: use the settings in this guide rather than OBS defaults.
+
+## Recommended OBS Settings for Deadlock
+
+### Output Settings
+
+| Setting | Twitch | YouTube Live | Kick |
+|---|---|---|---|
+| Encoder | NVENC H.264 (new) | NVENC H.264 or AV1 | NVENC H.264 (new) |
+| Rate Control | CBR | CBR | CBR |
+| Bitrate | 6,000 Kbps | 8,000–10,000 Kbps | 6,000–8,000 Kbps |
+| Keyframe Interval | 2 seconds | 2 seconds | 2 seconds |
+| Preset | P5 (Slow) | P5 (Slow) | P5 (Slow) |
+| Profile | High | High | High |
+| Psycho Visual Tuning | Enabled | Enabled | Enabled |
+
+For audio: **AAC, 160 Kbps, 48 kHz stereo**. Deadlock has strong in-game audio design — footsteps and ability cues are important, so don't drop audio below 128 Kbps.
+
+Check whether your upload speed can support these bitrates with the [bandwidth calculator](/tools/bandwidth-calculator/) before going live.
+
+### Video Settings
+
+| Setting | Recommended Value |
+|---|---|
+| Base (Canvas) Resolution | 1920x1080 or 2560x1440 |
+| Output (Scaled) Resolution | 1920x1080 |
+| Downscale Filter | Lanczos (sharpest) |
+| FPS | 60 (Common FPS values) |
+
+Set your base resolution to match your in-game resolution. If you play at 1440p, set the canvas to 2560x1440 and scale down to 1920x1080 output. Downscaling a 1440p source to 1080p looks sharper than rendering at native 1080p because you capture more pixel data. For the full breakdown of how resolution affects file size and quality, see the [file size calculator](/size/).
+
+## Encoder Selection: NVENC vs x264 vs AV1
+
+### NVENC H.264 (Best for Single-PC Streamers)
+
+If you are gaming and streaming on the same PC, **NVENC H.264 (new)** is the correct default. It offloads encoding to the GPU's dedicated NVENC hardware, adding less than 1% GPU overhead compared to gaming alone. Deadlock already hits the GPU hard — you do not want a CPU encoder competing for resources.
+
+RTX 30-series and 40-series NVENC quality is excellent. At 6,000 Kbps with P5 preset and Psycho Visual Tuning enabled, the output rivals x264 Medium on most scenes.
+
+### NVENC AV1 (RTX 40-Series Only)
+
+If you have an RTX 4070 or newer, **NVENC AV1** produces visibly better quality than H.264 at the same bitrate — roughly 25–30% more efficient. YouTube Live supports AV1 ingest as of 2026. Twitch and Kick support is limited, so AV1 is most useful when streaming to YouTube. See our [codec comparison](/compare/) to understand the quality-per-bitrate tradeoffs between H.264, HEVC, and AV1.
+
+### x264 (Two-PC Setups Only)
+
+If you run a dedicated streaming PC, **x264 at Medium or Slow preset** delivers the best quality per bitrate of any widely supported encoder. A dedicated machine with a Ryzen 7 or Core i7 can handle x264 Slow in real time without impacting game performance on the gaming PC. For single-PC setups this is not practical — stick to NVENC.
+
+For more detail on this tradeoff, read the [NVENC vs x264 streaming guide](/blog/nvenc-vs-x264-streaming/).
+
+## CBR vs VBR for Deadlock
+
+Use **CBR (Constant Bitrate)** for live streaming, always. Twitch, YouTube, and Kick all expect a steady bitrate — VBR can cause encoder buffering and dropped frames on platforms that are not optimized for variable ingest. Deadlock's scene complexity fluctuates heavily, which is exactly when a VBR encoder might spike above your connection's capacity. See the [CBR vs VBR guide](/blog/cbr-vs-vbr-for-streaming/) if you want to understand why this matters.
+
+For local recordings, the opposite is true: use CQP 18–20 with NVENC HEVC for high-quality VOD captures.
+
+## Platform-Specific Configurations
+
+### Twitch
+
+Twitch's ingest limit is 6,000 Kbps for most streamers (8,000 Kbps for Partners). For Deadlock, 6,000 Kbps at 1080p 60fps is the right target. Going lower than 5,000 Kbps at 1080p 60fps produces visible artifact in busy team fights. If your upload cannot sustain 6,000 Kbps reliably, drop to **900p or 720p 60fps at 4,500–5,000 Kbps** rather than staying at 1080p with a lower bitrate — resolution reduction scales better visually than bitrate reduction. See the full [Twitch settings guide](/platforms/twitch/) for account-level requirements.
+
+### YouTube Live
+
+YouTube re-encodes your stream server-side, so a higher source bitrate genuinely improves every viewer's quality level. Push to **8,000–10,000 Kbps at 1080p 60fps** for Deadlock if your connection allows. YouTube also supports 1440p live streaming — if you play at 1440p, streaming at 1440p with 12,000–15,000 Kbps produces noticeably better results for the fast fight visuals. Full configuration details at the [YouTube platform page](/platforms/youtube/).
+
+### Kick
+
+Kick allows up to 8,000 Kbps and is a good choice for Deadlock content given the game's growing competitive scene. Use 6,000–8,000 Kbps at 1080p 60fps. The [Kick platform page](/platforms/kick/) covers server selection and any bitrate updates.
+
+## Storage Planning for Deadlock VODs
+
+If you record locally while streaming (highly recommended — your stream VOD is lower quality than a local recording), here is what to expect per hour at common settings:
+
+| Recording Settings | Approx. Size/Hour |
+|---|---|
+| 1080p 60fps NVENC HEVC CQP 20 | 4–6 GB |
+| 1080p 60fps NVENC HEVC CQP 18 | 6–9 GB |
+| 1440p 60fps NVENC HEVC CQP 20 | 8–12 GB |
+| 1080p 60fps NVENC H.264 CQP 20 | 7–10 GB |
+
+Use the [recording time calculator](/tools/recording-time-calculator/) to figure out how many hours of Deadlock footage fit on your drive before your next session. A 2 TB SSD holds roughly 200–400 hours of 1080p HEVC recordings at CQP 20, which is more than enough for most streamers.
+
+## OBS Scene and Performance Tips for Deadlock
+
+**Cap your in-game FPS.** Deadlock can push 200+ FPS on high-end hardware, which is wasted work when you are streaming at 60fps. Use the in-game FPS limiter or RTSS to cap at 120 or 144fps. This reduces GPU temperature and leaves more headroom for the NVENC encoder.
+
+**Use Game Capture, not Display Capture.** Deadlock runs in full-screen or borderless windowed mode. Game Capture hooks directly into the game's render output and has zero GPU overhead compared to Display Capture, which must read back the frame from the monitor pipeline.
+
+**Set OBS to Normal process priority.** Counter-intuitively, setting OBS to High priority can cause stutters by stealing CPU time from Deadlock's game thread. Normal priority lets Windows scheduler balance load correctly.
+
+**Disable unused OBS sources.** If you have a webcam or browser sources in your scene that are not visible, disable or remove them. Deadlock's GPU load is high enough that you want every spare cycle available.
+
+For complete OBS configuration including audio routing, scene layout, and advanced settings, visit the [OBS settings hub](/obs/).
+
+## Frequently Asked Questions
+
+### What bitrate should I use for Deadlock on Twitch?
+
+Use **6,000 Kbps CBR** at 1080p 60fps — this is Twitch's practical cap for most streamers and it handles Deadlock's visual complexity well. If your upload is under 8 Mbps, test a 30-minute session and check OBS stats for dropped frames before going live. Use the [bandwidth calculator](/tools/bandwidth-calculator/) to verify headroom.
+
+### Should I stream Deadlock at 1080p or 1440p?
+
+If you play at 1440p and stream to YouTube, streaming at 1440p with 12,000+ Kbps is worth it — the sharper UI and ability readability are genuinely useful for viewers. For Twitch, stick to 1080p because the 6,000 Kbps cap makes 1440p look worse than a well-configured 1080p stream. Downscaling 1440p to 1080p in OBS also produces a sharper image than rendering native 1080p.
+
+### Why does my Deadlock stream look blurry during team fights?
+
+This is almost always a bitrate problem. Deadlock's team fights are among the most visually complex scenes in any current game — lots of translucent particle effects and rapid camera motion. The fix is to increase bitrate (up to your platform cap) or switch to a better encoder (NVENC with P5 preset and Psycho Visual Tuning enabled). Also confirm you are using Lanczos downscale filter, not Bilinear, in OBS Video settings.
+
+### Can I stream and record Deadlock at the same time?
+
+Yes, using OBS Advanced Output mode with separate streaming and recording tabs. Stream at CBR 6,000 Kbps H.264 for Twitch while recording at NVENC HEVC CQP 20 for a high-quality local copy. The encoding runs on separate NVENC sessions simultaneously on most modern NVIDIA GPUs. Plan for 4–6 GB per hour of recording storage on top of your stream session.
