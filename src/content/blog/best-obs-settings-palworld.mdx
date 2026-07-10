@@ -3,43 +3,49 @@ slug: best-obs-settings-palworld
 title: "Best OBS Settings for Streaming Palworld in 2026"
 description: "Optimal OBS bitrate, encoder, and graphics settings for streaming Palworld to Twitch and YouTube. Covers open-world performance, base-building scenes, and chunk-loading hitches."
 publishedAt: "2026-04-24"
-updatedAt: "2026-04-24"
-readTime: "9 min read"
+updatedAt: "2026-07-10"
+readTime: "8 min read"
 ---
 
-Palworld remains one of the most-streamed survival-craft games on Twitch and YouTube. Its open world, dense foliage, and frequent base-vs-raid combat all create unique encoder challenges. Get OBS configured correctly and your viewers will see crisp creature animations and base-building details even at modest Twitch bitrates.
+Palworld remains one of the most-streamed survival-craft games on Twitch and YouTube. Its open world, dense foliage, and frequent base-vs-raid combat create unique encoder challenges — and its Unreal Engine 5 tech is genuinely heavy on hardware. Get OBS configured correctly and viewers will see crisp creature animations and base details even at modest Twitch bitrates.
 
-## Why Palworld is harder to stream than it looks
+## Quick Answer
 
-On the surface, Palworld looks like a stylized open-world game. In practice, three streaming pain points show up:
+**Stream Palworld at 1080p 60fps with 6,000 Kbps CBR on Twitch using NVENC preset P5, Psycho Visual Tuning on. Put the game on an NVMe SSD — chunk-loading hitches from an HDD are the biggest cause of visible stutter for Palworld streamers.**
 
-1. **Foliage density** — grass and tree detail at distance produce shimmer that compresses poorly.
-2. **Camera-relative motion** — you're constantly running, gliding, or flying, which keeps temporal compression working hard.
-3. **Base scenes with many Pals** — busy bases with 10+ Pals create tons of independent character animations that the encoder treats as new motion vectors.
+Palworld is both GPU-heavy (Lumen/Nanite) and storage-sensitive, so this game rewards attention to both your encoder and your disk.
 
-The combination means Palworld benefits more than most survival games from a higher-quality encoder preset.
+## Why Palworld Is Harder to Stream Than It Looks
 
-## Recommended OBS settings for Palworld
+On the surface Palworld is a stylized open-world game. In practice, three streaming pain points show up:
+
+1. **Foliage density** — grass and tree detail at distance produces shimmer that compresses poorly.
+2. **Camera-relative motion** — you're constantly running, gliding, or flying, keeping temporal compression working hard.
+3. **Busy bases** — 10+ Pals working create independent character animations the encoder treats as many separate motion vectors.
+
+The combination means Palworld benefits more than most survival games from a higher-quality encoder preset. For context on how motion affects bitrate needs, see our note on [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/).
+
+## Recommended OBS Settings by Platform
 
 ### Twitch (6,000 Kbps cap)
 
 - **Resolution:** 1920×1080
-- **FPS:** 60 (or 30 if your hardware can't sustain 60 stable in big bases)
+- **FPS:** 60 (or 30 if you can't hold 60 stable in big bases)
 - **Encoder:** NVENC (New) — H.264 for standard Twitch, HEVC for Enhanced Broadcasting
 - **Preset:** P5 (Slow) for cleanest output
 - **Bitrate:** 6,000 Kbps for 60fps, 4,500 Kbps for 30fps
-- **Rate control:** CBR
-- **Keyframe interval:** 2 seconds
+- **Rate Control:** CBR
+- **Keyframe Interval:** 2 seconds
 - **B-frames:** 2
 - **Profile:** High
-- **Psycho Visual Tuning:** On (cleans up shimmer in foliage)
+- **Psycho Visual Tuning:** On (helps clean up foliage shimmer)
 
 ### YouTube Live
 
-- **Resolution:** 1920×1080 or 2560×1440 (if your upload supports it)
+- **Resolution:** 1920×1080 or 2560×1440 (if upload supports it)
 - **FPS:** 60
 - **Bitrate:** 9,000–12,000 Kbps (1080p) or 16,000 Kbps (1440p)
-- **Encoder:** NVENC P5 or x264 Medium
+- **Encoder:** NVENC P5, or NVENC AV1 on RTX 40-series for foliage-heavy scenes
 
 ### Kick
 
@@ -48,63 +54,65 @@ The combination means Palworld benefits more than most survival games from a hig
 - **Bitrate:** 8,000 Kbps
 - **Encoder:** NVENC P5
 
-## In-game graphics tuning for clean stream output
+## In-Game Graphics Tuning for Clean Stream Output
 
-Palworld is built on Unreal Engine 5 with Lumen and Nanite. These technologies look great but are GPU-hungry. Tune for stream output, not for screenshots:
+Palworld runs on Unreal Engine 5 with Lumen and Nanite. These look great but are GPU-hungry. Tune for stream output, not screenshots:
 
 - **Graphics preset:** Epic for VOD recordings, High for live streaming if your GPU is borderline.
-- **View Distance:** Far (not Epic) — Epic adds shimmering distant foliage that wastes encoder bits.
-- **Shadows:** High. Epic has noisy contact shadows that compress badly.
-- **Anti-Aliasing:** TSR Quality — produces a softer but cleaner image for streaming than DLSS Performance.
-- **Motion Blur:** Off. Critical for first-person aiming clarity.
-- **Foliage Quality:** High, not Epic. The visual difference is small; the bitrate cost is large.
-- **DLSS/FSR/TSR upscaling:** Quality mode is fine; never use Performance mode for streaming — it adds artifacts that the encoder amplifies.
+- **View Distance:** Far, not Epic — Epic adds shimmering distant foliage that wastes encoder bits.
+- **Shadows:** High — Epic has noisy contact shadows that compress badly.
+- **Anti-Aliasing:** TSR Quality — a softer but cleaner image for streaming than DLSS Performance.
+- **Motion Blur:** Off — important for first-person aiming clarity.
+- **Foliage Quality:** High, not Epic — small visual gain, large bitrate cost.
+- **Upscaling (DLSS/FSR/TSR):** Quality mode is fine; never Performance mode for streaming — it adds artifacts the encoder amplifies.
 
-## Encoder choice for Palworld
+## Encoder Choice for Palworld
 
-NVENC HEVC is the clear winner if your platform supports it (YouTube Live, Kick, Twitch Enhanced Broadcasting). Standard Twitch users on H.264 should still prefer NVENC over x264 — the GPU encoder has caught up and leaves CPU free for the game's complex AI loop.
+NVENC HEVC is the clear winner where your platform supports it (YouTube, Kick, Twitch Enhanced Broadcasting). Standard Twitch users on H.264 should still prefer NVENC over x264 — the GPU encoder leaves your CPU free for Palworld's heavy AI and world-simulation loop.
 
 | Hardware | Recommended encoder |
 |----------|---------------------|
-| RTX 40-series | NVENC HEVC P5 |
+| RTX 40-series | NVENC HEVC or AV1 P5 |
 | RTX 30-series | NVENC H.264 P5 |
 | RTX 20-series | NVENC H.264 P4 |
 | RX 7000-series | AMF HEVC High Quality |
-| AMD Ryzen CPU only | x264 Fast or Medium (Medium drops frames in big bases) |
+| Ryzen CPU only | x264 Fast (Medium drops frames in big bases) |
 
-## Avoiding chunk-loading hitches on stream
+Comparing codecs? Our [H.264 vs H.265 vs AV1](/blog/h264-vs-h265-vs-av1/) breakdown explains why HEVC's edge handling matters more in foliage-heavy games.
 
-Palworld streams chunks of the open world from disk as you traverse. On HDD storage, this causes visible hitching every few seconds — viewers see stutter. Two fixes:
+## Avoiding Chunk-Loading Hitches on Stream
 
-1. **Move the game to an NVMe SSD.** This is the #1 quality-of-life upgrade for Palworld streamers in 2026 — sub-1ms read latency eliminates the visible hitches.
-2. **In OBS Advanced settings, enable "Process Priority: Above Normal"** so OBS keeps encoding through OS-level disk pauses.
+Palworld streams chunks of the open world from disk as you traverse. On HDD storage this causes visible hitching every few seconds — viewers see stutter that no bitrate setting can fix. Two solutions:
 
-If you can't move to SSD, lower your stream FPS to 30. The encoder will use the time savings to mask hitches better.
+1. **Move the game to an NVMe SSD.** This is the #1 quality-of-life upgrade for Palworld streamers in 2026 — sub-millisecond read latency eliminates the visible hitches.
+2. **Enable "Process Priority: Above Normal"** in OBS Advanced settings so OBS keeps encoding smoothly through OS-level disk pauses.
 
-## Recording vs streaming
+If you can't move to SSD, lower stream FPS to 30. The encoder uses the extra per-frame time to mask hitches better. If you're chasing stutter, our guide on [fixing stream lag and stutter](/blog/how-to-fix-stream-lag-and-stutter/) has more.
 
-Many Palworld creators stream live to Twitch then upload edited highlights to YouTube. To save GPU/CPU headroom while doing both:
+## Recording vs Streaming
 
-- Use OBS's separate **Recording output** with a higher bitrate (20-30 Mbps H.264 or 12-15 Mbps HEVC).
+Many Palworld creators stream live to Twitch and upload edited highlights to YouTube. To preserve headroom while doing both:
+
+- Use OBS's separate **Recording output** at a higher bitrate (20–30 Mbps H.264 or 12–15 Mbps HEVC).
 - Set Recording resolution to 1440p or 2160p if your GPU can handle it.
-- Stream output stays at 1080p 60fps for live viewers.
+- Keep the stream output at 1080p 60fps for live viewers.
 
-This dual-output flow gives you a mezzanine-quality file for editing without inflating your live stream cost. Use our [Bitrate & Storage Calculator](/) to plan disk space — long Palworld recording sessions can produce 20+ GB per hour at higher recording bitrates.
+This dual-output flow gives you a high-quality mezzanine file for editing without inflating your live stream cost. Long recording sessions can produce 20+ GB per hour at higher recording bitrates, so plan ahead with the [recording time calculator](/tools/recording-time-calculator/).
 
-## Audio for Palworld streams
+## Audio for Palworld Streams
 
 Palworld has surprisingly good ambient and combat audio. Don't smother it:
 
 - **Mic bitrate:** 128 Kbps minimum.
-- **Game audio:** Keep at full level; duck only when you're explaining mechanics.
+- **Game audio:** keep at full level; duck only when explaining mechanics.
 - **Mic filters:** RNNoise + Compressor + Limiter at -3 dB.
 - **Sample rate:** 48 kHz.
 
-## Recommended upload speed
+## Recommended Upload Speed
 
-For Twitch 1080p 60fps at 6,000 Kbps, you need at least **10 Mbps upload speed**. For YouTube at 9,000 Kbps, plan for **15 Mbps**. If you're on a 5G home internet plan or rural DSL, drop to 720p 30fps at 3,000 Kbps. Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to test.
+For Twitch 1080p 60fps at 6,000 Kbps, you need at least **10 Mbps upload**. For YouTube at 9,000 Kbps, plan for **15 Mbps**. On 5G home internet or rural DSL, drop to 720p 30fps at 3,000 Kbps.
 
-## Quick reference table
+## Quick Reference Table
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
@@ -114,4 +122,20 @@ For Twitch 1080p 60fps at 6,000 Kbps, you need at least **10 Mbps upload speed**
 | YouTube | 1440p | 60 | 16,000 Kbps | NVENC P4 |
 | Kick | 1080p | 60 | 8,000 Kbps | NVENC P5 |
 
-Browse our [Codec Comparison](/compare/) to weigh HEVC vs H.264 for Palworld's foliage-heavy scenes — HEVC's better edge handling matters more here than in flat-shaded games.
+## FAQ
+
+### Why does my Palworld stream stutter every few seconds?
+
+That's almost always chunk-loading from a slow disk, not your encoder or bitrate. Move the game to an NVMe SSD to fix it. Setting OBS process priority to Above Normal helps OBS ride through the disk pauses.
+
+### Should I lower foliage settings for a cleaner stream?
+
+Yes — set Foliage Quality and View Distance to High/Far rather than Epic. Distant foliage shimmer is one of the biggest bitrate wasters in Palworld and the visual loss on stream is minimal.
+
+### Can I record at higher quality than I stream?
+
+Absolutely. Use OBS's separate Recording output at 20–30 Mbps and 1440p while streaming at 1080p 60fps. That gives you a clean file for YouTube edits without raising your live encoding load.
+
+## Bottom Line
+
+Palworld is a two-front challenge: a heavy UE5 renderer and disk-dependent world streaming. Max Twitch's 6,000 Kbps with NVENC P5, keep foliage and view distance at High/Far, and above all put the game on an SSD. Weigh HEVC vs H.264 with the [codec comparison](/compare/) tool, and size your VOD storage with the [recording time calculator](/tools/recording-time-calculator/).

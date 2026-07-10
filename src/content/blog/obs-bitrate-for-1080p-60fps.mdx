@@ -1,44 +1,104 @@
 ---
 slug: obs-bitrate-for-1080p-60fps
-title: Best OBS Bitrate for 1080p 60fps Streaming
-description: Find the ideal OBS bitrate for 1080p 60fps streaming on Twitch and YouTube, with encoder, upload speed, and quality tips.
+title: "Best OBS Bitrate for 1080p 60fps Streaming"
+description: "Find the ideal OBS bitrate for 1080p 60fps streaming on Twitch, YouTube, and Kick, with encoder, rate control, upload speed, and quality tips."
 publishedAt: 2026-03-31
-updatedAt: 2026-03-31
-readTime: 6 min read
+updatedAt: 2026-07-10
+readTime: 7 min read
 ---
 
-For OBS 1080p 60fps streaming, the right bitrate depends mostly on platform and upload speed. Twitch users often stay around **6,000 Kbps**, while YouTube streamers can often push **8,000–12,000 Kbps** or more. For the full settings map, see the [OBS settings hub](/obs/).
+1080p 60fps is the sweet spot for gaming streams — sharp enough to read, smooth enough for fast motion — but only if you feed it enough bitrate. Too little and the picture smears during action; too much and viewers with slow connections buffer.
+
+## Quick Answer
+
+**Use 6,000 Kbps on Twitch and 8,000–12,000 Kbps on YouTube for 1080p 60fps.** Set rate control to [CBR](/glossary/cbr/), keyframe interval to 2 seconds, and pick a hardware encoder like NVENC (or AV1 if your GPU supports it). Anything below ~4,500 Kbps will look soft at 60fps. For the full settings map, see the [OBS settings hub](/obs/).
 
 ## Quick answer table
 
 | Platform | Recommended Bitrate | Safe Upload Speed |
 | --- | --- | --- |
 | Twitch | 6,000 Kbps | 10+ Mbps |
-| YouTube | 6,000–12,000 Kbps | 10–18 Mbps |
+| YouTube | 8,000–12,000 Kbps | 14–18 Mbps |
 | Kick | 6,000–8,000 Kbps | 10–12 Mbps |
+
+## Why 1080p 60fps needs more bitrate
+
+Every second of 60fps video packs twice as many frames as 30fps. Doubling the frame count means the encoder has far more data to compress, and it needs more bitrate to keep each frame clean. At the same bitrate, a 60fps stream shows more compression artifacts than a 30fps one, especially in fast-moving games.
+
+That's why 1080p60 sits near the top of what most platforms comfortably handle. On Twitch, the practical ceiling is **6,000 Kbps** for non-partners (partners can reach ~8,000). YouTube's server-side [transcoding](/glossary/transcoding/) is far more generous, so you can push higher and let YouTube re-encode quality ladders for viewers. Compare the platforms directly in our [Twitch vs YouTube bitrate comparison](/blog/twitch-vs-youtube-bitrate-comparison/).
 
 ## Best OBS settings besides bitrate
 
-- **Rate control:** CBR
-- **Keyframe interval:** 2
-- **Audio bitrate:** 160 Kbps
-- **Encoder:** NVENC or x264; AV1 if supported
+Bitrate is only one dial. These matter just as much:
+
+- **Rate control:** CBR (constant bitrate). Twitch requires it, and it produces the most predictable stream. Learn why in our [CBR vs VBR explainer](/blog/cbr-vs-vbr-for-streaming/).
+- **Keyframe interval:** 2 seconds. Required by most RTMP platforms for proper segmenting.
+- **Preset:** For x264 use "veryfast" as a baseline; for NVENC use "Quality" or "Max Quality." Hardware encoders have plenty of headroom.
+- **Profile:** high.
+- **Audio bitrate:** 160 Kbps AAC for music-heavy streams, 128 Kbps for voice-only.
+- **Encoder:** NVENC (NVIDIA), AMD AMF, or Intel QuickSync offload work from your CPU; x264 gives the best quality per bit if your CPU can spare the cores.
+
+### Choosing your encoder
+
+If you have an NVIDIA RTX card, NVENC is the easy default — it's nearly transparent to game performance and looks excellent at 6,000 Kbps. Owners of RTX 40/50-series cards can use **AV1 via NVENC**, which delivers roughly 30% more efficiency, so 6,000 Kbps of AV1 looks closer to 8,000 Kbps of H.264. Just remember Twitch's AV1 support is still rolling out, while YouTube already accepts it. For a full breakdown, see [NVENC vs x264](/blog/nvenc-vs-x264-streaming/).
 
 ## Upload speed needed
 
-Use the 1.5x rule for comfort:
+Use roughly a 1.5x buffer over your total stream bitrate:
 
-- 6,000 Kbps stream → aim for 9–10 Mbps upload
-- 10,000 Kbps stream → aim for 15 Mbps upload or more
+- **6,000 Kbps stream** → aim for 9–10 Mbps stable upload
+- **8,000 Kbps stream** → aim for 12–13 Mbps upload
+- **12,000 Kbps stream** → aim for 18+ Mbps upload
 
-## Common problems
+Test on a wired connection at your usual streaming hour. If your upload can't sustain the target, lower the bitrate before anything else. Our [bandwidth calculator](/tools/bandwidth-calculator/) will tell you exactly what your connection supports.
+
+## Common problems and fixes
 
 ### Dropped frames
 
-Usually upload speed related.
+Dropped frames on the network almost always mean your bitrate exceeds what your upload can sustain. Lower the bitrate by 1,000–1,500 Kbps, switch from Wi-Fi to Ethernet, and pause background uploads. See [how to fix dropped frames in OBS](/blog/how-to-fix-dropped-frames-in-obs/).
 
-### Blurry stream
+### Blurry or smeary stream
 
-Usually bitrate is too low for 1080p 60fps.
+If the picture turns to mush during motion, your bitrate is too low for 1080p 60fps. Bump toward 6,000 Kbps, or if you're already capped, drop to 30fps — halving the frame rate gives each frame more bits. A clean 1080p30 often beats a starved 1080p60.
 
-For exact values, use our [1080p 60fps calculator](/size/1080p-60fps/), [1080p streaming bitrate guide](/size/1080p-streaming-bitrate/), [bandwidth calculator](/tools/bandwidth-calculator/), and [OBS setup wizard](/setup-wizard/).
+### "Encoding overloaded"
+
+This warning means your CPU can't keep up with x264. Switch to a hardware encoder (NVENC/AMF/QuickSync) or use a faster x264 preset. Full steps are in [how to fix encoding overloaded in OBS](/blog/how-to-fix-encoding-overloaded-obs/).
+
+## How bitrate, resolution, and frame rate interact
+
+It helps to think of bitrate as a fixed budget you're spending across pixels and frames. At 1080p60 you're asking one number to cover roughly 124 million pixels per second — more than double what 1080p30 requires. When that budget is stretched too thin, the encoder throws away detail in whichever frames are most complex, which is exactly why fast-motion scenes are the first to look blocky.
+
+That's the reasoning behind the two most common downgrades:
+
+- **Keep 60fps, lower resolution:** great for competitive shooters where smoothness wins. 720p60 at 4,500 Kbps looks cleaner in motion than 1080p60 starved at the same bitrate.
+- **Keep 1080p, lower frame rate:** great for slower content like strategy games, Just Chatting, or creative streams. 1080p30 gives each frame twice the bits and looks razor-sharp.
+
+If you're unsure which way to go, our [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/) breakdown walks through the tradeoff by content type.
+
+## A quick sanity-check before you go live
+
+- Confirm your base and output resolution are both 1920x1080 in OBS Video settings.
+- Set your Common FPS value to 60.
+- Verify rate control is CBR and bitrate is 6,000 (Twitch) or your YouTube target.
+- Run a 5-minute private test stream and watch OBS Stats for dropped frames.
+- If frames drop, lower bitrate by 1,000 Kbps and retest until stable.
+
+## FAQ
+
+### Is 6,000 Kbps enough for 1080p 60fps?
+
+Yes — 6,000 Kbps is the standard target for 1080p60 on Twitch and looks great for most games. Very fast-motion titles benefit from more, but 6,000 is the reliable baseline where nearly all viewers can watch smoothly.
+
+### Should I use CBR or VBR for 1080p 60fps?
+
+CBR. It keeps your bandwidth predictable and is required by Twitch. VBR can look marginally better for recording, but for live streaming CBR avoids buffering spikes.
+
+### Can I stream 1080p 60fps with a slow upload?
+
+Not reliably. If you can't sustain ~10 Mbps upload, drop to 1080p 30fps or 720p 60fps instead of forcing 60fps with too little bitrate.
+
+## Bottom Line
+
+For 1080p 60fps in OBS, set 6,000 Kbps on Twitch or 8,000–12,000 Kbps on YouTube, keep CBR and a 2-second keyframe interval, and use a hardware encoder. For exact values, run our [1080p 60fps calculator](/size/1080p-60fps/), the [1080p streaming bitrate guide](/size/1080p-streaming-bitrate/), the [bandwidth calculator](/tools/bandwidth-calculator/), or start fresh with the [OBS setup wizard](/setup-wizard/).

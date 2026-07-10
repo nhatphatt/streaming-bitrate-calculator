@@ -1,52 +1,74 @@
 ---
 slug: best-obs-settings-valorant
 title: "Best OBS Settings for Streaming Valorant in 2026"
-description: "Optimal OBS streaming settings for Valorant. Recommended bitrate, resolution, and encoder for Twitch and YouTube with minimal FPS impact."
+description: "Optimal OBS streaming settings for Valorant. Recommended bitrate, resolution, keyframes, and encoder for high-FPS competitive play on Twitch and YouTube."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
+updatedAt: "2026-07-10"
 readTime: "6 min read"
 ---
 
-Valorant is a competitive tactical shooter where every frame matters. The good news: it's relatively easy to stream because its art style is clean and compresses well. Here are the best OBS settings for streaming Valorant.
+Valorant is a competitive tactical shooter where framerate is everything — players chase 240fps and beyond to keep peeker's advantage. The good news for streamers is that Valorant is one of the easiest games to encode: it's CPU-light, GPU-light, and its clean art style compresses at bitrates that would look terrible on a busier title.
 
-## Recommended Settings
+## Quick Answer
+
+**Stream Valorant at 1080p60 with NVENC (New), 5,000–6,000 Kbps CBR on Twitch (8,000–10,000 on YouTube), preset P5, and a 2-second keyframe interval.** Because Valorant runs at hundreds of frames per second, the real goal is protecting your in-game FPS — so always offload encoding to NVENC and keep OBS off your CPU.
+
+## Why Valorant Is Easy to Stream
+
+Two things make Valorant a dream to broadcast:
+
+1. **It's extremely light on hardware.** Valorant is built to run on modest machines, so most gaming PCs render it at 200–400fps with the CPU and GPU barely breaking a sweat. That leaves plenty of headroom for OBS.
+2. **It compresses cleanly.** The stylized art style uses flat colors, clean geometry, and minimal particle clutter. Compared to Warzone or Fortnite, there's far less visual noise for the encoder to chew through, so a sharp image is achievable at lower bitrates.
+
+The one twist is high-refresh gameplay. You'll be playing at well above 60fps, but you should still **stream at 60fps** — 120fps streams are bandwidth-hungry, poorly supported, and pointless for viewers on Twitch. Let the game run fast locally; cap OBS output at 60.
+
+## The Real Challenge: Protecting Your Framerate
+
+For a competitive shooter, encoder choice is about FPS preservation, not raw quality. A CPU-based x264 encode steals cycles from the game and can tank your framerate mid-clutch. NVENC runs on a dedicated block of the GPU that barely touches game rendering, so it's the clear winner here even though Valorant is CPU-light.
+
+- Use **NVENC (New)** so your CPU stays free for input polling and game logic.
+- Cap your in-game FPS a bit below your monitor's refresh rate (e.g., 237 on a 240 Hz panel) to keep GPU load steady and frametimes consistent.
+- If you're serious about zero encoding impact, a [dual-PC setup](/blog/dual-pc-streaming-setup-guide/) moves OBS entirely off your gaming machine — overkill for most, but the ultimate answer for high-FPS competitive play.
+
+## Recommended Bitrate and Resolution
+
+Twitch caps non-partner bitrate at ~6,000 Kbps, and Valorant looks great well under that. YouTube Live transcodes server-side and accepts far higher bitrates.
 
 ### Twitch
 
-- **1080p 60fps:** 5,000–6,000 Kbps, NVENC (New), Preset P5
-- **720p 60fps:** 3,500–4,500 Kbps — great if you want maximum game FPS
+- **1080p 60fps:** 5,000–6,000 Kbps, NVENC (New), preset P5
+- **720p 60fps:** 3,500–4,500 Kbps — a smart pick if you're squeezing out every frame
 
 ### YouTube Live
 
 - **1080p 60fps:** 8,000–10,000 Kbps
 - **1440p 60fps:** 12,000–15,000 Kbps
 
-## Why Valorant Compresses Well
-
-Valorant uses a stylized art style with flat colors and clean geometry. Unlike Fortnite or Warzone, there's less visual noise — fewer particles, simpler textures, and less foliage. This means the encoder can produce sharp output at **lower bitrates** than most shooters.
-
-At 1080p 60fps, 5,000 Kbps on Twitch looks excellent for Valorant. You can even get away with 4,500 Kbps without noticeable quality loss during normal gameplay.
+At 1080p60, 5,000 Kbps on Twitch looks excellent; you can even hold up at 4,500 Kbps in normal gameplay. Compare against other resolutions on our [1080p 60fps bitrate page](/size/1080p-60fps/) if you're weighing 720p vs 1080p.
 
 ## Encoder Settings
 
-### NVENC (Recommended)
+### NVENC (recommended)
 
 - **Rate Control:** CBR
 - **Bitrate:** 5,000–6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
-- **Preset:** P5 (Slow)
+- **Keyframe Interval:** 2 seconds
+- **Preset:** P5 (Slow) — P6 works too, since the GPU is barely loaded
 - **Profile:** High
 - **B-frames:** 2
-- **Look-ahead:** Off
+- **Look-ahead / Psycho Visual Tuning:** optional; enable only if you have GPU headroom
 
-### x264
+### x264 (only if you must)
 
-- **Preset:** Medium
+- **Preset:** Medium on an 8-core+ CPU with FPS to spare
 - **Profile:** High
-- **Tune:** None (don't use "zerolatency" — it hurts quality)
+- **Tune:** None — do **not** use "zerolatency," it hurts quality for no benefit
+
+Valorant is CPU-light, so a strong processor *can* run x264 Medium — but there's rarely a reason to risk framerate dips in a competitive game when NVENC already looks great. Reserve x264 for a second encoding PC. Our [NVENC vs x264](/blog/nvenc-vs-x264-streaming/) comparison covers the tradeoff in depth.
 
 ## In-Game Settings for Streaming
 
-Valorant is CPU-light, so streaming impact is minimal. Recommended in-game settings:
+Valorant's minimal overhead means you can prioritize clarity over performance without hurting FPS meaningfully:
 
 - **Resolution:** 1920×1080 (native)
 - **Material Quality:** High
@@ -54,25 +76,45 @@ Valorant is CPU-light, so streaming impact is minimal. Recommended in-game setti
 - **Detail Quality:** Medium
 - **Anti-Aliasing:** MSAA 4x
 - **Anisotropic Filtering:** 4x
-- **Distortion:** Off (reduces visual noise)
+- **Distortion:** Off (reduces visual noise the encoder wastes bitrate on)
 - **Bloom:** Off (cleaner image for stream)
 
-## Performance Tips
+## Audio Settings
 
-Valorant targets 128+ FPS for competitive play. To maintain high FPS while streaming:
+- **Sample Rate:** 48 kHz
+- **Track/Bitrate:** 160 Kbps stereo
+- Competitive players run game audio loud for footsteps — mix it so viewers hear callouts and comms clearly, and add a noise gate so your mic doesn't broadcast keyboard clatter during tense rounds.
 
-1. Use **NVENC** encoding — it offloads work to the GPU's dedicated encoder chip, not the game rendering cores
-2. Cap your game FPS at your monitor's refresh rate to reduce GPU load
-3. Close Chrome and other background apps — Valorant is sensitive to background CPU usage
-4. Set OBS process priority to "Above Normal" in Settings → Advanced
-
-## Quick Reference
+## Platform-Specific Tips
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
-| Twitch | 1080p | 60 | 5,000–6,000 Kbps | NVENC P5 |
+| Twitch | 1080p | 60 | 5,000–6,000 Kbps | NVENC P5 (H.264) |
 | Twitch | 720p | 60 | 3,500–4,500 Kbps | NVENC P5 |
 | YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC P5 |
 | Kick | 1080p | 60 | 6,000–7,000 Kbps | NVENC P5 |
 
-Calculate your exact storage needs with our [Bitrate Calculator](/) or check your connection with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+- **Twitch:** Stay at or below 6,000 Kbps CBR. See the [Twitch platform guide](/platforms/twitch/) for ingest and latency options — low-latency mode is great for interacting with chat during downtime between rounds.
+- **YouTube:** Push higher bitrate or step up to 1440p; the clean art style stays razor-sharp and YouTube's generous ceiling handles it.
+- **Kick:** Its ~8,000 Kbps cap gives comfortable headroom at 1080p60.
+
+## Performance Checklist
+
+1. Use NVENC to keep encoding off the CPU and game cores.
+2. Cap game FPS just below monitor refresh to stabilize frametimes.
+3. Close Chrome and background apps — Valorant is sensitive to CPU contention.
+4. Set OBS process priority to "Above Normal" under Settings → Advanced.
+
+## FAQ
+
+### Should I stream Valorant at 720p for more FPS?
+
+If you're chasing the highest possible framerate on a mid-range card, 720p60 at ~4,000 Kbps is a legitimate choice and still looks clean thanks to Valorant's simple art. On capable hardware, 1080p60 is the better default for viewers.
+
+### Does streaming lower my Valorant FPS?
+
+With NVENC, the impact is minimal — a few percent at most — because encoding runs on a separate GPU block. If you see larger drops, you're likely on x264 or CPU-limited by background apps; switch to NVENC and close browsers. Our guide to [fixing dropped frames](/blog/how-to-fix-dropped-frames-in-obs/) helps with network-side stutter.
+
+## Bottom Line
+
+Valorant is light and clean, so 1080p60 NVENC at 5,000–6,000 Kbps on Twitch looks great while protecting the high framerate competitive play demands — the winning move is keeping OBS off your CPU. Check your upload headroom with the [bandwidth calculator](/tools/bandwidth-calculator/) and browse more [OBS game guides](/obs/) to dial in the rest.

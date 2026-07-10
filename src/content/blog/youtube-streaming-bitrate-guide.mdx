@@ -1,13 +1,17 @@
 ---
 slug: youtube-streaming-bitrate-guide
-title: Best YouTube Streaming Bitrate Settings (720p, 1080p, 1440p, 4K)
-description: Find the best YouTube Live bitrate settings for 720p, 1080p, 1440p, and 4K streaming. Includes FPS recommendations, upload speed, and OBS tips.
+title: "Best YouTube Streaming Bitrate Settings (720p, 1080p, 1440p, 4K)"
+description: "Find the best YouTube Live bitrate settings for 720p, 1080p, 1440p, and 4K streaming. Includes FPS recommendations, upload speed, codecs, and OBS tips."
 publishedAt: 2026-03-31
-updatedAt: 2026-03-31
+updatedAt: 2026-07-10
 readTime: 8 min read
 ---
 
-If you're wondering what streaming bitrate to use for YouTube Live, the right answer depends on your resolution, frame rate, codec, and upload speed. In general, 1080p 60fps streams often work best around **6,000–12,000 Kbps**, while 4K streaming needs much more bandwidth.
+The right YouTube Live bitrate depends on your resolution, frame rate, codec, and upload speed. YouTube is far more generous than Twitch — it transcodes your stream server-side into multiple quality options — so you can push higher and let YouTube handle the rest.
+
+## Quick Answer
+
+**For 1080p 60fps on YouTube, use 6,000–12,000 Kbps.** Scale up for higher resolutions: 1440p wants 12,000–20,000 Kbps, and 4K wants 20,000–51,000 Kbps. Use CBR, a 2-second keyframe interval, and match your bitrate to what your upload can sustain — not the maximum you're allowed.
 
 ## Recommended YouTube streaming bitrate table
 
@@ -21,47 +25,65 @@ If you're wondering what streaming bitrate to use for YouTube Live, the right an
 | 4K | 30 | 20,000–35,000 Kbps | 30–50 Mbps |
 | 4K | 60 | 30,000–51,000 Kbps | 45–75 Mbps |
 
+These ranges match YouTube's own recommended live encoder settings. Confirm your target with the [bandwidth calculator](/tools/bandwidth-calculator/) before turning the dial to maximum.
+
+## Why YouTube allows higher bitrates than Twitch
+
+Every YouTube Live stream is [transcoded](/glossary/transcoding/) server-side into a full ladder of qualities — from your source resolution down to 360p — so viewers on any connection get a smooth playback option. Because YouTube always re-encodes for viewers, it can accept a much fatter source feed than Twitch, where non-partners are effectively capped near 6,000 Kbps. That's the core difference explained in our [Twitch vs YouTube bitrate comparison](/blog/twitch-vs-youtube-bitrate-comparison/).
+
+The takeaway: on YouTube, higher bitrate improves your archived VOD and the top quality tier, without punishing viewers on slow connections.
+
 ## Best YouTube bitrate by resolution
 
 ### 720p streaming bitrate for YouTube
 
-For 720p streaming, YouTube usually looks good between 2,500 and 5,000 Kbps depending on frame rate and scene complexity.
+720p looks good between 2,500 and 5,000 Kbps depending on frame rate and scene complexity. It's the right fallback when your upload is limited or inconsistent. See the [720p streaming bitrate guide](/size/720p-streaming-bitrate/) for specifics.
 
 ### 1080p streaming bitrate for YouTube
 
-1080p is the most common target for YouTube Live. For 30fps, **4,500–9,000 Kbps** is a strong range. For 60fps, most creators should start around **6,000 Kbps** and increase if their connection and encoder can handle it.
+1080p is the most common target. For 30fps, 4,500–9,000 Kbps is a strong range; talking-head and tutorial content sits fine near the low end, while high-motion gameplay benefits from more. For 60fps, start around 6,000 Kbps and climb toward 12,000 if your connection and encoder can handle it. The [1080p streaming bitrate guide](/size/1080p-streaming-bitrate/) has exact targets.
 
 ### 1440p and 4K streaming bitrate for YouTube
 
-Higher resolutions look great on YouTube, but they also need dramatically more bitrate. If your upload speed is inconsistent, staying at 1080p often produces a better real-world stream.
+Higher resolutions look stunning on YouTube but demand dramatically more bandwidth. 1440p60 wants 12,000–20,000 Kbps; native 4K climbs to 20,000–51,000 Kbps. These need genuinely fast, symmetrical upload — think fiber or high-tier cable. If your upload is inconsistent, staying at 1080p usually produces a better real-world stream than a stuttering 4K feed. Check the [4K streaming bitrate guide](/size/4k-streaming-bitrate/) before committing.
 
 ## YouTube bitrate for 30fps vs 60fps
 
-30fps is usually enough for tutorials, interviews, and slower-paced live content. 60fps is better for gaming, sports, and fast-motion scenes. If your connection is limited, dropping from 60fps to 30fps often gives a better result than trying to force high frame rates with too little bitrate.
+30fps is usually enough for tutorials, interviews, podcasts, and slower live content, and it lets you spend your bitrate on a sharper image. 60fps is better for gaming, sports, and fast-motion scenes where smoothness matters most. If your connection is limited, dropping from 60fps to 30fps almost always beats forcing high frame rates with too little bitrate — the extra bits per frame keep the picture clean. See [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/) for a deeper look.
+
+## Codec choice: H.264 vs AV1 on YouTube
+
+YouTube accepts H.264 for live, and it also supports AV1 ingest on newer encoders. AV1 is roughly 30% more efficient, so the same visual quality needs less bitrate — useful if your upload is the bottleneck. If you own an RTX 40/50-series or Intel Arc GPU, AV1 via NVENC or QuickSync is worth testing. Learn the tradeoffs in [H.264 vs H.265 vs AV1](/blog/h264-vs-h265-vs-av1/).
 
 ## Best OBS settings for YouTube streaming
 
-- **Rate control:** CBR
-- **Keyframe interval:** 2 seconds
-- **Encoder:** NVENC, x264, or AV1 if supported
-- **Audio bitrate:** 128–160 Kbps AAC
+- **Rate control:** [CBR](/glossary/cbr/) for stability (VBR is allowed but CBR is simpler).
+- **Keyframe interval:** 2 seconds.
+- **Encoder:** NVENC, x264, or AV1 if supported.
+- **Preset:** x264 "veryfast," NVENC "Quality."
+- **Audio bitrate:** 128–160 Kbps AAC.
+- **Profile:** high.
 
-For exact bitrate and file size calculations, use our [1080p 60fps calculator](/size/1080p-60fps/), [4K 60fps calculator](/size/4k-60fps/), and [upload speed calculator](/tools/bandwidth-calculator/).
+Set your stream up cleanly with the [OBS setup wizard](/setup-wizard/) or review the [YouTube platform guide](/platforms/youtube/).
 
 ## How much upload speed do you need for YouTube streaming?
 
-A safe rule is to keep your stream bitrate below about **70–75%** of your real upload speed. That leaves room for audio, overlays, and network fluctuation.
+Keep your stream bitrate below about **70–75%** of your real upload speed. That headroom absorbs audio, overlays, and network fluctuation. A 9,000 Kbps 1080p stream wants roughly 13–14 Mbps of stable, wired upload; a 20,000 Kbps 1440p stream wants closer to 30 Mbps. If you see dropped frames, lower bitrate first — see [how to fix dropped frames in OBS](/blog/how-to-fix-dropped-frames-in-obs/).
 
 ## Frequently asked questions
 
 ### What is the best YouTube bitrate for 1080p 60fps?
 
-Usually **6,000–12,000 Kbps** depending on motion, encoder quality, and upload speed.
+Usually 6,000–12,000 Kbps depending on motion, encoder quality, and upload speed. Start at 6,000 and increase if your connection is stable.
 
 ### Is 6,000 Kbps enough for YouTube Live?
 
-Yes, for many 1080p streams it is a solid starting point.
+Yes — for many 1080p streams it's a solid, reliable starting point. YouTube transcodes it into lower qualities for viewers, so you rarely need to go higher unless you want a sharper VOD.
 
 ### What bitrate should I use for 4K YouTube streaming?
 
-4K usually needs **20,000–35,000 Kbps** for 30fps and significantly more for 60fps.
+Roughly 20,000–35,000 Kbps for 4K 30fps and 30,000–51,000 Kbps for 4K 60fps — with the fast upload speed to match.
+
+### Should I use AV1 for YouTube Live?
+
+Only if you have hardware AV1 encoding (RTX 40/50-series or Intel Arc). It delivers the same quality at a lower bitrate, which helps if your upload is limited.

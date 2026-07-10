@@ -1,79 +1,122 @@
 ---
 slug: best-obs-settings-minecraft
 title: "Best OBS Settings for Streaming Minecraft in 2026"
-description: "Optimal OBS settings for streaming Minecraft on Twitch and YouTube. Bitrate, resolution, and encoder recommendations for Java and Bedrock editions."
+description: "Optimal OBS settings for streaming Minecraft on Twitch and YouTube. Bitrate, encoder, and keyframe recommendations for vanilla, shaders, Java, and Bedrock."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
+updatedAt: "2026-07-10"
 readTime: "6 min read"
 ---
 
-Minecraft is one of the most-watched games on Twitch and YouTube. Its blocky art style compresses extremely well, meaning you can get great stream quality at lower bitrates than most games.
+Minecraft is one of the most-watched games on Twitch and YouTube, and its blocky art style makes it one of the easiest to encode — until you add shaders. The right settings depend heavily on whether you're running vanilla, a shader pack, Java, or Bedrock, and those differences change everything from your bitrate to your encoder choice.
 
-## Recommended Settings
+## Quick Answer
+
+**For vanilla Minecraft, stream 1080p60 at 4,500–5,000 Kbps with NVENC (New), preset P6, and a 2-second keyframe interval. With shaders (SEUS, BSL, Complementary), treat it like a AAA game: push to 6,000 Kbps on Twitch and higher on YouTube.** Java is CPU-heavy, so always prefer NVENC to keep the processor free.
+
+## Vanilla vs Shaders: The Key Difference
+
+This is the single most important decision for a Minecraft stream, because vanilla and shaded Minecraft are almost different games from a compression standpoint.
+
+**Vanilla Minecraft compresses beautifully.** Block visuals mean large areas of uniform color, hard edges, and simple geometry — exactly what H.264 handles efficiently. The encoder produces sharp output at bitrates that would fall apart on a realistic game. At 1080p60, even 4,500 Kbps looks crisp.
+
+**Shaders change the math entirely.** Packs like SEUS, BSL, and Complementary add realistic lighting, water reflections, shadows, volumetric fog, and particle effects. All of that introduces high-frequency detail and constant subtle motion, dramatically increasing compression complexity. Shaders also hammer your GPU — a machine that renders vanilla at 400fps might drop to 60–90fps with a heavy pack. So with shaders you need both **more bitrate** and **more GPU headroom**.
+
+| Mode | Twitch bitrate | GPU load | Compression difficulty |
+|------|---------------|----------|------------------------|
+| Vanilla, no mods | 4,500 Kbps | Very low | Easy |
+| Vanilla + optimization mods | 4,500–5,000 Kbps | Low | Easy |
+| Lite shaders (BSL, Complementary) | 5,000–6,000 Kbps | Moderate | Medium |
+| Heavy shaders (SEUS PTGI, ray-traced) | 6,000 Kbps | High | Hard |
+
+## Recommended Bitrate and Resolution
+
+Twitch caps non-partner bitrate at ~6,000 Kbps. YouTube Live transcodes server-side and accepts much higher figures — a real advantage for shader packs, where extra bitrate visibly cleans up reflections and fog.
 
 ### Twitch
 
-- **1080p 60fps:** 4,500–6,000 Kbps, NVENC or x264 Medium
-- **1080p 30fps:** 3,500–4,500 Kbps — perfectly fine for casual Minecraft
+- **1080p 60fps (vanilla):** 4,500–5,000 Kbps
+- **1080p 60fps (shaders):** 6,000 Kbps
+- **1080p 30fps:** 3,500–4,500 Kbps — fine for casual, relaxed play
 - **720p 60fps:** 3,000–4,000 Kbps
 
 ### YouTube Live
 
 - **1080p 60fps:** 6,000–9,000 Kbps
-- **1440p 60fps:** 10,000–12,000 Kbps (great for shader packs)
-
-## Why Minecraft Compresses Well
-
-Minecraft's block-based visuals have large areas of uniform color and simple geometry. The encoder can compress these efficiently, resulting in sharp output at lower bitrates. At 1080p 60fps, even 4,500 Kbps looks excellent for vanilla Minecraft.
-
-**Exception:** Shader packs (SEUS, BSL, Complementary) add realistic lighting, reflections, and particle effects that significantly increase compression complexity. With shaders, treat Minecraft like a AAA game and use 6,000 Kbps on Twitch.
+- **1440p 60fps:** 10,000–14,000 Kbps (great headroom for shader detail)
 
 ## Encoder Settings
 
-### NVENC
+### NVENC (recommended, especially for Java)
 
 - **Rate Control:** CBR
 - **Bitrate:** 4,500–6,000 Kbps (Twitch) / 6,000–9,000 Kbps (YouTube)
-- **Preset:** P5 (Slow) — Minecraft is light on GPU, so you have headroom
+- **Keyframe Interval:** 2 seconds
+- **Preset:** P6 (Slower) — vanilla leaves plenty of GPU headroom; drop to P5 with heavy shaders
 - **Profile:** High
 - **B-frames:** 2
 
-### x264
+### x264 — mind the Java CPU trap
 
-Minecraft Java Edition is CPU-heavy, so be careful with x264:
+Here's the catch that surprises new Minecraft streamers: **Java Edition is CPU-heavy**, not GPU-heavy. It runs on the Java Virtual Machine, leans on single-thread performance, and does world generation, lighting, and entity ticking on the CPU. That directly competes with x264, which also lives on the CPU.
 
-- **Preset:** Faster or Fast (not Medium — Java Minecraft needs CPU headroom)
-- **Bedrock Edition:** Medium preset is fine — Bedrock is much lighter on CPU
+- **Java + x264:** use Faster or Fast preset only — Medium will starve the game and cause chunk-loading lag. Better yet, use NVENC.
+- **Bedrock + x264:** Medium is fine. Bedrock is written in C++, runs far lighter, and leaves CPU headroom.
 
-## In-Game Settings
+If you insist on x264 for Java, cap render distance and consider optimization mods (below). Otherwise, NVENC sidesteps the whole problem. The [NVENC vs x264](/blog/nvenc-vs-x264-streaming/) guide explains why the CPU/GPU split matters so much here.
 
-- **Render Distance:** 12–16 chunks (higher = more CPU load, minimal stream quality gain)
+## Java vs Bedrock for Streaming
+
+- **Java Edition:** CPU-intensive, mod-friendly, and the standard for shaders. Always favor NVENC so the CPU can handle world logic. With mods (Fabric/Forge), allocate 4–6 GB of RAM to the game and add performance mods like Sodium and Lithium to lift framerate before shaders even enter the picture.
+- **Bedrock Edition:** C++ engine, much lighter on CPU, and happy with either NVENC or x264. It's the easier edition to stream on modest hardware, though its shader ecosystem is smaller.
+
+## In-Game Settings for a Clean Stream
+
+### Vanilla
+
+- **Render Distance:** 12–16 chunks (higher adds CPU load for little stream benefit)
 - **Smooth Lighting:** Maximum
-- **Graphics:** Fancy (not Fabulous — it adds unnecessary GPU load)
-- **Particles:** Decreased (reduces compression noise)
+- **Graphics:** Fancy (not Fabulous — it adds GPU cost with little visible gain)
+- **Particles:** Decreased (cuts compression noise)
 - **Clouds:** Off or Fast
 - **Entity Shadows:** Off
 
 ### With Shaders
 
-- **Render Distance:** 8–12 chunks
-- **Shadow Quality:** Medium in shader settings
+- **Render Distance:** 8–12 chunks (shaders multiply the cost of each chunk)
+- **Shadow Quality:** Medium in the shader settings
 - **Bloom:** Low or Off
-- **Motion Blur:** Off
+- **Motion Blur:** Off (always — it smears and wastes bitrate)
 
-## Java vs Bedrock for Streaming
+## Audio Settings
 
-**Java Edition** is more CPU-intensive and benefits from NVENC encoding to keep CPU free. **Bedrock Edition** runs much lighter and works well with either NVENC or x264.
+- **Sample Rate:** 48 kHz
+- **Track/Bitrate:** 160 Kbps stereo
+- Minecraft's music and ambient sounds are quiet; balance them well below your mic so commentary and chat interaction stay clear.
 
-If you're streaming Java with mods (Fabric/Forge), allocate 4–6 GB RAM to Minecraft and use NVENC to avoid CPU bottlenecks.
-
-## Quick Reference
+## Platform-Specific Tips
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
-| Twitch | 1080p | 60 | 4,500–6,000 Kbps | NVENC P5 |
-| Twitch | 720p | 60 | 3,000–4,000 Kbps | NVENC P5 |
-| YouTube | 1080p | 60 | 6,000–9,000 Kbps | NVENC P5 |
-| YouTube | 1440p | 60 | 10,000–12,000 Kbps | NVENC P5 |
+| Twitch (vanilla) | 1080p | 60 | 4,500–5,000 Kbps | NVENC P6 |
+| Twitch (shaders) | 1080p | 60 | 6,000 Kbps | NVENC P5/P6 |
+| YouTube | 1080p | 60 | 6,000–9,000 Kbps | NVENC P6 |
+| YouTube | 1440p | 60 | 10,000–14,000 Kbps | NVENC P6 |
+| Kick | 1080p | 60 | 6,000–7,000 Kbps | NVENC P6 |
 
-Calculate your storage needs with our [Bitrate Calculator](/) or plan your disk space with the [Disk Space Planner](/tools/disk-space-planner/).
+- **Twitch:** Vanilla rarely needs the full 6,000 Kbps cap — save it for shaders. See the [Twitch platform guide](/platforms/twitch/) for ingest details.
+- **YouTube:** The generous bitrate ceiling really pays off with shaders; 1440p60 keeps reflections and fog clean.
+- **Kick:** Its ~8,000 Kbps cap is comfortable for shaded worlds at 1080p60.
+
+## FAQ
+
+### Do I need 6,000 Kbps for Minecraft?
+
+Only with shaders. Vanilla Minecraft looks sharp at 4,500–5,000 Kbps thanks to its simple, blocky visuals — pushing higher wastes upload bandwidth. Once you add realistic lighting and reflections, the extra bitrate becomes worthwhile.
+
+### Why does my Java Minecraft stream lag when I use x264?
+
+Java Edition and x264 both compete for CPU time, so a Medium preset can starve world generation and cause chunk-loading stutter. Switch to NVENC, lower the x264 preset to Fast, or add Sodium/Lithium performance mods. Our [encoding overload guide](/blog/how-to-fix-encoding-overloaded-obs/) has more fixes.
+
+## Bottom Line
+
+Minecraft is easy to stream in vanilla — 4,500–5,000 Kbps on NVENC looks great — but shaders push it into AAA territory, demanding the full 6,000 Kbps and more GPU headroom. Because Java leans on the CPU, NVENC is almost always the smart choice. Plan your recording storage with the [disk space planner](/tools/disk-space-planner/) and explore more [OBS game setups](/obs/) to finish dialing in your stream.

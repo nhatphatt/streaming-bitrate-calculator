@@ -1,77 +1,96 @@
 ---
 slug: best-obs-settings-warzone
 title: "Best OBS Settings for Streaming Warzone in 2026"
-description: "Optimal OBS bitrate and encoder settings for streaming Call of Duty Warzone. Covers 1080p 60fps, NVENC vs x264, and performance optimization."
+description: "Optimal OBS bitrate and encoder settings for streaming Call of Duty Warzone. Covers 1080p 60fps, NVENC vs x264, film grain, and performance optimization."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
-readTime: "7 min read"
+updatedAt: "2026-07-10"
+readTime: "6 min read"
 ---
 
-Call of Duty: Warzone is one of the most demanding games to stream. Its large open-world maps, detailed textures, and constant action create high scene complexity that requires careful OBS configuration.
+Call of Duty: Warzone is one of the hardest games on the planet to stream cleanly. Its huge open maps, dense foliage, particle-heavy gunfights, and near-constant camera movement create enormous scene complexity that punishes low bitrates and weak encoders.
 
-## Recommended Settings
+## Quick Answer
 
-### Twitch
+**Stream Warzone at 1080p 60fps with 6,000 Kbps CBR on Twitch (the non-partner cap), using NVENC preset P4–P5 on an NVIDIA GPU. Set in-game Film Grain to 0 — it is the single most impactful setting for stream quality.**
 
-- **1080p 60fps:** 6,000 Kbps, NVENC (New), Preset P4–P5
-- **720p 60fps:** 4,500–5,000 Kbps — recommended if your GPU is struggling
+Warzone runs your GPU at 90–100% by itself, so you want a hardware encoder that uses a separate silicon block instead of stealing headroom from the game.
+
+## Why Warzone Is So Hard to Stream
+
+Warzone is compression-unfriendly in almost every way a game can be:
+
+- **Massive open maps** packed with grass, trees, and terrain detail that shimmer at distance.
+- **Constant camera movement** from sprinting, driving, and parachuting — this destroys temporal (frame-to-frame) compression efficiency.
+- **Particle effects** from explosions, gas, muzzle flash, and smoke that fill the frame with high-frequency detail.
+- **High texture fidelity** on weapons and operators that an encoder tries hard to preserve.
+
+The practical result: at 1080p 60fps, Warzone needs the full 6,000 Kbps on Twitch just to look acceptable, and even then a final-circle gas cloud can show blocking. On YouTube Live, where you can push 10,000–12,000 Kbps, the difference is night and day. If you want to understand the tradeoff between sharpness and frame rate, our guide on [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/) breaks it down.
+
+## Recommended OBS Settings by Platform
+
+### Twitch (6,000 Kbps cap)
+
+- **Resolution:** 1920×1080 (drop to 1280×720 if your GPU is struggling)
+- **FPS:** 60
+- **Encoder:** NVENC (New), H.264
+- **Preset:** P4 (Medium) — P5 (Slow) can drop frames because Warzone already saturates the GPU
+- **Rate Control:** CBR (Twitch requires it)
+- **Bitrate:** 6,000 Kbps
+- **Keyframe Interval:** 2 seconds
+- **Profile:** High
+- **B-frames:** 2
 
 ### YouTube Live
 
 - **1080p 60fps:** 10,000–12,000 Kbps
 - **1440p 60fps:** 15,000–18,000 Kbps
 
-## Why Warzone Is Hard to Stream
+YouTube's generous ceiling is where Warzone finally breathes. The extra bitrate is spent almost entirely on masking the particle and foliage detail that Twitch's 6,000 Kbps can't hold. See the [YouTube platform guide](/platforms/youtube/) for ingest specifics.
 
-Warzone has several characteristics that make it compression-unfriendly:
+### Kick
 
-- **Large open maps** with lots of foliage and terrain detail
-- **Constant camera movement** from running, driving, and parachuting
-- **Particle effects** from explosions, smoke, and gunfire
-- **High texture detail** on weapons and environments
+Kick allows up to ~8,000 Kbps, so run 7,000 Kbps at 1080p 60fps for a visible bump over Twitch without stressing most home uploads.
 
-At 1080p 60fps, Warzone needs the full 6,000 Kbps on Twitch to look acceptable. Even then, heavy action scenes (gas circles, final zones) may show some compression artifacts. On YouTube, pushing to 10,000+ Kbps makes a noticeable difference.
+## Encoder Choice: NVENC vs x264
 
-## Encoder Settings
+For Warzone, **NVENC on any RTX card is the right answer** for 95% of streamers. The game maxes your GPU, but NVENC runs on a dedicated encoder chip, so it adds almost no rendering overhead.
 
-### NVENC (Recommended)
+x264 (CPU encoding) only makes sense on a very strong CPU (Ryzen 9 / Core i9) or a dedicated two-PC setup. Even then, you're stuck with the **Faster** or **Fast** preset — Medium will drop frames under Warzone's load. Modern NVENC at P4 matches or beats x264 Fast on quality, so there's little reason to burn CPU cycles. If you want the deeper comparison, read [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
 
-- **Rate Control:** CBR
-- **Bitrate:** 6,000 Kbps (Twitch) / 10,000–12,000 Kbps (YouTube)
-- **Preset:** P4 (Medium) — P5 may cause frame drops in Warzone due to GPU load
-- **Profile:** High
-- **B-frames:** 2
+Have an RTX 40-series card and stream to YouTube or Kick? NVENC AV1 is roughly 30% more efficient than H.264 and makes Warzone's busy frames noticeably cleaner. It isn't fully supported on Twitch's main ingest yet, so keep H.264 there.
 
-### x264
+## In-Game Settings That Change Stream Quality
 
-Only recommended with a dedicated streaming PC or very powerful CPU (Ryzen 9 / i9):
+Warzone is GPU-intensive, so tune to hold frame rate while also making the scene easier to encode:
 
-- **Preset:** Faster or Fast (Medium will likely cause frame drops)
-- **Bitrate:** Same as NVENC
+- **Render Resolution:** 100% — never lower; it looks terrible on stream.
+- **Texture Resolution:** Normal or High.
+- **Shadow Quality:** Low — biggest FPS gain for the smallest visual cost on stream.
+- **Particle Quality:** Low — directly reduces compression complexity in fights.
+- **Tessellation:** Off.
+- **Anti-Aliasing:** SMAA T2X — clean edges without excessive edge detail.
+- **Depth of Field:** Off.
+- **Motion Blur:** Off.
+- **Film Grain: 0** — the most important setting in this list.
 
-## In-Game Settings for Streaming
+**Why Film Grain matters so much:** film grain adds random noise to every single frame. The encoder can't tell noise from detail, so it wastes precious bitrate encoding meaningless static instead of your gameplay. Turning it to 0 can visibly improve perceived stream quality, especially in the dark, contrast-heavy areas where grain is worst.
 
-Warzone is GPU-intensive. Optimize these settings to maintain FPS while streaming:
+## Performance and Audio
 
-- **Render Resolution:** 100% (don't go below — it looks terrible on stream)
-- **Texture Resolution:** Normal or High
-- **Shadow Quality:** Low — biggest FPS gain with minimal visual impact on stream
-- **Particle Quality:** Low — reduces compression complexity
-- **Tessellation:** Off
-- **Anti-Aliasing:** SMAA T2X
-- **Film Grain:** 0 (critical — film grain destroys stream quality by adding noise)
-- **Depth of Field:** Off
-- **Motion Blur:** Off
+To keep your game frame rate stable while encoding:
 
-**Film Grain at 0 is the single most important setting.** Film grain adds random noise to every frame, which the encoder treats as detail and wastes bitrate on. Turning it off can improve perceived stream quality by 20–30%.
+1. Use **NVENC** so encoding runs off the GPU's dedicated block.
+2. Cap in-game FPS at your monitor's refresh rate to avoid frame-time spikes.
+3. Use **Game Capture** in OBS, not Display Capture.
+4. Disable Windows Game Bar and Game DVR.
+5. Trim unneeded browser sources and overlays.
 
-## Performance Optimization
+For audio, Warzone's footstep and gunfire cues matter to viewers, so don't crush the game mix:
 
-1. Use **NVENC** — Warzone already uses 90–100% GPU, but NVENC uses a separate chip
-2. Cap FPS at 120 or your monitor refresh rate
-3. Set OBS to **Game Capture** mode (not Display Capture)
-4. Disable Windows Game Bar and Game DVR
-5. Close all overlays except essential ones
+- **Audio bitrate:** 160 Kbps AAC.
+- **Sample rate:** 48 kHz.
+- **Mic filters:** Noise Suppression (RNNoise) + Compressor + Limiter at -3 dB.
+- Duck game audio only slightly (a few dB) when you talk, rather than muting it.
 
 ## Quick Reference
 
@@ -80,6 +99,23 @@ Warzone is GPU-intensive. Optimize these settings to maintain FPS while streamin
 | Twitch | 1080p | 60 | 6,000 Kbps | NVENC P4 |
 | Twitch | 720p | 60 | 4,500–5,000 Kbps | NVENC P5 |
 | YouTube | 1080p | 60 | 10,000–12,000 Kbps | NVENC P4 |
+| YouTube | 1440p | 60 | 15,000–18,000 Kbps | NVENC P4 |
 | Kick | 1080p | 60 | 7,000 Kbps | NVENC P4 |
 
-Use our [Bitrate Calculator](/) to estimate recording file sizes, or check your upload speed with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+## FAQ
+
+### Should I stream Warzone at 720p instead of 1080p on Twitch?
+
+If your GPU can't hold 60fps at 1080p while encoding, yes. A stable 720p 60fps stream at 5,000 Kbps looks better than a stuttering 1080p one. Warzone's motion means smooth frame rate beats raw resolution for viewer comfort.
+
+### Why does my Warzone stream look blocky in the gas circle?
+
+Late-game gas and smoke are the worst-case for compression — huge fields of moving semi-transparent particles. At Twitch's 6,000 Kbps cap this is largely unavoidable; lowering in-game Particle Quality and turning off Film Grain reduces it. On YouTube's higher bitrate it mostly disappears.
+
+### Is AV1 worth it for Warzone?
+
+On an RTX 40-series card streaming to YouTube or Kick, yes — AV1's efficiency directly targets the busy, noisy frames Warzone produces. For Twitch, stick with H.264 for now since AV1 isn't on the main ingest.
+
+## Bottom Line
+
+Warzone demands the maximum your platform allows: 6,000 Kbps on Twitch, far more on YouTube, always with NVENC. Kill Film Grain, drop Particle and Shadow quality, and you'll squeeze real quality out of a punishing game. Plan your VOD storage with the [recording time calculator](/tools/recording-time-calculator/) and confirm your connection can sustain the upload with the [bandwidth calculator](/tools/bandwidth-calculator/).

@@ -1,76 +1,121 @@
 ---
 slug: best-obs-settings-gta-v
 title: "Best OBS Settings for Streaming GTA V & GTA Online in 2026"
-description: "Optimal OBS bitrate and encoder settings for streaming GTA V and GTA Online on Twitch and YouTube. Includes performance tips for RP servers."
+description: "Optimal OBS bitrate and encoder settings for streaming GTA V and GTA Online on Twitch and YouTube. Includes performance tips for FiveM RP servers."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
+updatedAt: "2026-07-10"
 readTime: "6 min read"
 ---
 
-GTA V and GTA Online remain hugely popular on Twitch, especially RP (roleplay) servers like NoPixel. The game's detailed open world and driving sequences need proper OBS settings to look good on stream.
+GTA V and GTA Online remain fixtures on Twitch and YouTube, driven largely by FiveM roleplay servers like NoPixel. The game mixes calm, dialogue-heavy scenes with high-speed chases and explosive shootouts, and that split personality is exactly what makes it tricky to encode well.
 
-## Recommended Settings
+## Quick Answer
+
+**Stream GTA V at 1080p60 with NVENC (New), 6,000 Kbps CBR on Twitch (9,000–12,000 on YouTube), preset P5 or P6, a 2-second keyframe interval, and Motion Blur turned off.** Roleplay-heavy sessions can drop to 4,500–5,000 Kbps, but racing and action content should use every bit of the Twitch cap.
+
+## Why GTA V Is Demanding to Encode
+
+GTA V is a GPU-heavy title first and foremost. Los Santos is packed with dense geometry, reflective surfaces, traffic, and long draw distances, so your graphics card does the heavy lifting while the CPU handles physics, AI, and streaming assets in and out of memory. That balance matters for your encoder choice: because the GPU is already loaded, a CPU-based x264 encode is usually the safer bet on a single PC — but only if your processor has spare threads.
+
+From a compression standpoint, GTA V is a game of two halves:
+
+- **Low-motion scenes** (standing around, in-menu, cutscenes, RP conversations) compress easily. Large flat surfaces and slow camera pans give the encoder an easy job.
+- **High-motion scenes** (driving fast through the city, chases, gunfights, particle-heavy explosions) create rapid full-frame changes. Add motion blur or heavy foliage and the encoder can't keep up at low bitrates, producing blocky artifacts on every corner you take.
+
+The city itself is harder to compress than the open desert around Sandy Shores, because urban scenes contain more edges, more moving objects, and more high-frequency detail. Plan your bitrate around your worst-case content, not your average.
+
+## Recommended Bitrate and Resolution
+
+Twitch caps non-partner video bitrate at roughly 6,000 Kbps, so 1080p60 GTA V should run right at that ceiling. YouTube Live is far more generous and transcodes server-side, so you can push much higher for a crisper image.
 
 ### Twitch
 
-- **1080p 60fps:** 6,000 Kbps, NVENC (New), Preset P5
-- **1080p 30fps:** 4,500 Kbps — acceptable for RP streams where 60fps isn't critical
-- **720p 60fps:** 4,000–4,500 Kbps
+- **1080p 60fps:** 6,000 Kbps, NVENC (New), preset P5–P6
+- **1080p 30fps:** 4,500 Kbps — fine for slow RP sessions
+- **720p 60fps:** 4,000–4,500 Kbps — worth it on weaker uploads
 
 ### YouTube Live
 
 - **1080p 60fps:** 9,000–12,000 Kbps
-- **1440p 60fps:** 14,000–16,000 Kbps
+- **1440p 60fps:** 14,000–18,000 Kbps
 
-## GTA V Streaming Characteristics
-
-GTA V has moderate compression complexity. City environments with lots of geometry and traffic are harder to compress than open desert areas. High-speed driving creates rapid scene changes that need more bitrate.
-
-For RP streams, which are mostly walking and talking, 5,000 Kbps at 1080p looks great. For racing or action-heavy content, push to 6,000 Kbps on Twitch.
+If you're unsure your connection can sustain your target bitrate, check headroom with the [bandwidth calculator](/tools/bandwidth-calculator/) before you go live.
 
 ## Encoder Settings
 
-### NVENC
+### NVENC (recommended for single-PC setups)
 
-- **Rate Control:** CBR
+- **Rate Control:** CBR (Twitch requires stable bitrate)
 - **Bitrate:** 6,000 Kbps (Twitch) / 9,000–12,000 Kbps (YouTube)
-- **Preset:** P5 (Slow)
+- **Keyframe Interval:** 2 seconds
+- **Preset:** P5 (Slow) or P6 (Slower) if your GPU has headroom
 - **Profile:** High
 - **B-frames:** 2
 
+Modern NVENC runs on a dedicated block of the GPU, so the quality hit to your game framerate is small even though GTA V is GPU-bound. If you own an RTX 40-series or newer card and stream to YouTube or Kick, [NVENC AV1](/blog/nvenc-av1-explained/) gives you roughly 30% better efficiency — a real win for GTA's busy city scenes. Twitch does not yet accept AV1 for most streamers, so stay on H.264 there.
+
 ### x264
 
-- **Preset:** Fast or Medium (GTA V is GPU-heavy, so CPU is usually available)
+- **Preset:** Fast on a 6-core CPU, Medium on 8-core or better
 - **Profile:** High
+- **Tune:** None
 
-## In-Game Settings
+Because GTA V leans on the GPU, a capable CPU often has room to run x264 Medium, which squeezes more quality out of the 6,000 Kbps Twitch cap than NVENC does. If you see [encoding overload warnings](/blog/how-to-fix-encoding-overloaded-obs/), step down one preset or switch to NVENC.
+
+## In-Game Settings for a Clean Stream
+
+The single most important change is turning off motion blur — it looks bad after compression and wastes bitrate on driving scenes.
 
 - **FXAA:** On
-- **MSAA:** Off (use FXAA instead — MSAA is too GPU-heavy)
+- **MSAA:** Off (too GPU-heavy; FXAA is enough for stream)
 - **Texture Quality:** High
 - **Shader Quality:** High
 - **Shadow Quality:** Normal
 - **Reflection Quality:** Normal
-- **Grass Quality:** Normal (High/Ultra kills FPS)
+- **Grass Quality:** Normal (High/Ultra tanks framerate)
 - **Post FX:** Normal
-- **Motion Blur:** Off (important for stream quality)
+- **Motion Blur:** Off (critical)
 - **Depth of Field:** Off
 
-### For FiveM / RP Servers
+### FiveM / RP Server Tips
 
-FiveM RP servers often have custom assets that increase VRAM usage:
+FiveM RP servers load custom vehicles, clothing, and map assets that inflate VRAM usage well beyond base GTA V:
 
-- Lower Texture Quality to Normal if you have less than 8 GB VRAM
+- Drop Texture Quality to Normal if you have less than 8 GB VRAM
 - Disable Extended Distance Scaling
-- Set Population Density and Variety to lower values
+- Lower Population Density and Variety to ease CPU load
+- Because RP is mostly walking and talking, 4,500–5,000 Kbps at 1080p looks great and leaves upload headroom for voice chat and alerts
 
-## Quick Reference
+## Audio Settings
+
+- **Sample Rate:** 48 kHz (match Discord and OBS)
+- **Track/Bitrate:** 160 Kbps stereo for game + mic mix
+- GTA's radio and engine noise are loud — use a noise gate on your mic and duck game audio during RP dialogue so viewers can hear you
+
+## Platform-Specific Tips
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
-| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P5 |
-| Twitch | 1080p | 30 | 4,500 Kbps | NVENC P5 |
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P5 (H.264) |
+| Twitch | 1080p | 30 | 4,500 Kbps | NVENC P5 (H.264) |
 | YouTube | 1080p | 60 | 9,000–12,000 Kbps | NVENC P5 |
-| Kick | 1080p | 60 | 7,000 Kbps | NVENC P5 |
+| YouTube | 1440p | 60 | 14,000–18,000 Kbps | NVENC P6 |
+| Kick | 1080p | 60 | 7,000 Kbps | NVENC P5 (AV1 optional) |
 
-Use our [Bitrate Calculator](/) for exact file size estimates or check your connection with the [Bandwidth Calculator](/tools/bandwidth-calculator/).
+- **Twitch:** Stay at or below 6,000 Kbps CBR and lean on x264 Medium if your CPU allows — the tight cap rewards a stronger encoder. See the [Twitch platform guide](/platforms/twitch/) for ingest details.
+- **YouTube:** Push the bitrate; the extra headroom keeps fast driving sharp. Consider 1440p if your card can hold 60fps.
+- **Kick:** Its ~8,000 Kbps ceiling sits between the two — a good middle ground for city chaos.
+
+## FAQ
+
+### Should I stream GTA V at 720p or 1080p?
+
+If your GPU and upload can hold 1080p60 at 6,000 Kbps, use it. If you see dropped frames or your upload is under about 8 Mbps, drop to 720p60 — a clean 720p beats a stuttering 1080p every time.
+
+### Why does my GTA V stream look blocky when driving?
+
+That's the encoder running out of bitrate during high-motion scenes. Turn off motion blur, drop grass and reflection quality, and make sure you're at the full 6,000 Kbps on Twitch. Fixed-frame RP looks fine at lower bitrates, but action needs the ceiling.
+
+## Bottom Line
+
+GTA V is GPU-bound, so a capable CPU can often run x264 Medium for the best quality inside Twitch's 6,000 Kbps cap; otherwise NVENC P5 with motion blur off is the reliable default. Estimate recording file sizes with the [recording time calculator](/tools/recording-time-calculator/), and browse more [OBS game guides](/obs/) to fine-tune your setup.

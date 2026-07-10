@@ -1,77 +1,122 @@
 ---
 slug: best-obs-settings-cs2
 title: "Best OBS Settings for Streaming CS2 in 2026"
-description: "Optimal OBS settings for streaming Counter-Strike 2. Bitrate, encoder, and in-game settings for competitive CS2 streaming on Twitch and YouTube."
+description: "Optimal OBS settings for streaming Counter-Strike 2. Bitrate, encoder, keyframe, and in-game settings for high-FPS competitive CS2 streaming on Twitch and YouTube."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
-readTime: "6 min read"
+updatedAt: "2026-07-10"
+readTime: "7 min read"
 ---
 
-Counter-Strike 2 (CS2) is a competitive FPS where high frame rates are essential. Your OBS settings need to balance stream quality with minimal performance impact.
+Counter-Strike 2 is a twitch-reaction FPS where frame rate is everything. Your OBS setup has to deliver a clean stream without stealing the CPU cycles that keep your game at 300+ fps.
 
-## Recommended Settings
+## Quick Answer
 
-### Twitch
+**Stream CS2 at 1080p 60fps with 6,000 Kbps CBR on Twitch (8,000–10,000 on YouTube), using NVENC so your CPU stays free for the game. Keyframe interval 2 seconds, High profile, and cap in-game FPS well above your monitor's refresh.** In CS2 the encoder choice matters more than in almost any other game because the CPU is your bottleneck.
 
-- **1080p 60fps:** 5,500–6,000 Kbps, NVENC (New), Preset P5
-- **720p 60fps:** 4,000–4,500 Kbps
+## Recommended Resolution and FPS
 
-### YouTube Live
+CS2 players run absurdly high in-game frame rates for input consistency, but your stream doesn't need to match. Stream at 60fps for smooth spray transfers and flick shots — 30fps makes fast crosshair movement look choppy and hides recoil control.
 
-- **1080p 60fps:** 8,000–10,000 Kbps
-- **1440p 60fps:** 12,000–15,000 Kbps
+- **1080p 60fps** — the standard for competitive FPS streams. Sharp enough to read enemy models at range.
+- **1080p 30fps** — not recommended for CS2; fast aim looks stuttery.
+- **720p 60fps** — a smart fallback when upload or hardware is limited; motion stays smooth, which matters more than raw pixels in an FPS.
+- **1440p 60fps** — YouTube-only territory, since Twitch's cap can't feed enough bitrate to keep 1440p sharp during smoke-filled chaos.
 
-## CS2 Compression Characteristics
+Prioritizing smooth motion over resolution is the core tradeoff in fast shooters. The [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/) breakdown explains why.
 
-CS2 has moderate compression complexity. The Source 2 engine produces clean visuals with good anti-aliasing, but smoke grenades and flashbangs create temporary spikes in scene complexity.
+## Bitrate by Platform
 
-At 5,500–6,000 Kbps on Twitch, 1080p 60fps looks sharp. CS2's relatively static environments (compared to battle royales) compress efficiently between action moments.
-
-## Encoder Settings
-
-### NVENC
-
-- **Rate Control:** CBR
-- **Bitrate:** 6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
-- **Preset:** P5 (Slow)
-- **Profile:** High
-- **B-frames:** 2
-
-### x264
-
-- **Preset:** Fast or Faster (CS2 is CPU-intensive)
-- **Profile:** High
-
-## In-Game Settings
-
-For competitive CS2, prioritize FPS over visual quality:
-
-- **Global Shadow Quality:** Medium
-- **Model/Texture Detail:** Medium or High
-- **Shader Detail:** Medium
-- **Particle Detail:** Low
-- **Ambient Occlusion:** Off
-- **High Dynamic Range:** Performance
-- **FidelityFX Super Resolution:** Off (adds blur)
-- **MSAA:** 4x or 8x (helps stream quality by reducing aliasing)
-- **Texture Filtering:** Bilinear (minimal FPS impact)
-- **Motion Blur:** Off
-
-## Performance Tips
-
-1. CS2 is CPU-bound — use **NVENC** to keep CPU free for the game
-2. Cap FPS at 300 or your monitor refresh rate
-3. Use `-high` launch option for higher process priority
-4. Disable Steam overlay
-5. Set OBS to Game Capture mode
-
-## Quick Reference
+CS2's Source 2 engine produces clean geometry, but smokes, molotovs, and flashbangs create sudden bursts of hard-to-compress detail. Give the encoder maximum bitrate so those moments don't smear.
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
 | Twitch | 1080p | 60 | 5,500–6,000 Kbps | NVENC P5 |
 | Twitch | 720p | 60 | 4,000–4,500 Kbps | NVENC P5 |
 | YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC P5 |
-| Kick | 1080p | 60 | 6,500–7,000 Kbps | NVENC P5 |
+| YouTube | 1440p | 60 | 12,000–15,000 Kbps | NVENC P5 |
+| Kick | 1080p | 60 | 6,500–8,000 Kbps | NVENC P5 |
 
-Use our [Bitrate Calculator](/) for file size estimates or check [Twitch settings](/platforms/twitch/) for more platform-specific tips.
+On Twitch, always use the full 6,000 Kbps in CBR — the [smoke rework in CS2](/glossary/bitrate/) makes volumetric particles genuinely hard to encode, and every kilobit helps. [YouTube](/platforms/youtube/) lets you push far higher and transcodes server-side, so 8,000–10,000 Kbps keeps mid-round smokes clean. See the [twitch streaming bitrate guide](/blog/twitch-streaming-bitrate-guide/) for the full picture.
+
+## Why CS2 Is CPU-Heavy
+
+CS2 is one of the most CPU-bound competitive games, which directly shapes your encoder decision:
+
+- **Sub-tick / high-frequency simulation** — the game logic, hit registration, and per-round calculations lean hard on single-thread CPU performance.
+- **Huge frame rates** — pros run 300–600 fps to minimize input latency, and each of those frames is CPU work.
+- **Volumetric smoke** — the new smoke grenades add particle and lighting cost that spikes during fights.
+
+Because your CPU is already saturated feeding CS2, you should not steal it for software encoding. This is the exact scenario NVENC was built for. If you're weighing options, the [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/) shows why hardware encoding wins on CPU-bound games.
+
+## Encoder Settings
+
+### NVENC (strongly recommended)
+
+Offloading encoding to the GPU keeps your CPU dedicated to CS2's simulation, protecting your frame rate.
+
+- **Rate Control:** CBR
+- **Bitrate:** 6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
+- **Preset:** P5 (Quality) — P6 if your GPU has headroom (CS2 is GPU-light at competitive settings)
+- **Profile:** High
+- **Keyframe Interval:** 2 seconds
+- **B-frames:** 2 (improves quality; harmless since CS2 leaves GPU spare)
+- **Look-ahead / Psycho Visual Tuning:** On for cleaner smokes
+
+Since CS2 runs light on the GPU at competitive settings, NVENC has plenty of room even on a mid-range card. On an RTX 40-series GPU, [AV1 to YouTube or Kick](/blog/nvenc-av1-explained/) squeezes noticeably more quality from the same bitrate.
+
+### x264 (only with a spare CPU)
+
+Software encoding is risky in CS2 — it competes with the game for the CPU. Use it only if you have a high core-count chip you're not fully utilizing, and keep the preset light.
+
+- **Preset:** Fast or Faster (never Medium while gaming — it will drop game frames)
+- **Profile:** High
+- **Keyframe Interval:** 2 seconds
+
+## In-Game Settings
+
+Competitive CS2 is about visibility and frames, but a few settings also help your stream compress cleanly:
+
+- **Global Shadow Quality:** Medium
+- **Model / Texture Detail:** Medium or High
+- **Shader Detail:** Medium
+- **Particle Detail:** Low
+- **Ambient Occlusion:** Off
+- **High Dynamic Range:** Performance
+- **FidelityFX Super Resolution:** Off (upscaling adds blur that looks bad on stream)
+- **MSAA:** 4x or 8x — anti-aliasing reduces shimmering edges, which actually helps the encoder
+- **Texture Filtering:** Bilinear (minimal FPS cost)
+- **Motion Blur:** Off (blur wastes bitrate and hurts clarity)
+
+## Audio Settings
+
+- **Track Bitrate:** 160 Kbps AAC — footstep and callout clarity matters in CS2
+- **Sample Rate:** 48 kHz
+- **Mic Processing:** Noise Suppression + Compressor; add a Noise Gate to cut mechanical keyboard clatter
+- **Separate Tracks:** keep mic, game, and Discord on distinct tracks for clean VODs
+
+## Performance and Platform Tips
+
+1. **Use NVENC** — the single most important choice for a CPU-bound game like CS2.
+2. Cap FPS above your monitor refresh (e.g. `fps_max 400`) to smooth frame pacing without uncapped spikes.
+3. Add the `-high` launch option for elevated process priority.
+4. Disable the Steam and Discord overlays to avoid frame-time hitches.
+5. Set OBS to **Game Capture** for the lowest overhead.
+6. If you see dropped frames, work through the [dropped frames in OBS fix](/blog/how-to-fix-dropped-frames-in-obs/); if OBS reports "Encoding overloaded," see the [encoding overloaded guide](/blog/how-to-fix-encoding-overloaded-obs/).
+
+## FAQ
+
+### Should I stream CS2 in 720p or 1080p?
+
+If your PC or upload can't reliably sustain 1080p 60fps, drop to 720p 60fps rather than 1080p 30fps. In a reaction shooter, smooth motion beats extra pixels.
+
+### Why does my CS2 stream tank my FPS?
+
+Almost always because you're using x264 software encoding, which fights CS2 for the CPU. Switch to NVENC and your in-game frame rate should recover immediately.
+
+### What bitrate for CS2 smokes on Twitch?
+
+Use the full 6,000 Kbps in CBR. Smokes are the hardest thing to encode in CS2, and there's no benefit to leaving bitrate on the table at Twitch's cap.
+
+## Bottom Line
+
+CS2 is defined by its CPU appetite, so the winning formula is simple: NVENC at 1080p 60fps, CBR at the platform's ceiling (6,000 on Twitch, more on YouTube/Kick), 2-second keyframes, and in-game settings tuned for frames and visibility. Keep the CPU for the game and let the GPU handle the stream. Fine-tune your exact numbers with the [bitrate calculator](/tools/bandwidth-calculator/) or review the full [OBS settings guide](/obs/).

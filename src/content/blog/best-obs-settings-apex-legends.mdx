@@ -1,79 +1,123 @@
 ---
 slug: best-obs-settings-apex-legends
 title: "Best OBS Settings for Streaming Apex Legends in 2026"
-description: "Optimal OBS settings for streaming Apex Legends. Recommended bitrate, encoder, and in-game settings for Twitch and YouTube."
+description: "Optimal OBS settings for streaming Apex Legends. Recommended bitrate, encoder, keyframe, audio, and in-game settings for smooth battle royale streaming on Twitch and YouTube."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
-readTime: "6 min read"
+updatedAt: "2026-07-10"
+readTime: "7 min read"
 ---
 
-Apex Legends is a fast-paced battle royale with lots of movement, abilities, and particle effects. Getting your OBS settings right ensures your stream looks clean during intense fights.
+Apex Legends packs slides, wall-jumps, ziplines, and stacked ability effects into a fast, large-map battle royale. All that motion and detail makes it one of the tougher games to compress cleanly — your OBS settings determine whether final-ring fights stay sharp.
 
-## Recommended Settings
+## Quick Answer
 
-### Twitch
+**Stream Apex at 1080p 60fps with the full 6,000 Kbps CBR on Twitch (9,000–11,000 on YouTube), using NVENC to protect both CPU and GPU. Keyframe interval 2 seconds, High profile, and cap in-game FPS at 144 to avoid frame-time spikes that make the stream stutter.** Apex is demanding on both the CPU and GPU, so hardware encoding is the safe default.
 
-- **1080p 60fps:** 6,000 Kbps, NVENC (New), Preset P4–P5
-- **720p 60fps:** 4,500 Kbps — solid option for lower-end PCs
+## Recommended Resolution and FPS
 
-### YouTube Live
+Apex's constant movement — sliding down hills, tap-strafing, riding ziplines — means smooth frame delivery is critical. 60fps is non-negotiable; 30fps turns fast rotations and gunfights into a stuttery blur.
 
-- **1080p 60fps:** 9,000–11,000 Kbps
-- **1440p 60fps:** 14,000–16,000 Kbps
+- **1080p 60fps** — the standard for a competitive battle royale stream.
+- **720p 60fps** — a solid fallback for lower-end PCs or limited upload; keeps motion fluid.
+- **1440p 60fps** — YouTube-only, where higher bitrate can actually feed the extra resolution. Twitch's cap leaves 1440p soft during chaotic fights.
 
-## Compression Characteristics
+In a fast BR, prioritizing frame rate over resolution keeps rotations and firefights readable. The [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/) article covers why smoothness wins in high-motion games.
 
-Apex Legends has moderate-to-high compression complexity due to:
+## Bitrate by Platform
 
-- Fast player movement (sliding, jumping, ziplines)
-- Ability effects (Bangalore smoke, Caustic gas, Seer tactical)
-- Detailed environments with varied terrain
+Apex's detailed environments and layered ability VFX give the encoder a lot to chew on, so run bitrate at the platform ceiling.
 
-At 6,000 Kbps on Twitch, 1080p 60fps looks good for most situations. During heavy ability usage in final rings, you may see minor artifacts — this is normal at Twitch's bitrate cap.
+| Platform | Resolution | FPS | Bitrate | Encoder |
+|----------|-----------|-----|---------|---------|
+| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P4–P5 |
+| Twitch | 720p | 60 | 4,500 Kbps | NVENC P5 |
+| YouTube | 1080p | 60 | 9,000–11,000 Kbps | NVENC P4 |
+| YouTube | 1440p | 60 | 14,000–16,000 Kbps | NVENC P4 |
+| Kick | 1080p | 60 | 7,000–8,000 Kbps | NVENC P4 |
+
+At Twitch's 6,000 Kbps cap in CBR, most of the match looks good, but heavy ability usage in a stacked final ring — Bangalore smoke over Caustic gas over a Seer scan — may show minor artifacts. That's the ceiling at work, not a misconfiguration. [YouTube](/platforms/youtube/) and [Kick](/platforms/kick/) allow much higher bitrate and keep those moments clean; see the [twitch streaming bitrate guide](/blog/twitch-streaming-bitrate-guide/) for details.
+
+## Why Apex Legends Is Demanding on Both CPU and GPU
+
+Apex is unusual in taxing both major components, which is why hardware encoding is the sensible choice:
+
+- **CPU-heavy game logic** — the Source-derived engine handles physics, movement tech, and 60-player-lobby simulation on the CPU, and Apex is notorious for CPU load in busy fights.
+- **GPU-heavy rendering** — detailed maps, foliage, and ability particles push the graphics card, especially at high frame rates.
+- **High-motion frames** — sliding, ziplining, and camera swings mean each frame differs greatly from the last, weakening [inter-frame compression](/glossary/encoding/) and demanding bitrate.
+
+Because both the CPU and GPU are already working, x264 software encoding risks dropping game frames. NVENC sidesteps that by using the GPU's dedicated encoder block. The [NVENC vs x264 guide](/blog/nvenc-vs-x264-streaming/) explains the tradeoff.
 
 ## Encoder Settings
 
-### NVENC
+### NVENC (recommended)
+
+The dedicated encoder chip runs alongside rendering, so you keep both CPU and GPU free for the game itself.
 
 - **Rate Control:** CBR
 - **Bitrate:** 6,000 Kbps (Twitch) / 9,000–11,000 Kbps (YouTube)
-- **Preset:** P4 or P5
+- **Preset:** P4 (Medium); step to P5 only if your GPU has clear headroom
 - **Profile:** High
+- **Keyframe Interval:** 2 seconds
 - **B-frames:** 2
+- **Psycho Visual Tuning:** On for busier fights
 
-### x264
+On an RTX 40-series GPU, switching to [AV1](/blog/nvenc-av1-explained/) for YouTube or Kick is a meaningful upgrade — around 30% more efficient, which directly helps Apex's high-detail scenes.
 
-- **Preset:** Faster (Apex is CPU-intensive for game logic)
+### x264 (use cautiously)
+
+Because Apex is CPU-intensive for game logic, software encoding competes for cycles you can't spare in a fight. If you must use it, keep the preset light.
+
+- **Preset:** Faster (never Medium while playing)
 - **Profile:** High
+- **Keyframe Interval:** 2 seconds
 
 ## In-Game Settings
 
-- **Anti-Aliasing:** TSAA
-- **Texture Streaming Budget:** Match your VRAM (4 GB, 6 GB, 8 GB)
+These settings balance frames, visibility, and encoder-friendliness. Trimming effects and shadows reduces both GPU load and hard-to-compress detail:
+
+- **Anti-Aliasing:** TSAA (smooths edges, reducing shimmer that wastes bitrate)
+- **Texture Streaming Budget:** match your VRAM (4 GB / 6 GB / 8 GB)
 - **Texture Filtering:** Anisotropic 4x
 - **Ambient Occlusion:** Low
-- **Sun Shadow Coverage:** Low
-- **Sun Shadow Detail:** Low
+- **Sun Shadow Coverage / Detail:** Low
 - **Spot Shadow Detail:** Off
 - **Model Detail:** Medium
 - **Effects Detail:** Medium (Low if you need more FPS)
 - **Impact Marks:** Low
 - **Ragdolls:** Low
 
-## Performance Tips
+Lowering **Effects Detail** and shadows is the highest-value change — it lifts your frame rate and cuts the particle complexity that spikes encoder load in fights.
 
-1. **Cap FPS at 144** — uncapped FPS causes frame time spikes that affect stream smoothness
-2. Use **Game Capture** in OBS, not Display Capture
-3. Disable Steam overlay and Discord overlay
-4. Set Apex to **Fullscreen** (not Borderless) for best performance
+## Audio Settings
 
-## Quick Reference
+- **Track Bitrate:** 160 Kbps AAC — footsteps and pings are competitive information in Apex
+- **Sample Rate:** 48 kHz
+- **Mic Processing:** Noise Suppression (RNNoise) + Compressor; add a Noise Gate for mechanical keyboards
+- **Separate Tracks:** keep mic, game, and Discord on separate tracks for clean, monetization-safe VODs
 
-| Platform | Resolution | FPS | Bitrate | Encoder |
-|----------|-----------|-----|---------|---------|
-| Twitch | 1080p | 60 | 6,000 Kbps | NVENC P4 |
-| Twitch | 720p | 60 | 4,500 Kbps | NVENC P5 |
-| YouTube | 1080p | 60 | 9,000–11,000 Kbps | NVENC P4 |
-| Kick | 1080p | 60 | 7,000 Kbps | NVENC P4 |
+## Performance and Platform Tips
 
-Calculate your exact storage needs with our [Bitrate Calculator](/) or check platform settings at [Platform Guides](/platforms/).
+1. **Cap FPS at 144** — uncapped Apex causes frame-time spikes that translate into visible stream stutter. Use the in-game limiter or `+fps_max 144`.
+2. Use **Game Capture** in OBS, not Display Capture, for lower overhead.
+3. Disable Steam and Discord overlays to avoid hitches.
+4. Run Apex in **Fullscreen** (not Borderless) for the best performance and lowest latency.
+5. **Twitch:** stick to 6,000 Kbps CBR with 2-second keyframes.
+6. If the stream stutters, work through the [stream lag and stutter fix](/blog/how-to-fix-stream-lag-and-stutter/); for skipped frames, see the [dropped frames in OBS guide](/blog/how-to-fix-dropped-frames-in-obs/).
+
+## FAQ
+
+### Why does my Apex stream stutter even at high FPS?
+
+Usually uncapped in-game frame rate. Wild FPS swings create uneven frame times that OBS can't smooth out. Cap at 144 (or your monitor refresh) to stabilize pacing.
+
+### Should I use NVENC or x264 for Apex?
+
+NVENC. Apex loads both CPU and GPU, so software encoding tends to drop game frames in fights. The dedicated encoder keeps your gameplay and stream smooth.
+
+### What causes artifacts in Apex final rings?
+
+Stacked ability effects — smoke, gas, and scans layered together — overwhelm Twitch's 6,000 Kbps cap. Use the full bitrate in CBR, lower Effects Detail to Medium, or stream to YouTube for more headroom.
+
+## Bottom Line
+
+Apex Legends is demanding on both CPU and GPU and full of high-motion, effect-heavy scenes, so let the GPU's NVENC block do the encoding. Lock in 1080p 60fps, CBR at the platform ceiling, NVENC P4 with 2-second keyframes, cap FPS at 144, and trim effects and shadows to keep fights clean. Estimate your exact bitrate and storage with the [bitrate calculator](/tools/bandwidth-calculator/) or review the full [OBS settings guide](/obs/).

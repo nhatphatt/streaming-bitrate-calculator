@@ -1,74 +1,112 @@
 ---
 slug: best-obs-settings-elden-ring
 title: "Best OBS Settings for Streaming Elden Ring in 2026"
-description: "Optimal OBS settings for streaming Elden Ring. Bitrate, encoder, and in-game settings for smooth streaming on Twitch and YouTube."
+description: "Optimal OBS settings for streaming Elden Ring: bitrate, encoder, keyframes, and in-game options for smooth 60fps streaming on Twitch and YouTube."
 publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
-readTime: "5 min read"
+updatedAt: "2026-07-10"
+readTime: "6 min read"
 ---
 
-Elden Ring is a visually stunning open-world RPG that streams beautifully when configured correctly. Its slower pace compared to competitive shooters means you can get excellent quality at moderate bitrates.
+Elden Ring is a slow-paced, atmospheric open-world RPG that streams beautifully once you understand its two quirks: a hard 60fps cap and a graphics card that's usually working hard even before OBS enters the picture. Get those right and you can hit excellent quality at very reasonable bitrates.
 
-## Recommended Settings
+## Quick Answer
+
+**Stream Elden Ring at 1080p60 with NVENC (New), 5,000–6,000 Kbps CBR on Twitch (8,000–10,000 on YouTube), preset P6, a 2-second keyframe interval, and both motion blur and depth of field off.** The 60fps engine cap means there's no point setting OBS above 60 — spend that headroom on encoder quality instead.
+
+## Why Elden Ring Compresses Efficiently
+
+Elden Ring is GPU-heavy but encoder-friendly. Here's the difference. FromSoftware's engine leans on your graphics card for lush environments, volumetric fog, and dense foliage, which is why the game can stutter on mid-range hardware. But from a compression standpoint, it's one of the friendlier open-world titles:
+
+- The camera is third-person and relatively controlled — no rapid 180-degree flick shots that force the encoder to redraw the whole frame.
+- The art direction favors muted colors, soft atmospheric lighting, and gentle gradients, all of which compress cleanly.
+- Traversal is slow. You're mostly walking, riding Torrent, or dodging at a measured pace, so frame-to-frame changes are modest.
+
+The exceptions are boss fights and spell-heavy builds, where particle effects, flashes, and screen-filling attacks spike compression complexity. Those moments — not your average field exploration — should set your bitrate. Budget for the boss, not the bonfire.
+
+## Recommended Bitrate and Resolution
+
+Because the game compresses well, you don't need to max out Twitch's ~6,000 Kbps cap for a great-looking stream — but there's no harm in it during effect-heavy fights. YouTube Live transcodes server-side and accepts much higher bitrates for a crisper image.
 
 ### Twitch
 
-- **1080p 60fps:** 5,000–6,000 Kbps, NVENC (New), Preset P5
-- **1080p 30fps:** 4,000–4,500 Kbps — acceptable since Elden Ring caps at 60fps anyway
+- **1080p 60fps:** 5,000–6,000 Kbps, NVENC (New), preset P6
+- **1080p 30fps:** 4,000–4,500 Kbps — acceptable since the game caps at 60 anyway
 
 ### YouTube Live
 
 - **1080p 60fps:** 8,000–10,000 Kbps
 - **1440p 60fps:** 12,000–15,000 Kbps
 
-## Why Elden Ring Streams Well
-
-Elden Ring has moderate compression complexity. While the environments are detailed, the camera movement is relatively controlled (third-person, no rapid spinning). Boss fights increase complexity with particle effects, but the overall scene is manageable.
-
-At 5,000–6,000 Kbps on Twitch, 1080p looks excellent. The game's art direction with muted colors and atmospheric lighting compresses efficiently.
+The atmospheric look means viewers rarely notice the difference between 5,000 and 6,000 Kbps in the open world, but the higher figure keeps particle-heavy bosses clean.
 
 ## Encoder Settings
 
-### NVENC
+### NVENC (recommended)
 
 - **Rate Control:** CBR
 - **Bitrate:** 5,000–6,000 Kbps (Twitch) / 8,000–10,000 Kbps (YouTube)
-- **Preset:** P5 (Slow)
+- **Keyframe Interval:** 2 seconds
+- **Preset:** P6 (Slower) — the game is GPU-bound, but a P6 encode adds little extra GPU cost on modern cards
 - **Profile:** High
 - **B-frames:** 2
 
-## In-Game Settings
+Elden Ring is a case where **NVENC is almost always the right call**, because the GPU load is high but consistent, and NVENC's dedicated encoder block barely touches your game framerate. Pushing x264 on a single PC risks CPU contention during boss fights when the engine is already busy with physics and effects. If you want to understand the tradeoff, our [NVENC vs x264](/blog/nvenc-vs-x264-streaming/) breakdown covers when each wins. On an RTX 40-series card streaming to YouTube, [AV1 via NVENC](/blog/nvenc-av1-explained/) gives you noticeably cleaner fog and particles at the same bitrate.
 
-Elden Ring has limited graphics options, but optimize what you can:
+## In-Game Settings for a Clean Stream
+
+Elden Ring exposes a limited set of graphics options, but the two that matter most for stream clarity are motion blur and depth of field — both add smear that compresses badly and hides detail.
 
 - **Texture Quality:** High or Maximum
 - **Antialiasing Quality:** High
 - **SSAO:** Medium
-- **Depth of Field:** Off (cleaner stream image)
+- **Depth of Field:** Off (cleaner, sharper image)
 - **Motion Blur:** Off (critical for stream quality)
 - **Shadow Quality:** Medium
 - **Lighting Quality:** High
 - **Effects Quality:** Medium
-- **Volumetric Quality:** Medium
-- **Reflection Quality:** Medium
+- **Volumetric Quality:** Medium (a common stutter culprit)
 - **Grass Quality:** Medium
 
-**Note:** Elden Ring is capped at 60fps. Don't set your OBS to 120fps — it won't help.
+**Do not set OBS to 120fps.** The game is hard-capped at 60fps, so a higher OBS framerate just duplicates frames and wastes encoder cycles.
 
-## Performance Tips
+## Performance and Frame-Pacing Tips
 
-1. Elden Ring has frame pacing issues — use **RTSS (RivaTuner)** to cap at 60fps for smoother frame delivery
-2. Use NVENC encoding — the game is GPU-heavy
-3. Disable Steam overlay to prevent stutters
-4. If you experience stuttering in the open world, lower Grass Quality and Volumetric Quality
+Elden Ring is notorious for frame-pacing hitches, which look worse on a recording than they do live:
 
-## Quick Reference
+1. Cap the game to 60fps with **RTSS (RivaTuner Statistics Server)** for smoother, more consistent frame delivery than the in-engine cap.
+2. Disable the Steam overlay — it's a known source of stutter in this title.
+3. If the open world hitches, lower Grass Quality and Volumetric Quality first; they're the heaviest options.
+4. Use NVENC so your CPU stays free for the engine's background asset streaming. If you still hit warnings, our guide on [fixing encoding overload](/blog/how-to-fix-encoding-overloaded-obs/) walks through the fixes.
+
+## Audio Settings
+
+- **Sample Rate:** 48 kHz
+- **Track/Bitrate:** 160 Kbps stereo
+- Elden Ring's dynamic range is wide — quiet exploration, then loud boss music. Apply gentle compression to your desktop audio track so a sudden boss intro doesn't blow out your mic mix.
+
+## Platform-Specific Tips
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
-| Twitch | 1080p | 60 | 5,000–6,000 Kbps | NVENC P5 |
-| YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC P5 |
-| YouTube | 1440p | 60 | 12,000–15,000 Kbps | NVENC P5 |
-| Kick | 1080p | 60 | 6,000–7,000 Kbps | NVENC P5 |
+| Twitch | 1080p | 60 | 5,000–6,000 Kbps | NVENC P6 (H.264) |
+| YouTube | 1080p | 60 | 8,000–10,000 Kbps | NVENC P6 |
+| YouTube | 1440p | 60 | 12,000–15,000 Kbps | NVENC P6 |
+| Kick | 1080p | 60 | 6,000–7,000 Kbps | NVENC P6 |
 
-Use our [Bitrate Calculator](/) for recording file size estimates or the [Disk Space Planner](/tools/disk-space-planner/) to plan your storage.
+- **Twitch:** 6,000 Kbps CBR is plenty. The efficient compression means you rarely need x264 to look sharp here.
+- **YouTube:** Bump to 1440p if your GPU can hold 60fps — the extra resolution suits the game's scenic vistas and YouTube's [generous bitrate ceiling](/platforms/youtube/) handles it easily.
+- **Kick:** Its ~8,000 Kbps cap gives you room to run 1080p60 at a comfortable 6,000–7,000 Kbps.
+
+## FAQ
+
+### Do I need x264 for Elden Ring?
+
+No. Because the game is GPU-bound and compresses efficiently, NVENC P6 delivers excellent quality without stealing CPU cycles the engine needs. x264 only makes sense on a two-PC setup where a dedicated encoding machine has spare headroom.
+
+### Why does my Elden Ring stream stutter during boss fights?
+
+Two likely causes: the game's own frame-pacing hitches (cap with RTSS and disable the Steam overlay) or encoder overload from particle-heavy attacks. If it's the encoder, confirm you're on NVENC and drop the preset from P7 to P6. See our [dropped frames guide](/blog/how-to-fix-dropped-frames-in-obs/) for network-side stutter.
+
+## Bottom Line
+
+Elden Ring is GPU-heavy but compresses cleanly, so NVENC P6 at 5,000–6,000 Kbps on Twitch (higher on YouTube) hits a great quality-to-effort ratio — just cap the framerate at 60 and kill motion blur. Estimate your recording sizes with the [disk space planner](/tools/disk-space-planner/) and explore more [OBS game setups](/obs/) to round out your config.

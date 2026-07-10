@@ -1,21 +1,90 @@
 ---
 slug: best-streaming-bitrate-by-resolution
-title: Best Streaming Bitrate by Resolution: 720p vs 1080p vs 1440p vs 4K
-description: Compare recommended streaming bitrates for 720p, 1080p, 1440p, and 4K on Twitch, YouTube, and OBS.
+title: "Best Streaming Bitrate by Resolution: 720p vs 1080p vs 1440p vs 4K"
+description: "Recommended streaming bitrates for 720p, 1080p, 1440p, and 4K at 30fps and 60fps on Twitch, YouTube, and OBS, plus how to pick the right number."
 publishedAt: 2026-03-31
-updatedAt: 2026-03-31
-readTime: 7 min read
+updatedAt: 2026-07-10
+readTime: 6 min read
 ---
 
-The best streaming bitrate depends heavily on your resolution and frame rate. Higher resolution improves clarity, but also demands much more bandwidth and stronger hardware.
+The right streaming bitrate depends almost entirely on two things: your resolution and your frame rate. Push too low and the picture blocks up during fast motion; push too high and you exceed platform caps or your own upload, causing dropped frames. This guide gives realistic ranges for every common resolution and shows how to land on the right number for your setup.
 
-## Quick comparison table
+## Quick Answer
 
-| Resolution | 30fps Bitrate | 60fps Bitrate |
+**As a rule of thumb: 720p wants ~2,500–5,000 Kbps, 1080p wants ~4,500–12,000 Kbps, 1440p wants ~8,000–20,000 Kbps, and 4K wants ~20,000–51,000 Kbps — with the higher end of each range for 60fps and fast-motion content. Twitch caps most streamers near 6,000 Kbps; YouTube allows the full ranges above.**
+
+## Recommended Bitrate by Resolution and Frame Rate
+
+These are practical [bitrate](/glossary/bitrate/) ranges for H.264 streaming. Start in the middle of a range, then adjust based on your game's motion and your platform's cap.
+
+| Resolution | 30fps bitrate | 60fps bitrate |
 | --- | --- | --- |
 | 720p | 2,500–4,000 Kbps | 3,500–5,000 Kbps |
 | 1080p | 4,500–9,000 Kbps | 6,000–12,000 Kbps |
 | 1440p | 8,000–15,000 Kbps | 12,000–20,000 Kbps |
 | 4K | 20,000–35,000 Kbps | 30,000–51,000 Kbps |
 
-For more detail, see our [720p guide](/size/720p-streaming-bitrate/), [1080p guide](/size/1080p-streaming-bitrate/), [1440p guide](/size/1440p-streaming-bitrate/), and [4K guide](/size/4k-streaming-bitrate/).
+Two forces set these ranges. **Resolution** multiplies pixel count — 1080p has over twice the pixels of 720p, and 4K has four times the pixels of 1080p, so each step up needs proportionally more data. **Frame rate** adds a second axis: going from 30fps to 60fps roughly doubles the frames per second, so you need extra bitrate to keep them sharp. Our [30fps vs 60fps comparison](/blog/30fps-vs-60fps-streaming/) covers that trade-off.
+
+A third factor is **content motion**. A slow, static talking-head stream compresses easily and can look great near the low end of a range. A fast first-person shooter or a racing game fills the frame with motion the encoder has to describe every fraction of a second, so it needs the high end of the range — or a step down in resolution — to stay clean. When in doubt, favor a lower resolution with plenty of bitrate over a higher resolution that's starved for data.
+
+## Bitrate by Resolution
+
+### 720p
+
+720p is the reliable choice for slower uploads and busy fast-motion games where you'd rather have a clean 720p than a blocky 1080p. A range of 3,500–5,000 Kbps at 60fps looks excellent. See the [720p bitrate guide](/size/720p-streaming-bitrate/) and our [720p deep dive](/blog/best-bitrate-for-720p-streaming/).
+
+### 1080p
+
+1080p60 is the sweet spot for most streamers. On Twitch you'll typically run 6,000 Kbps [CBR](/glossary/cbr/); on YouTube you can go to 9,000–12,000 Kbps for noticeably cleaner motion. Details are in the [1080p bitrate guide](/size/1080p-streaming-bitrate/) and [OBS 1080p60 settings](/blog/obs-bitrate-for-1080p-60fps/).
+
+### 1440p
+
+1440p is a great middle ground when you have the upload for it. Because Twitch's ~6,000 Kbps cap is tight for 1440p60, most 1440p streamers use YouTube. Budget 12,000–20,000 Kbps for 60fps — see the [1440p bitrate guide](/size/1440p-streaming-bitrate/) and [best bitrate for 1440p](/blog/best-bitrate-for-1440p-streaming/).
+
+### 4K
+
+4K is bandwidth-hungry and realistically a YouTube-only proposition, where 4K60 can run up to ~51,000 Kbps. It demands a strong GPU encoder and a fast, stable upload. See the [4K bitrate guide](/size/4k-streaming-bitrate/) and [best bitrate for 4K](/blog/best-bitrate-for-4k-streaming/).
+
+## Match Bitrate to Your Platform
+
+Your platform's cap often matters more than the "ideal" number:
+
+- **Twitch:** ~6,000 Kbps for non-partners (partners up to ~8,000). This makes 1080p60 the practical ceiling. Use CBR and a 2-second keyframe interval.
+- **YouTube Live:** Generous — 1080p60 at 6,000–12,000, 1440p at 10,000–20,000, and 4K at 20,000–51,000 Kbps.
+- **Kick:** Allows up to ~8,000 Kbps, giving a bit more headroom than Twitch at 1080p60.
+
+If your target bitrate is above your platform's cap, drop your resolution or frame rate rather than exceeding it. Compare platforms in our [Twitch vs YouTube bitrate guide](/blog/twitch-vs-youtube-bitrate-comparison/).
+
+## Don't Exceed Your Upload
+
+Whatever bitrate you choose, your upload must comfortably sustain it. A good target is keeping your stream bitrate at **50–70%** of your measured upload speed, leaving headroom for audio, overhead, and other traffic. For example, a 6,000 Kbps stream really wants ~10 Mbps of reliable upload.
+
+- Estimate the upload you need with the [bandwidth calculator](/tools/bandwidth-calculator/).
+- If you're seeing lost frames, read [how to fix dropped frames in OBS](/blog/how-to-fix-dropped-frames-in-obs/).
+- Not sure how much data a session uses? See [how many GB is a 2-hour stream](/blog/how-many-gb-is-a-2-hour-stream/).
+
+## How to Pick Your Number in 4 Steps
+
+1. **Choose resolution and frame rate** based on your game and monitor — 1080p60 is the default for most.
+2. **Look up the range** in the table above and start in the middle.
+3. **Clamp to your platform cap** (e.g., 6,000 Kbps on Twitch).
+4. **Confirm your upload** can sustain it with headroom, then test-stream and watch for dropped frames.
+
+## FAQ
+
+### Is a higher bitrate always better?
+
+No. Beyond a certain point for a given resolution, extra bitrate produces little visible improvement while raising your upload requirement and the odds of dropped frames. Stay within the recommended ranges.
+
+### What bitrate should I use for 1080p 60fps on Twitch?
+
+6,000 Kbps CBR is the standard, since that's the effective cap for most streamers. On YouTube you can raise it to 9,000–12,000 Kbps for cleaner fast motion.
+
+### Should I lower resolution or bitrate for fast games?
+
+For fast-motion games on a tight cap, dropping to 720p60 at 5,000 Kbps often looks better than a starved 1080p60, because each pixel gets more data. Test both and pick the cleaner result.
+
+## Bottom Line
+
+Pick your resolution and frame rate first, read the matching range from the table, then clamp it to your platform's cap and your upload's ceiling. For most creators that means 1080p60 at 6,000 Kbps on Twitch or up to 12,000 on YouTube — with 720p as the safe fallback and 1440p/4K reserved for streamers with the upload and hardware to back them up.

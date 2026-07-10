@@ -1,24 +1,87 @@
 ---
 slug: cbr-vs-vbr-for-streaming
-title: CBR vs VBR for Streaming: Which Bitrate Mode Is Better?
-description: Learn the difference between CBR and VBR for live streaming, and why CBR is usually the safer choice for OBS, Twitch, and YouTube.
+title: "CBR vs VBR for Streaming: Which Bitrate Mode Is Better?"
+description: "Learn the difference between CBR and VBR for live streaming, why CBR is usually the safer choice for OBS, Twitch, and YouTube, and when VBR makes sense."
 publishedAt: 2026-03-31
-updatedAt: 2026-03-31
+updatedAt: 2026-07-10
 readTime: 6 min read
 ---
 
-When setting up a stream, one of the most important encoding choices is whether to use constant bitrate or variable bitrate. For most live streaming setups, **CBR** is the safer default.
+One of the first encoding choices in OBS is the rate control mode: constant bitrate (CBR) or variable bitrate (VBR). It sounds like a small setting, but it directly affects how stable your stream is and how well it survives a shaky connection. This guide explains the difference and tells you which to use.
 
-## What is CBR?
+## Quick Answer
 
-CBR keeps bitrate steady throughout the stream.
+**For live streaming, use CBR. It sends a steady, predictable data rate that platforms and networks handle reliably, which is exactly what Twitch, YouTube, and Kick expect. Save VBR for local recording, where an unstable data rate isn't a problem.**
 
-## What is VBR?
+## What CBR and VBR Actually Do
 
-VBR changes bitrate based on scene complexity.
+Both modes target a [bitrate](/glossary/bitrate/), but they hit it differently.
 
-## Which is better for live streaming?
+- **CBR ([constant bitrate](/glossary/cbr/))** holds your data rate steady no matter what's on screen. A quiet menu and a chaotic firefight both use the same bitrate — the encoder spends "extra" bits on simple scenes and works harder on complex ones to stay flat.
+- **VBR ([variable bitrate](/glossary/vbr/))** lets the data rate rise and fall with scene complexity. Simple scenes use fewer bits; complex, high-motion scenes spike higher (up to a max you can set). This is more efficient for a given average quality, but the output is bursty.
 
-For most platforms, **CBR** is better because it gives more predictable network behavior and platform compatibility.
+| Aspect | CBR | VBR |
+| --- | --- | --- |
+| Data rate | Steady and predictable | Fluctuates with scene |
+| Network behavior | Smooth, easy to buffer | Bursty, can spike |
+| Efficiency (quality per bit) | Slightly lower | Slightly higher |
+| Best use | Live streaming | Local recording |
+| Platform preference | Recommended | Discouraged for live |
 
-See also our [OBS bitrate guide](/blog/obs-bitrate-for-1080p-60fps/) and [Twitch bitrate guide](/blog/twitch-streaming-bitrate-guide/).
+## Why CBR Wins for Live Streaming
+
+Live streaming is a real-time delivery problem, not just a quality problem. Three things make CBR the right default:
+
+### Predictable network load
+
+A steady stream is easy for your router, ISP, and the platform's [ingest server](/glossary/ingest-server/) to handle. VBR's spikes can momentarily exceed your available upload during intense scenes — exactly when you least want trouble — leading to [dropped frames](/blog/how-to-fix-dropped-frames-in-obs/) and stutter.
+
+### Platform expectations
+
+Twitch, YouTube, and Kick all tune their ingest and transcoding around a consistent incoming bitrate. Twitch in particular recommends CBR. Feeding a bursty VBR stream into a system built for CBR increases the odds of [buffering](/glossary/buffering/) for viewers.
+
+### Easy to plan your upload
+
+Because CBR is flat, you can size your connection precisely. If you stream at 6,000 Kbps CBR, you know you need roughly 10 Mbps of reliable upload with headroom. VBR's peaks make that calculation fuzzy. Use the [bandwidth calculator](/tools/bandwidth-calculator/) to check your numbers.
+
+## When VBR Is the Right Choice
+
+VBR isn't bad — it's just built for a different job. It shines when there's no live network to feed:
+
+- **Local recording.** Recording gameplay to disk? VBR gives better quality per megabyte because it spends bits where the scene needs them and saves them where it doesn't. See our [OBS recording settings guide](/blog/obs-recording-settings-guide/).
+- **Video-on-demand encoding.** When you're exporting a file that will be watched later, smooth real-time delivery doesn't matter, so VBR's efficiency is a clear win, and it helps [reduce file size](/blog/how-to-reduce-video-file-size/).
+
+The distinction is delivery: live means CBR, files mean VBR.
+
+## Recommended OBS Settings
+
+For a typical live stream, use these as a starting point:
+
+- **Rate Control:** CBR
+- **Bitrate:** Match your resolution and platform cap — e.g., 6,000 Kbps for 1080p60 on Twitch. See [bitrate by resolution](/blog/best-streaming-bitrate-by-resolution/).
+- **Keyframe Interval:** 2 seconds (required by Twitch; good practice everywhere). More on [keyframes](/glossary/keyframe/).
+- **Encoder:** x264 (Medium) or NVENC on a modern GPU.
+
+For recording profiles, switch rate control to VBR (or CQP) and raise the quality target since you're not limited by a live connection. Twitch-specific numbers live in our [Twitch bitrate guide](/blog/twitch-streaming-bitrate-guide/).
+
+## Common Misconception
+
+A frequent mistake is assuming VBR "looks better" so it must be better for streaming. VBR can produce marginally better quality per bit, but that advantage is small and it comes at the cost of network stability. For live delivery, a rock-steady CBR stream that never drops frames beats a slightly sharper VBR stream that stutters during action. Stability is the quality that viewers actually notice. If you want a deeper technical comparison, see [CBR vs VBR bitrate explained](/blog/cbr-vs-vbr-bitrate-explained/).
+
+## FAQ
+
+### Does CBR waste bandwidth on simple scenes?
+
+Technically yes — CBR uses your full bitrate even on a static menu. But that "waste" buys predictable delivery, and platforms are built around it. The trade is well worth it for live streaming.
+
+### Is VBR ever okay for live streaming?
+
+It can work if you cap the maximum bitrate well below your upload headroom, but there's little upside and real downside. CBR remains the recommended choice on every major platform.
+
+### What about CQP or CRF?
+
+CQP (NVENC) and CRF (x264) are quality-targeted modes ideal for **recording**, not live streaming. They let bitrate float freely to hit a quality level, which is great for files but unpredictable for a live connection.
+
+## Bottom Line
+
+Use CBR for live streaming and VBR for local recording. CBR's steady output is what keeps a stream smooth and predictable across your network and the platform's ingest, while VBR's efficiency is best saved for files you'll watch later. Set CBR, match your bitrate to your resolution and platform cap, use a 2-second keyframe interval, and you'll have a stable stream that viewers can watch without buffering.

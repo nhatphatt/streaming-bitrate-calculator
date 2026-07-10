@@ -3,33 +3,39 @@ slug: best-obs-settings-rocket-league
 title: "Best OBS Settings for Streaming Rocket League in 2026"
 description: "Optimal OBS bitrate, encoder, and graphics settings for Rocket League streaming on Twitch and YouTube. Covers high refresh rates, ball clarity, and competitive play."
 publishedAt: "2026-04-26"
-updatedAt: "2026-04-26"
+updatedAt: "2026-07-10"
 readTime: "7 min read"
 ---
 
-Rocket League is one of the cleaner-streaming games out there — flat shading, predictable physics, and clear motion vectors make it efficient to compress. But "easy to stream" doesn't mean "set it and forget it." Competitive Rocket League players run at 240 Hz and demand sub-millisecond input clarity, while RLCS-watching viewers want every aerial to be readable. Here's how to balance both in OBS.
+Rocket League is one of the cleaner-streaming games out there — flat shading, predictable physics, and clear motion vectors make it efficient to compress. But "easy to stream" doesn't mean "set it and forget it." Competitive players run at 240 Hz and demand crisp input clarity, while RLCS-style viewers want every aerial to be readable. Here's how to balance both in OBS.
 
-## Why Rocket League is encoder-friendly
+## Quick Answer
 
-Compared to AAA shooters, Rocket League's visual scene is straightforward:
+**Stream Rocket League at 1080p 60fps with 6,000 Kbps CBR on Twitch using NVENC preset P4 — it doesn't need P5. The clean, low-entropy scene means even a light encoder produces a sharp image. Save your expensive presets for harder games.**
+
+Rocket League is the rare title where encoder choice and preset barely matter, which frees you to prioritize frame rate and camera comfort.
+
+## Why Rocket League Is Encoder-Friendly
+
+Compared to AAA shooters, Rocket League's scene is straightforward:
 
 - **Flat colors and clean lighting** mean low entropy per frame.
-- **Predictable physics-based motion** lets the encoder predict motion vectors well.
-- **No dense particles or volumetric fog** for most of the game.
+- **Predictable physics-based motion** lets the encoder guess motion vectors accurately.
+- **No dense particles or volumetric fog** for most of the match.
 
-The result: a 6,000 Kbps Twitch stream of Rocket League looks closer to YouTube quality than the same bitrate on Warzone. Most viewers report Rocket League streams as "clean even on low bitrate."
+The result: a 6,000 Kbps Twitch stream of Rocket League looks closer to YouTube quality than the same bitrate on Warzone. Most viewers report Rocket League streams as clean even on modest bitrate. To see how it compares to a heavy game, our [best OBS bitrate settings](/blog/best-obs-bitrate-settings/) guide covers the general scale.
 
-## Recommended OBS settings for Rocket League
+## Recommended OBS Settings by Platform
 
 ### Twitch (6,000 Kbps cap)
 
 - **Resolution:** 1920×1080
 - **FPS:** 60 (or 120 if your account has access to that ingest tier)
-- **Encoder:** NVENC (New) — H.264 for standard Twitch
+- **Encoder:** NVENC (New), H.264
 - **Preset:** P4 (Medium) is plenty — Rocket League doesn't need P5
 - **Bitrate:** 6,000 Kbps
-- **Rate control:** CBR
-- **Keyframe interval:** 2 seconds
+- **Rate Control:** CBR
+- **Keyframe Interval:** 2 seconds
 - **Profile:** High
 - **B-frames:** 2
 
@@ -47,33 +53,31 @@ The result: a 6,000 Kbps Twitch stream of Rocket League looks closer to YouTube 
 - **Bitrate:** 7,000 Kbps
 - **Encoder:** NVENC P4
 
-## In-game graphics for clarity, not realism
+## In-Game Graphics for Clarity, Not Realism
 
-Competitive Rocket League players usually run **low graphics settings** for max FPS. That actually helps streaming too — fewer particles and effects = cleaner compression. Recommended:
+Competitive players usually run low graphics for max FPS — and that also helps streaming, since fewer effects mean cleaner compression. Recommended:
 
-- **Render Quality:** High Quality (this controls the resolution scale; never set below 100%).
+- **Render Quality:** High Quality (controls resolution scale; never below 100%).
 - **Render Detail:** High Performance — many top players use this.
-- **Anti-Aliasing:** FXAA Medium. SMAA looks better but slightly heavier.
+- **Anti-Aliasing:** FXAA Medium — SMAA looks slightly better but is heavier.
 - **Texture Detail:** High.
-- **Particle Detail:** High Quality (Performance hides ball trails — bad for stream readability).
-- **Effects Intensity:** High Quality — full shock-wave effects on goals look better on stream.
-- **Light Shafts:** Off.
-- **Bloom:** Off — pros disable it for clarity.
-- **Lens Flares:** Off.
-- **Dynamic Shadows:** Off — competitive standard, also helps streaming.
-- **Motion Blur:** Off. Always.
+- **Particle Detail:** High Quality — Performance hides ball trails, which hurts readability.
+- **Effects Intensity:** High Quality — full goal shock-waves look better on stream.
+- **Light Shafts, Bloom, Lens Flares:** Off — pros disable these for clarity.
+- **Dynamic Shadows:** Off — competitive standard, and it helps compression.
+- **Motion Blur:** Off, always.
 
-## Frame rate decisions: 60, 120, or 240?
+## Frame Rate: 60, 120, or 240?
 
-Rocket League is a 60fps competitive game per RLCS broadcast standards. Streaming at 60fps is fine for 99% of creators. Streaming at higher rates only matters if:
+Rocket League is broadcast at 60fps in RLCS, and streaming at 60fps is right for 99% of creators. Higher rates only matter if:
 
-- You're a competitive player who wants viewers to see the same frame rate you play at.
+- You're competitive and want viewers to see your exact frame rate.
 - Your platform supports 120fps ingest (YouTube does; Twitch only via certain partners).
-- Your audience watches in 120Hz+ panels (most don't).
+- Your audience watches on 120Hz+ panels (most don't).
 
-For most creators, **stream at 60fps** even if you play at 240. OBS's downsampling from 240 to 60 is fine — better to put the bitrate budget into image quality than frame rate.
+For most creators, **stream at 60fps even if you play at 240**. OBS downsampling from 240 to 60 is clean, and it's better to spend the bitrate budget on image quality than extra frames. Our [30fps vs 60fps streaming](/blog/30fps-vs-60fps-streaming/) piece covers the tradeoff in depth.
 
-## Encoder choice
+## Encoder Choice
 
 Rocket League is the rare game where encoder choice barely matters because the scene is so clean:
 
@@ -84,41 +88,41 @@ Rocket League is the rare game where encoder choice barely matters because the s
 | AMD RX 6000+ | AMF H.264 High | No noticeable quality gap |
 | Modern Ryzen / Intel CPU | x264 Fast | OK, slightly higher delay |
 
-Save your "expensive" P5 preset and HEVC budget for harder games like Marvel Rivals or Warzone.
+Save your P5 preset and HEVC budget for harder games. If you're comparing hardware encoders anyway, see [NVENC vs x264 for streaming](/blog/nvenc-vs-x264-streaming/).
 
-## Camera settings that affect viewer comfort
+## Camera Settings That Affect Viewer Comfort
 
-Rocket League's competitive camera (high FOV, low angle, fast camera speed) can make spectators motion-sick on long sessions. Common recommendations for streamers:
+Rocket League's competitive camera (high FOV, low angle, fast speed) can make spectators motion-sick on long sessions. Widely used streamer-friendly values, close to the pro range:
 
 - **FOV:** 110 (max competitive)
 - **Camera Distance:** 270
 - **Camera Height:** 110
 - **Camera Angle:** -3
-- **Camera Stiffness:** 0.45-0.50
+- **Camera Stiffness:** 0.45–0.50
 - **Swivel Speed:** 6.0
 - **Transition Speed:** 1.40
 
-These are widely used pro settings (close to Squishy/Jstn range) and translate well to viewer comfort on stream.
+These translate well to viewer comfort without hurting your own play.
 
-## Audio for Rocket League streams
+## Audio for Rocket League Streams
 
 Rocket League's soundtrack and crowd ambience are part of the experience:
 
-- **Game audio:** Full music + reduced SFX is fine for streamers; keep crowd sounds audible during goals.
+- **Game audio:** full music plus reduced SFX is fine; keep crowd sounds audible during goals.
 - **Mic bitrate:** 128 Kbps.
 - **Mic filters:** RNNoise + Compressor + Limiter at -3 dB.
 - **Sample rate:** 48 kHz.
-- Monsterscat / Rocket League radio music is **not** copyrighted on Twitch/YouTube as long as you use the in-game version (Psyonix has a streamer-safe license).
+- The in-game Rocket League radio music is streamer-safe on Twitch and YouTube as long as you use the in-game version — Psyonix licenses it for broadcast.
 
-## Ranked play and stream sniping
+## Ranked Play and Stream Sniping
 
-If you stream ranked Rocket League, add a **5-10 second stream delay** in OBS to prevent stream-sniping in champ-tier and SSL lobbies. The delay won't hurt viewer experience much — Rocket League viewers are used to slight lag. Set it under Settings → Advanced → Stream Delay.
+If you stream ranked, add a **5–10 second stream delay** in OBS to prevent stream-sniping in Champ-tier and SSL lobbies. The delay barely affects viewer experience — Rocket League viewers tolerate slight lag. Set it under Settings → Advanced → Stream Delay.
 
-## Recommended upload speed
+## Recommended Upload Speed
 
-For 1080p 60fps at 6,000 Kbps Twitch, target at least **10 Mbps upload**. For YouTube 9,000 Kbps, plan **15 Mbps**. Rocket League's clean compression means even modest 5G home internet uploads at 8-12 Mbps work great. Use our [Bandwidth Calculator](/tools/bandwidth-calculator/) to verify.
+For 1080p 60fps at 6,000 Kbps on Twitch, target at least **10 Mbps upload**. For YouTube at 9,000 Kbps, plan **15 Mbps**. Rocket League's efficient compression means even modest 8–12 Mbps home uploads work great.
 
-## Quick reference table
+## Quick Reference Table
 
 | Platform | Resolution | FPS | Bitrate | Encoder |
 |----------|-----------|-----|---------|---------|
@@ -128,4 +132,20 @@ For 1080p 60fps at 6,000 Kbps Twitch, target at least **10 Mbps upload**. For Yo
 | YouTube | 1080p | 120 | 12,000–15,000 Kbps | NVENC P4 |
 | Kick | 1080p | 60 | 7,000 Kbps | NVENC P4 |
 
-Use our [Bitrate & Storage Calculator](/) to estimate Rocket League VOD storage — full ranked sessions of 6 games at 8 Mbps H.264 produce about 1.8 GB per hour.
+## FAQ
+
+### Do I need P5 or HEVC for Rocket League?
+
+No. The scene is clean enough that NVENC P4 H.264 at 6,000 Kbps looks great. Reserve heavier presets and HEVC for particle-heavy games like Marvel Rivals or Warzone where they actually change the picture.
+
+### Should I stream Rocket League at 120fps?
+
+Only if you play competitively and your platform supports it. For most creators, 60fps at higher image quality beats 120fps at lower quality — most viewers can't display 120fps anyway.
+
+### Is the in-game music safe for VODs?
+
+Yes, the built-in Rocket League radio is licensed by Psyonix for streaming when you use the in-game version. Adding your own outside music can still trigger copyright claims.
+
+## Bottom Line
+
+Rocket League is a joy to stream: 6,000 Kbps at 1080p 60fps with NVENC P4 looks clean, and you can put your energy into frame rate, camera comfort, and a stream delay for ranked. Keep bloom and shadows off, motion blur off, and let the efficient scene do the work. Estimate VOD storage with the [recording time calculator](/tools/recording-time-calculator/) and confirm your upload with the [bandwidth calculator](/tools/bandwidth-calculator/).
